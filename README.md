@@ -3,7 +3,7 @@
 
 <h1>Trello clone with express and React </h2>
 
-<ul><<li>Express js</li><li>PostgreSQL.</li></ul>
+<ul><li>Express js</li><li>PostgreSQL.</li></ul>
 
 And to build the single-page front-end we are going for:
 
