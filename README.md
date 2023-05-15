@@ -12,7 +12,7 @@ And to build the single-page front-end we are going for:
 <p>React.</p>
 <p>React router.</p>
 <p>Redux.</p>
-<p>ES6/ES7 JavaScript.</p>
+<p>TypeScript.</p>
 
 
 
