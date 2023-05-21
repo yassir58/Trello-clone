@@ -38,9 +38,7 @@ package-lock.json
 yarn.lock
 
 # Ignore production build artifacts
-*.js
-*.css
-*.map
+
 
 # Ignore compressed files
 *.gz
