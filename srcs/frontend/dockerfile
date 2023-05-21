@@ -1,0 +1,9 @@
+FROM node:16-buster
+
+RUN  apt-get update && apt-get -y install curl build-essential 
+RUN  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash 
+ADD ./tools/entrypoint.sh /tmp/
+ADD ./client /var/run
+RUN chmod +x /tmp/entrypoint.sh 
+WORKDIR /var/run/client 
+ENTRYPOINT ["/tmp/entrypoint.sh"]
