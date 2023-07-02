@@ -1,0 +1,34 @@
+$shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
+
+@mixin box-shadow-bottom {
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -2px;  // Adjust the distance of the shadow from the element
+    height: 2px;  // Adjust the height of the shadow
+    background-color: $shadow-md-color;
+    filter: blur(2px);  // Adjust the blur radius if desired
+  }
+}
+
+// Usage example
+.header {
+  // Your element's styles here
+  
+  @include box-shadow-bottom;
+}
+
+
+.BoardSection {
+  width: 95%;
+  margin: 10px auto;
+}
+
+.cardImage {
+  width: 96%;
+  border-radius: 22px;
+  object-fit: cover;
+}
