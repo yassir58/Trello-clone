@@ -3,7 +3,9 @@ node_modules/
 
 # Ignore build output
 build/
-dist/
+dist/*.js
+dist/*.json
+
 
 # Ignore development environment files
 .env.local
