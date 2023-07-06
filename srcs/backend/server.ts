@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import app from "./app";
 
 dotenv.config({
-  path: "./config.env",
+  path: "./.env",
 });
 
 const port = process.env.PORT || 3000;
