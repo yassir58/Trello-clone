@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, Flex , useColorModeValue} from "@chakra-ui/react";
 interface Props {
   children: React.ReactNode;
   width: string;
@@ -16,10 +16,11 @@ interface ColumnProps {
 }
 
 export const FlexContainer: React.FC<Props> = ({ children, width }) => {
+  const backgroundColor = useColorModeValue("rgba(236, 242, 255, 0.5)", "rgba(236, 242, 255, 0.5)");
   return (
     <div>
       <Flex w={width} justify="start" justifySelf='center' mx='auto' align="start" flexDir='row'
-      rounded='md' bg='blue.50' p='2vw' h='auto' border='none' gap='1vw'
+      rounded='md' bg={backgroundColor} p='2vw' h='auto' border='none' gap='1vw'
       >
         {children}
       </Flex>
