@@ -1,29 +1,136 @@
 import React from "react";
-import Nav from "./nav";
-import SmallLogo from "./SmallLogo";
-import SearchForm from "./SearchForm";
-import ProfileHeader from "./ProfileHeader";
+import { Flex, chakra, Avatar, HStack } from "@chakra-ui/react";
 import "../../styles/app.scss";
-interface Props {}
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { SecondaryButton , PrimaryButton} from "../ui-elements/Buttons";
 
+interface HeaderProps {}
+interface NavProps {}
+interface ProfileHeaderProps {}
+interface SearchFormProps {}
+interface LogoProps {}
 
-const Header:React.FC<Props> = ()=>{
- 
-    return (
-        <div>
-            <header className="flex justify-between items-center px-5 py-3 header">
-               <div className="flex justify-around items-center">
-                    <SmallLogo/>
-                    <Nav/>
-               </div>
-                <div className="flex justify-around items-center">
-                    <SearchForm/>
-                     <ProfileHeader/>
-                </div>
-            </header>
-        </div>
-            
-    )
-}
+const Header: React.FC<HeaderProps> = () => {
+  return (
+    <div>
+      <Flex className="header" px="2vw" py="2vh"  justify="space-between" align="center">
+        <Flex
+          width="40vw"
+          justify="space-between"
+          align="center"
+        >
+          <SmallLogo />
+          <Nav />
+        </Flex>
+        <Flex
+          justify="space-between"
+          width="35vw"
+          align="center"
+        >
+          <SearchForm />
+          <ProfileHeader />
+        </Flex>
+      </Flex>
+    </div>
+  );
+};
 
-export default Header
+const Nav: React.FC<NavProps> = () => {
+  return (
+    <Flex justify="space-between" align="center">
+      <chakra.h3 px="5px">DevChallenges Board</chakra.h3>
+      <chakra.div
+        className="w-px h-10 bg-gray-300 m-3.5"
+        width="1px"
+        height="1.8rem"
+        bg="gray.400"
+        mx="1.5rem"
+      ></chakra.div>
+     <SecondaryButton >
+     <FontAwesomeIcon icon={faGripVertical} />
+        <chakra.small>All boards</chakra.small>
+     </SecondaryButton>
+    </Flex>
+  );
+};
+
+const SmallLogo: React.FC<LogoProps> = () => {
+  return (
+    <Flex justify="space-between" align="center" p="2px">
+      <svg
+        width="32"
+        height="29"
+        viewBox="0 0 32 29"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M0 4C0 1.79086 1.79086 0 4 0H10C12.2091 0 14 1.79086 14 4V25C14 27.2091 12.2091 29 10 29H4C1.79086 29 0 27.2091 0 25V4Z"
+          fill="#2F80ED"
+        />
+        <path
+          d="M18 4C18 1.79086 19.7909 0 22 0H28C30.2091 0 32 1.79086 32 4V14C32 16.2091 30.2091 18 28 18H22C19.7909 18 18 16.2091 18 14V4Z"
+          fill="#2F80ED"
+        />
+      </svg>
+      <chakra.h3 fontSize="1.2rem" fontWeight="bold" px="5px">
+        Thello
+      </chakra.h3>
+    </Flex>
+  );
+};
+
+const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
+  return (
+    <HStack spacing={3} color='gray.600'>
+      <Avatar 
+        size='md'
+        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
+      />
+      <chakra.small color="gray.600" mx="10px">
+        Javier lima
+      </chakra.small>
+      <FontAwesomeIcon icon={faCaretDown} />
+    </HStack>
+  );
+};
+
+const SearchForm: React.FC<SearchFormProps> = () => {
+  return (
+    <div className="header">
+      <chakra.form
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        border="0"
+        rounded="md"
+        bg="white"
+        color="gray.300"
+        w="20vw"
+        h='6vh'
+        px="4px"
+        boxShadow='base'
+      >
+        <chakra.input
+          type="text"
+          className="bg-transparent border-0 outline-none w-3/5 px-30"
+          opacity="1"
+          px="2px"
+          py="2px"
+          w="3/5"
+          border="0"
+          fontSize="xs"
+          outline="none"
+          value={"keywords ..."}
+        />
+        <PrimaryButton>
+          <chakra.small>Search</chakra.small>
+        </PrimaryButton>
+      </chakra.form>
+    </div>
+  );
+};
+
+export default Header;

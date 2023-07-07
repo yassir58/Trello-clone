@@ -1,3 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+html {
+  padding: 0px;
+  margin:0px;
+  font-size: 16px;
+  font-family: 'Montserrat', sans-serif;
+}
+
 $shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
 
 @mixin box-shadow-bottom {
@@ -7,10 +16,10 @@ $shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -2px;  // Adjust the distance of the shadow from the element
-    height: 2px;  // Adjust the height of the shadow
+    bottom: -1px;  // Adjust the distance of the shadow from the element
+    height: 1px;  // Adjust the height of the shadow
     background-color: $shadow-md-color;
-    filter: blur(2px);  // Adjust the blur radius if desired
+    filter: blur(1px);  // Adjust the blur radius if desired
   }
 }
 
