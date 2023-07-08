@@ -16,7 +16,7 @@ interface CardInfoProps {
 export const CardCp: React.FC<CardProps> = ({ imgSrc, cardTitle , children}) => {
   return (
     <div>
-      <Card maxW="sm" w='98%'>
+      <Card maxW="sm" w='98%' rounded='lg'>
         <CardBody>
           <Image
             src={imgSrc}
@@ -38,8 +38,10 @@ export const CardInfo:React.FC<CardInfoProps> = ({value, icon}) => {
     return (
         <div>
             <HStack spacing={2} color='gray.200'>
-                <FontAwesomeIcon icon={icon}/>
-                <chakra.small color='gray.200' fontSize='sm'>
+                <chakra.small>
+                  <FontAwesomeIcon icon={icon}/>
+                </chakra.small>
+                <chakra.small color='gray.200' fontSize='xs'>
                     {value}
                 </chakra.small>
             </HStack>

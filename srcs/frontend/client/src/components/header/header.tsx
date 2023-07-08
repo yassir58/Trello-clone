@@ -45,7 +45,7 @@ const Nav: React.FC<NavProps> = () => {
         className="w-px h-10 bg-gray-300 m-3.5"
         width="1px"
         height="1.8rem"
-        bg="gray.400"
+        bg="gray.200"
         mx="1.5rem"
       ></chakra.div>
      <SecondaryButton >
@@ -86,7 +86,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   return (
     <HStack spacing={3} color='gray.600'>
       <Avatar 
-        size='md'
+        size='sm'
+        borderRadius='md'
         src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
       />
       <chakra.small color="gray.600" mx="10px">
@@ -99,7 +100,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
 
 const SearchForm: React.FC<SearchFormProps> = () => {
   return (
-    <div className="header">
+    <div >
       <chakra.form
         display="flex"
         justifyContent="space-between"
@@ -125,7 +126,7 @@ const SearchForm: React.FC<SearchFormProps> = () => {
           outline="none"
           value={"keywords ..."}
         />
-        <PrimaryButton>
+        <PrimaryButton width="6vw" height="5vh">
           <chakra.small>Search</chakra.small>
         </PrimaryButton>
       </chakra.form>

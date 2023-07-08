@@ -5,7 +5,9 @@ import { HStack , Tag} from "@chakra-ui/react";
 
 interface PrimaryButtonProps {
   children: React.ReactNode;
-  small?: boolean;
+  width?: string;
+  height?: string;
+  spacing?: string;
 }
 interface SecondaryButtonProps {
   children: React.ReactNode;
@@ -19,13 +21,15 @@ interface LabelProps {
     color: string;
 }
 
-export const PrimaryButton: React.FC<PrimaryButtonProps> = ({ children , small}) => {
+export const PrimaryButton: React.FC<PrimaryButtonProps> = ({ children , width='0px', height='0px', spacing='15px'}) => {
   return (
     <div>
       <Button
         bg="blue.500"
         color="white"
-        h={small ? '4vh' : '5vh'}
+        w={width}
+        h={height}
+        p={spacing}
         mx="2px"
         rounded="md"
         fontSize="xs"
@@ -93,7 +97,8 @@ export const Label: React.FC<LabelProps> = ({color, children }) => {
         color={`${color}.600`}
         h="4vh"
         mx="2px"
-        rounded="full"
+        px="8px"
+        rounded="xl"
         fontSize="xs"
         outline="none"
       >
