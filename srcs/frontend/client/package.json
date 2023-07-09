@@ -7,7 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack  --progress",
     "start": "webpack serve --mode development",
-    "css-build": "npx tailwindcss -i ./src/styles/index.css -o ./dist/styles.css --watch"
+    "test-data": "json-server --watch ./src/data/cards.json --port 3001",
+    "launch": "npm-run-all --parallel build test-data start"
+
   },
   "author": "",
   "license": "ISC",
@@ -23,6 +25,7 @@
     "autoprefixer": "^10.4.14",
     "babel-plugin-macros": "^3.1.0",
     "framer-motion": "^10.12.18",
+    "json-server": "^0.17.3",
     "postcss": "^8.4.23",
     "postcss-loader": "^7.3.0",
     "prop-types": "^15.8.1",
@@ -40,9 +43,10 @@
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "babel-loader": "^9.1.2",
+    "cson-loader": "^0.1.0",
     "css-loader": "^6.7.3",
     "html-webpack-plugin": "^5.5.1",
-    "node-sass": "^9.0.0",
+    "npm-run-all": "^4.1.5",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.2",
     "ts-loader": "^9.4.2",

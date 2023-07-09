@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Flex , useColorModeValue} from "@chakra-ui/react";
 interface Props {
   children: React.ReactNode;
-  width: string;
+  width?: string;
 }
 
 interface PlaceholderProps {
@@ -15,12 +15,12 @@ interface ColumnProps {
     width?: string;
 }
 
-export const FlexContainer: React.FC<Props> = ({ children, width }) => {
-  const backgroundColor = useColorModeValue("rgba(236, 242, 255, 0.5)", "rgba(236, 242, 255, 0.5)");
+export const FlexContainer: React.FC<Props> = ({ children, width = '98%' }) => {
+  const backgroundColor = useColorModeValue("rgba(236, 242, 255, 0.4)", "rgba(236, 242, 255, 0.4)");
   return (
     <div>
-      <Flex w={width} justify="start" justifySelf='center' mx='auto' align="start" flexDir='row'
-      rounded='md' bg={backgroundColor} p='2vw' h='auto' border='none' gap='1vw'
+      <Flex w={width} justify="start" justifySelf='center' mx='auto' flexWrap='wrap' align="start" flexDir='row'
+      rounded='md' bg={backgroundColor} p='8px' h='auto' border='none' gap='16px'
       >
         {children}
       </Flex>
@@ -28,9 +28,9 @@ export const FlexContainer: React.FC<Props> = ({ children, width }) => {
   );
 };
 
-export const ColumnContainer: React.FC<ColumnProps> = ({ children, width = '20vw' }) => {
+export const ColumnContainer: React.FC<ColumnProps> = ({ children, width = 'xs' }) => {
     return (
-        <Flex w={width} gap='2vh'  flexDir='column' h='auto' justify='start' align='center'>
+        <Flex width={width} gap='12px'  flexDir='column' h='auto' justify='start'  align='center'>
             {children}
         </Flex>
     )
