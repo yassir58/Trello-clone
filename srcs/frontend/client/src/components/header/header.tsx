@@ -15,9 +15,9 @@ interface LogoProps {}
 const Header: React.FC<HeaderProps> = () => {
   return (
     <div>
-      <Flex className="header" px="2vw" py="2vh"  justify="space-between" align="center">
+      <Flex className="header" px="18px" py="10px"  justify="space-between" align="center">
         <Flex
-          width="40vw"
+          width="40%"
           justify="space-between"
           align="center"
         >
@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = () => {
         </Flex>
         <Flex
           justify="space-between"
-          width="35vw"
+          width="35%"
           align="center"
         >
           <SearchForm />
@@ -105,13 +105,11 @@ const SearchForm: React.FC<SearchFormProps> = () => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        border="0"
         rounded="md"
         bg="white"
         color="gray.300"
-        w="20vw"
-        h='6vh'
-        px="4px"
+        w="2xs"
+        p="2px"
         boxShadow='base'
       >
         <chakra.input
@@ -126,7 +124,7 @@ const SearchForm: React.FC<SearchFormProps> = () => {
           outline="none"
           value={"keywords ..."}
         />
-        <PrimaryButton width="6vw" height="5vh">
+        <PrimaryButton>
           <chakra.small>Search</chakra.small>
         </PrimaryButton>
       </chakra.form>
