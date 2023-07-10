@@ -1,3 +1,4 @@
+import React from "react";
 import { Button, Text, Stack, Divider } from "@chakra-ui/react";
 
 function ThreeDot() {

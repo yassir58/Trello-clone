@@ -19,18 +19,20 @@ import {
   faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import { ColumnContainer } from "./Containers";
-import { LargeButton, Label } from "./Buttons"
+import { LargeButton, Label } from "./Buttons";
 import AddCard from "../AddCard";
+import ThreeDot from "../ThreeDot";
+import { PopOver } from "../Popover";
 interface CardProps {
-    card: {
-      id: number;
-      title: string;
-      cardBanner?: string;
-      tags?: Array<{ value: string; color: string }>;
-      members?: Array<string>;
-      commentCount?: number;
-      attachmentCount?: number;
-    }
+  card: {
+    id: number;
+    title: string;
+    cardBanner?: string;
+    tags?: Array<{ value: string; color: string }>;
+    members?: Array<string>;
+    commentCount?: number;
+    attachmentCount?: number;
+  };
 }
 
 interface CardInfoProps {
@@ -40,25 +42,25 @@ interface CardInfoProps {
 
 interface CardListProps {
   cards?: Array<{
-    id:number;
-    title: string ;
-    cardBanner:string;
-    tags: Array <{value: string ; color:string}>
-    members: Array<string>
-    commentCount: number
-    attachmentCount: number
+    id: number;
+    title: string;
+    cardBanner: string;
+    tags: Array<{ value: string; color: string }>;
+    members: Array<string>;
+    commentCount: number;
+    attachmentCount: number;
   }>;
 }
 
 const defaultCard = {
   id: 1,
-  cardBanner:"",
-  title:"",
+  cardBanner: "",
+  title: "",
   commentCount: 0,
   attachmentCount: 0,
   tags: [],
   members: [],
-}
+};
 
 export const CardCp: React.FC<CardProps> = ({ card = defaultCard }) => {
   return (
@@ -69,20 +71,26 @@ export const CardCp: React.FC<CardProps> = ({ card = defaultCard }) => {
           <Stack mt="6" spacing="3">
             <Heading size="sm">{card.title}</Heading>
             <HStack spacing={2}>
-              {card.tags && card.tags.map((tag, index)=>{
+              {card.tags &&
+                card.tags.map((tag, index) => {
                   if (index < 3)
-                  return <Label color={tag.color}>{tag.value}</Label>
-                })
-              }
+                    return <Label color={tag.color}>{tag.value}</Label>;
+                })}
             </HStack>
             <Flex justify="space-between" width="100%" align="center">
               <HStack spacing={2}>
-              {
-                card.members && card.members.map((member, index)=>{
-                  if (index < 2)
-                  return <Avatar size='xs' rounded="md" borderRadius='md' src={member} />;
-                })
-              }
+                {card.members &&
+                  card.members.map((member, index) => {
+                    if (index < 2)
+                      return (
+                        <Avatar
+                          size="xs"
+                          rounded="md"
+                          borderRadius="md"
+                          src={member}
+                        />
+                      );
+                  })}
                 <IconButton
                   colorScheme="blue"
                   size="xs"
@@ -92,10 +100,7 @@ export const CardCp: React.FC<CardProps> = ({ card = defaultCard }) => {
               </HStack>
               <HStack spacing={2}>
                 <CardInfo icon={faComment} value={"12"} />
-                <CardInfo
-                  icon={faPaperclip}
-                  value={"3"}
-                />
+                <CardInfo icon={faPaperclip} value={"3"} />
               </HStack>
             </Flex>
           </Stack>
@@ -124,7 +129,7 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
   const [createCard, setCreateCard] = React.useState(false);
   const createCardHandler = () => {
     setCreateCard(!createCard);
-  }
+  };
   return (
     <div>
       <ColumnContainer>
@@ -138,14 +143,20 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
           <Heading size="sm" fontWeight="normal">
             This is list title
           </Heading>
-          <FontAwesomeIcon icon={faEllipsis} />
+          <PopOver
+            icon={faEllipsis}
+            buttonTheme={{ bg: "transparent", color: "gray.400" }}
+          >
+            <ThreeDot />
+          </PopOver>
         </Flex>
         <ColumnContainer>
-          {cards && cards.map((item) => {
-            return <CardCp card={item} />;
-          })}
+          {cards &&
+            cards.map((item) => {
+              return <CardCp card={item} />;
+            })}
         </ColumnContainer>
-        {createCard && <AddCard/>}
+        {createCard && <AddCard />}
         <LargeButton onClickHandler={createCardHandler}>
           <chakra.small>Add another Card</chakra.small>
           <FontAwesomeIcon icon={faPlus} />
