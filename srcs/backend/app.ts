@@ -2,12 +2,16 @@ import express, { Express, Request, Response } from "express";
 import morgan from "morgan";
 import { PrismaClient } from "@prisma/client";
 
+import boardsRouter from "./routes/boardsRouter";
+
 const prisma = new PrismaClient();
 const app: Express = express();
 
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
 
 app.use(express.json());
+
+app.use("/api/v1/boards", boardsRouter);
 
 app.post("/users", async (req: Request, res: Response) => {
   try {
@@ -43,96 +47,34 @@ app.get("/users", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/boards", async (req: Request, res: Response) => {
-  const board = await prisma.board.create({
-    data: {
-      title: req.body.title,
-      coverImage: req.body.coverImage,
-      description: req.body.description,
-      author: {
-        connect: { id: req.body.authorId },
-      },
-    },
-  });
-  if (!board)
-    return res.status(403).json({
-      status: "fail",
-      message: "could not create board",
-    });
-  res.status(201).send(`Board created succesfully: ${board.id}`);
-});
-
-//users/id/boards
-
-app.get("/boards", async (req: Request, res: Response) => {
+app.get("/users/:id", async (req: Request, res: Response) => {
   try {
-    const boards = await prisma.board.findMany({
-      where: {
-        visibilty: true,
-      },
-      include: {
-        author: true,
-        users: true,
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      boards,
-      count: boards.length,
-    });
-  } catch (e) {
-    return res.status(404).json({
-      status: "fail",
-      message: "Error getting the boards",
-    });
-  }
-});
-
-app.get("/boards/:id", async (req: Request, res: Response) => {
-  const id = req.params.id;
-  try {
-    const board = await prisma.board.findUnique({
+    const id = req.params.id;
+    const user = await prisma.user.findUnique({
       where: {
         id,
       },
       include: {
-        author: true,
-        users: true,
-        lists: true,
+        contriBoards: {
+          include: {
+            users: true,
+          },
+        },
+        myBoards: {
+          include: {
+            users: true,
+          },
+        },
       },
     });
     res.status(200).json({
       status: "success",
-      board,
+      user,
     });
   } catch (e) {
-    return res.status(404).json({
+    res.status(404).json({
       status: "fail",
-      message: `Failed to get board ${id}`,
-    });
-  }
-});
-
-app.put("/boards/:id", async (req: Request, res: Response) => {
-  const id = req.params.id;
-  const updatedFields = req.body;
-  try {
-    const board = await prisma.board.update({
-      where: {
-        id,
-      },
-      data: {
-        ...updatedFields,
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      board,
-    });
-  } catch (e) {
-    return res.status(404).json({
-      status: "fail",
-      message: `Failed to get board ${id}`,
+      message: `No user found with ${req.params.id}`,
     });
   }
 });
