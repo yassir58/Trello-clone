@@ -20,7 +20,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { ColumnContainer } from "./Containers";
 import { LargeButton, Label } from "./Buttons"
-
+import AddCard from "../AddCard";
 interface CardProps {
     card: {
       id: number;
@@ -63,11 +63,11 @@ const defaultCard = {
 export const CardCp: React.FC<CardProps> = ({ card = defaultCard }) => {
   return (
     <div>
-      <Card maxW="sm" w="98%" rounded="lg">
+      <Card maxW="sm" w="98%" rounded="xl">
         <CardBody>
           <Image src={card.cardBanner} alt={card.title} borderRadius="lg" />
           <Stack mt="6" spacing="3">
-            <Heading size="md">{card.title}</Heading>
+            <Heading size="sm">{card.title}</Heading>
             <HStack spacing={2}>
               {card.tags && card.tags.map((tag, index)=>{
                   if (index < 3)
@@ -121,6 +121,10 @@ export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
 };
 
 export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
+  const [createCard, setCreateCard] = React.useState(false);
+  const createCardHandler = () => {
+    setCreateCard(!createCard);
+  }
   return (
     <div>
       <ColumnContainer>
@@ -141,7 +145,8 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
             return <CardCp card={item} />;
           })}
         </ColumnContainer>
-        <LargeButton>
+        {createCard && <AddCard/>}
+        <LargeButton onClickHandler={createCardHandler}>
           <chakra.small>Add another Card</chakra.small>
           <FontAwesomeIcon icon={faPlus} />
         </LargeButton>

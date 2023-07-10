@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, Button, Input, Wrap } from "@chakra-ui/react";
 
 const AddCard = () => {

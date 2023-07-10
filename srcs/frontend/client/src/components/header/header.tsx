@@ -20,6 +20,7 @@ const Header: React.FC<HeaderProps> = () => {
           width="40%"
           justify="space-between"
           align="center"
+          
         >
           <SmallLogo />
           <Nav />
@@ -28,6 +29,7 @@ const Header: React.FC<HeaderProps> = () => {
           justify="space-between"
           width="35%"
           align="center"
+          
         >
           <SearchForm />
           <ProfileHeader />

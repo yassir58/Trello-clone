@@ -7,6 +7,8 @@ html {
   font-family: 'Montserrat', sans-serif;
 }
 
+
+
 $shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
 
 @mixin box-shadow-bottom {
@@ -28,6 +30,15 @@ $shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
   // Your element's styles here
   
   @include box-shadow-bottom;
+    @media screen and (max-width: 1200px) {
+    // Styles for all children of parent element at or below 768px width
+
+      > * {
+        // border:1px solid red;
+        display: hidden;
+      }
+  }
+
 }
 
 
@@ -41,3 +52,4 @@ $shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
   border-radius: 22px;
   object-fit: cover;
 }
+

@@ -1,30 +1,32 @@
 import React, { useEffect , useState} from "react";
-import { chakra, Avatar, Flex, HStack, IconButton} from "@chakra-ui/react";
+import { chakra, Avatar, Flex, HStack} from "@chakra-ui/react";
 import {
-    SecondaryButton,
     LargeButton,
 } from "./ui-elements/Buttons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faGlobe,
-  faLock,
   faPlus,
   faEllipsis,
 } from "@fortawesome/free-solid-svg-icons";
 import { FlexContainer, ColumnContainer} from "./ui-elements/Containers";
 import { CardList } from "./ui-elements/Media";
+import { PopOver } from "./Popover";
+import { faGlobe } from "@fortawesome/free-solid-svg-icons";
+import Visibility from "./Visibility";
 interface BoardProps {
   
   
 }
 
 interface BoardMenuBarProps {
-  visibilty: boolean;
   members: string[];
-  toggler: () => void;
 }
 
-export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ visibilty, members , toggler}) => {
+export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
+  
+  
+
+
   return <div>
     <Flex
         justify="space-between"
@@ -33,33 +35,24 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ visibilty, members ,
         h="auto"
         mx="auto"
         mt="20px"
-        mb="12px"
+        mb="30px"
       >
         <HStack spacing={3}>
-          <SecondaryButton onClickHandler={toggler}>
-            {visibilty ? (
-                <FontAwesomeIcon icon={faGlobe} />
-                ) : (
-                <FontAwesomeIcon icon={faLock} />
-            )}
-            <chakra.small>
-                {visibilty ? "Public" : "Private"}
-            </chakra.small>
-          </SecondaryButton>
+         <PopOver icon={faGlobe} value='public' size='2xs' buttonTheme={{bg:'gray.100', color:'gray.500'}}>
+            <Visibility/>
+         </PopOver>
           {members.map((member) => {
             return <Avatar size='sm' rounded="md" borderRadius='md' src={member} />;
           })}
-          <IconButton
-          colorScheme='blue'
-          size='sm'
-          aria-label='Search database'
-          icon={<FontAwesomeIcon icon={faPlus} size="lg" />}
-/>
+
+          <PopOver icon={faPlus}  size='2xs' buttonTheme={{bg:'blue.500', color:'white'}}>
+            <small>hello fucking world</small>
+          </PopOver>
+         
         </HStack>
-        <SecondaryButton>
-          <FontAwesomeIcon icon={faEllipsis} />
-          <chakra.small> Menu </chakra.small>
-        </SecondaryButton>
+        <PopOver icon={faEllipsis} value='Menu' size="lg" buttonTheme={{bg:'gray.100', color:'gray.500'}}>
+          <small>hello fucking world</small>
+        </PopOver>
       </Flex>
   </div>
 }
@@ -73,11 +66,8 @@ export const Board: React.FC<BoardProps> = () => {
 ]
 
   const [cards, setCards] = useState([]);
-  const [visibilty, setVisibilty] = useState(true);
   const endPoint = "http://localhost:3001/Data";
-  const toggleVisibilty = () => {
-    setVisibilty(!visibilty);
-  }
+
 
   useEffect(() => {
     fetch(endPoint)
@@ -86,15 +76,16 @@ export const Board: React.FC<BoardProps> = () => {
   },[]);
   return (
     <div>
-      <BoardMenuBar visibilty={visibilty} members={members} toggler={toggleVisibilty}/>
+      <BoardMenuBar  members={members}/>
       <FlexContainer >
        <CardList cards={cards} /> 
+        <CardList/>
         <ColumnContainer>
         <LargeButton>
           <chakra.small>Add another list</chakra.small>
           <FontAwesomeIcon icon={faPlus} />
         </LargeButton>
-        </ColumnContainer>   
+        </ColumnContainer>
       </FlexContainer>
     </div>
   );

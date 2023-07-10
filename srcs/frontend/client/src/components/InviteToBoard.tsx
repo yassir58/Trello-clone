@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Card,
   CardBody,
@@ -12,7 +13,8 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
-import { SearchIcon } from "@chakra-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSearch } from "@fortawesome/free-solid-svg-icons";
 
 const InviteToBoard = () => {
   return (
@@ -26,7 +28,7 @@ const InviteToBoard = () => {
       <CardBody mx={-3} marginTop={-4}>
         <InputGroup>
           <InputRightElement pointerEvents="none">
-            <SearchIcon color="gray.300" />
+            <FontAwesomeIcon icon={faSearch} size="sm"/>
           </InputRightElement>
           <Input
             shadow="md"
