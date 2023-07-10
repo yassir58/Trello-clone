@@ -19,6 +19,7 @@ model Board {
   author      User    @relation(fields: [authorId], references: [id])
   authorId    String
   users       User[]  @relation("Members")
+  lists       List[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -29,11 +30,11 @@ model User {
   userName     String  @unique
   email        String  @unique
   profileImage String
-  boards       Board[] @relation("Members")
+  contriBoards Board[] @relation("Members")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Board     Board[]
+  myBoards  Board[]
   comments  Comment[]
 }
 
@@ -44,6 +45,8 @@ model List {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  Board     Board?   @relation(fields: [boardId], references: [id])
+  boardId   String?
 }
 
 model Card {
