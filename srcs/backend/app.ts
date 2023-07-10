@@ -13,7 +13,7 @@ app.use(express.json({ limit: "10kb" }));
 app.post("/users", async (req: Request, res: Response) => {
   const user = await prisma.user.create({
     data: {
-      userName: faker.internet.userName(),
+      userName: req.body.userName,
       profileImage: faker.image.url(),
     },
   });
@@ -46,6 +46,7 @@ app.post("/boards", async (req: Request, res: Response) => {
     data: {
       title: faker.company.catchPhrase(),
       coverImage: faker.image.url(),
+      description: faker.commerce.department(),
       author: {
         connect: { id: "85151a83-d7c3-48d2-8235-a9987a6aea6a" },
       },
