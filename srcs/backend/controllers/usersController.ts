@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+import AppError from "../utils/AppError";
 
 const prisma = new PrismaClient();
 
@@ -37,7 +38,11 @@ export const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserById = async (req: Request, res: Response) => {
+export const getUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const id = req.params.id;
     const user = await prisma.user.findUnique({
@@ -57,6 +62,8 @@ export const getUserById = async (req: Request, res: Response) => {
         },
       },
     });
+    if (!user)
+      return next(new AppError(`User ${req.params.id} does not exists`, 400));
     res.status(200).json({
       status: "success",
       user,
