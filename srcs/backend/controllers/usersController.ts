@@ -1,11 +1,12 @@
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 import AppError from "../utils/AppError";
+import catchAsync from "../utils/catchAsync";
 
 const prisma = new PrismaClient();
 
-export const createUser = async (req: Request, res: Response) => {
-  try {
+export const createUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const user = await prisma.user.create({
       data: {
         userName: req.body.userName,
@@ -14,36 +15,22 @@ export const createUser = async (req: Request, res: Response) => {
       },
     });
     res.status(201).send(`user created succesfully: ${user.id}`);
-  } catch (e) {
-    res.status(400).json({
-      status: "fail",
-      message: "could not create user",
-    });
   }
-};
+);
 
-export const getAllUsers = async (req: Request, res: Response) => {
-  try {
+export const getAllUsers = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const users = await prisma.user.findMany({});
     res.status(200).json({
       status: "success",
       users,
       count: users.length,
     });
-  } catch (e) {
-    res.status(404).json({
-      status: "fail",
-      message: "No users found",
-    });
   }
-};
+);
 
-export const getUserById = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
+export const getUserById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const user = await prisma.user.findUnique({
       where: {
@@ -68,10 +55,5 @@ export const getUserById = async (
       status: "success",
       user,
     });
-  } catch (e) {
-    res.status(404).json({
-      status: "fail",
-      message: `No user found with ${req.params.id}`,
-    });
   }
-};
+);

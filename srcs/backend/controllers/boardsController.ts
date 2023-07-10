@@ -1,29 +1,33 @@
 import { PrismaClient } from "@prisma/client";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
+
+import catchAsync from "../utils/catchAsync";
+import AppError from "../utils/AppError";
 
 const prisma = new PrismaClient();
 
-export const createBoard = async (req: Request, res: Response) => {
-  const board = await prisma.board.create({
-    data: {
-      title: req.body.title,
-      coverImage: req.body.coverImage,
-      description: req.body.description,
-      author: {
-        connect: { id: req.body.authorId },
+export const createBoard = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const board = await prisma.board.create({
+      data: {
+        title: req.body.title,
+        coverImage: req.body.coverImage,
+        description: req.body.description,
+        author: {
+          connect: { id: req.body.authorId },
+        },
       },
-    },
-  });
-  if (!board)
-    return res.status(403).json({
-      status: "fail",
-      message: "could not create board",
     });
-  res.status(201).send(`Board created succesfully: ${board.id}`);
-};
+    if (!board) next(new AppError("Could not create board", 400));
+    res.status(201).json({
+      status: "success",
+      board,
+    });
+  }
+);
 
-export const getAllBoards = async (req: Request, res: Response) => {
-  try {
+export const getAllBoards = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const boards = await prisma.board.findMany({
       where: {
         visibilty: true,
@@ -38,16 +42,11 @@ export const getAllBoards = async (req: Request, res: Response) => {
       boards,
       count: boards.length,
     });
-  } catch (e) {
-    return res.status(404).json({
-      status: "fail",
-      message: "Error getting the boards",
-    });
   }
-};
+);
 
-export const getBoardById = async (req: Request, res: Response) => {
-  try {
+export const getBoardById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const board = await prisma.board.findUnique({
       where: {
@@ -63,16 +62,11 @@ export const getBoardById = async (req: Request, res: Response) => {
       status: "success",
       board,
     });
-  } catch (e) {
-    return res.status(404).json({
-      status: "fail",
-      message: `Failed to get board ${req.params.id}`,
-    });
   }
-};
+);
 
-export const updateBoardById = async (req: Request, res: Response) => {
-  try {
+export const updateBoardById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
     const updatedFields = req.body;
     const board = await prisma.board.update({
@@ -87,10 +81,5 @@ export const updateBoardById = async (req: Request, res: Response) => {
       status: "success",
       board,
     });
-  } catch (e) {
-    return res.status(404).json({
-      status: "fail",
-      message: `Failed to get board ${req.params.id}`,
-    });
   }
-};
+);
