@@ -5,6 +5,7 @@ node_modules/
 build/
 dist/*.js
 dist/*.json
+srcs/frontend/client/dist/bundle.js
 
 
 # Ignore development environment files

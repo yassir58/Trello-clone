@@ -1,53 +1,56 @@
 import express, { Express, Request, Response } from "express";
 import morgan from "morgan";
 import { PrismaClient } from "@prisma/client";
-import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
 const app: Express = express();
 
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
 
-app.use(express.json({ limit: "10kb" }));
+app.use(express.json());
 
 app.post("/users", async (req: Request, res: Response) => {
-  const user = await prisma.user.create({
-    data: {
-      userName: faker.internet.userName(),
-      profileImage: faker.image.url(),
-    },
-  });
-  if (!user)
-    return res.status(403).json({
+  try {
+    const user = await prisma.user.create({
+      data: {
+        userName: req.body.userName,
+        profileImage: req.body.profileImage,
+        email: req.body.email,
+      },
+    });
+    res.status(201).send(`user created succesfully: ${user.id}`);
+  } catch (e) {
+    res.status(400).json({
       status: "fail",
       message: "could not create user",
     });
-  res.status(201).send(`user created succesfully: ${user.id}`);
+  }
 });
 
 app.get("/users", async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany({
-    include: {
-      Board: true,
-    },
-  });
-  if (!users)
-    return res.status(404).json({
-      status: "fail",
-      message: "No baords found",
+  try {
+    const users = await prisma.user.findMany({});
+    res.status(200).json({
+      status: "success",
+      users,
+      count: users.length,
     });
-  res.status(200).json({
-    users,
-  });
+  } catch (e) {
+    res.status(404).json({
+      status: "fail",
+      message: "No users found",
+    });
+  }
 });
 
 app.post("/boards", async (req: Request, res: Response) => {
   const board = await prisma.board.create({
     data: {
-      title: faker.company.catchPhrase(),
-      coverImage: faker.image.url(),
+      title: req.body.title,
+      coverImage: req.body.coverImage,
+      description: req.body.description,
       author: {
-        connect: { id: "85151a83-d7c3-48d2-8235-a9987a6aea6a" },
+        connect: { id: req.body.authorId },
       },
     },
   });
@@ -59,20 +62,79 @@ app.post("/boards", async (req: Request, res: Response) => {
   res.status(201).send(`Board created succesfully: ${board.id}`);
 });
 
+//users/id/boards
+
 app.get("/boards", async (req: Request, res: Response) => {
-  const boards = await prisma.board.findMany({
-    include: {
-      users: true,
-    },
-  });
-  if (!boards)
+  try {
+    const boards = await prisma.board.findMany({
+      where: {
+        visibilty: true,
+      },
+      include: {
+        author: true,
+        users: true,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      boards,
+      count: boards.length,
+    });
+  } catch (e) {
     return res.status(404).json({
       status: "fail",
-      message: "No baords found",
+      message: "Error getting the boards",
     });
-  res.status(200).json({
-    boards,
-  });
+  }
+});
+
+app.get("/boards/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  try {
+    const board = await prisma.board.findUnique({
+      where: {
+        id,
+      },
+      include: {
+        author: true,
+        users: true,
+        lists: true,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      board,
+    });
+  } catch (e) {
+    return res.status(404).json({
+      status: "fail",
+      message: `Failed to get board ${id}`,
+    });
+  }
+});
+
+app.put("/boards/:id", async (req: Request, res: Response) => {
+  const id = req.params.id;
+  const updatedFields = req.body;
+  try {
+    const board = await prisma.board.update({
+      where: {
+        id,
+      },
+      data: {
+        ...updatedFields,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      board,
+    });
+  } catch (e) {
+    return res.status(404).json({
+      status: "fail",
+      message: `Failed to get board ${id}`,
+    });
+  }
 });
 
 export default app;
