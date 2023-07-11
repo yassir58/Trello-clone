@@ -1,19 +1,19 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 
-import { listValidator, userValidator } from "../utils/validator";
+import { listValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 
 const prisma = new PrismaClient();
 
 export const createList = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { error, value } = userValidator(req.body);
+  const { error, value } = listValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
   const list = await prisma.list.create({
     data: {
       name: value.name,
-      Board: {
+      Board: { 
         connect: value.boardId,
       },
     },
