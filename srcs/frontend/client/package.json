@@ -21,6 +21,7 @@
     "babel-plugin-macros": "^3.1.0",
     "framer-motion": "^10.12.18",
     "json-server": "^0.17.3",
+    "node-sass": "^9.0.0",
     "postcss": "^8.4.23",
     "postcss-loader": "^7.3.0",
     "prop-types": "^15.8.1",
