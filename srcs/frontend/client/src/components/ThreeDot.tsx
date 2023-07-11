@@ -19,7 +19,7 @@ function ThreeDot() {
       >
         <Text>Rename</Text>
       </Button>
-      <Divider/>
+      <Divider />
       <Button
         py={8}
         borderRadius="xl"
