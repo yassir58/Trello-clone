@@ -1,8 +1,9 @@
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
+
+import { userValidator } from "../utils/validator";
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
-import { userValidator } from "../utils/validator";
 
 const prisma = new PrismaClient();
 

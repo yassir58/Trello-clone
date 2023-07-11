@@ -1,15 +1,20 @@
 import { PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
+
+import { listValidator, userValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
+import AppError from "../utils/AppError";
 
 const prisma = new PrismaClient();
 
 export const createList = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { error, value } = userValidator(req.body);
+  if (error) return next(new AppError(error.message, 400));
   const list = await prisma.list.create({
     data: {
-      name: req.body.name,
+      name: value.name,
       Board: {
-        connect: req.body.boardId,
+        connect: value.boardId,
       },
     },
   });
@@ -51,6 +56,7 @@ export const updateListById = catchAsync(async (req: Request, res: Response, nex
       ...updatedFields,
     },
   });
+  if (!list) return next(new AppError(`Could not update list ${id}`, 400));
   res.status(204).json({
     status: "success",
     list,
@@ -64,6 +70,7 @@ export const deleteListById = catchAsync(async (req: Request, res: Response, nex
       id,
     },
   });
+  if (!list) return next(new AppError(`Could not delete list ${id}`, 400));
   res.status(204).json({
     status: "success",
     list,
