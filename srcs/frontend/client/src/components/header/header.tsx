@@ -1,11 +1,8 @@
 import React from "react";
 import { Flex, chakra, Avatar, HStack } from "@chakra-ui/react";
 import "../../styles/app.scss";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faGripVertical } from "@fortawesome/free-solid-svg-icons";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
-import { SecondaryButton , PrimaryButton} from "../ui-elements/Buttons";
-
+import { SecondaryButton, PrimaryButton } from "../ui-elements/Buttons";
+import { BsFillGrid3X3GapFill , BsCaretDownFill} from "react-icons/bs";
 interface HeaderProps {}
 interface NavProps {}
 interface ProfileHeaderProps {}
@@ -15,20 +12,18 @@ interface LogoProps {}
 const Header: React.FC<HeaderProps> = () => {
   return (
     <div>
-      <Flex className="header" px="18px" py="10px"  justify="space-between" align="center">
-        <Flex
-          width="40%"
-          justify="space-between"
-          align="center"
-        >
+      <Flex
+        className="header"
+        px="18px"
+        py="10px"
+        justify="space-between"
+        align="center"
+      >
+        <Flex width="40%" justify="space-between" align="center">
           <SmallLogo />
           <Nav />
         </Flex>
-        <Flex
-          justify="space-between"
-          width="35%"
-          align="center"
-        >
+        <Flex justify="space-between" width="35%" align="center">
           <SearchForm />
           <ProfileHeader />
         </Flex>
@@ -48,10 +43,10 @@ const Nav: React.FC<NavProps> = () => {
         bg="gray.200"
         mx="1.5rem"
       ></chakra.div>
-     <SecondaryButton >
-     <FontAwesomeIcon icon={faGripVertical} />
+      <SecondaryButton>
+        <BsFillGrid3X3GapFill />
         <chakra.small>All boards</chakra.small>
-     </SecondaryButton>
+      </SecondaryButton>
     </Flex>
   );
 };
@@ -84,23 +79,23 @@ const SmallLogo: React.FC<LogoProps> = () => {
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   return (
-    <HStack spacing={3} color='gray.600'>
-      <Avatar 
-        size='sm'
-        borderRadius='md'
+    <HStack spacing={3} color="gray.600">
+      <Avatar
+        size="sm"
+        borderRadius="md"
         src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZSUyMHBpY3R1cmV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
       />
       <chakra.small color="gray.600" mx="10px">
         Javier lima
       </chakra.small>
-      <FontAwesomeIcon icon={faCaretDown} />
+      <BsCaretDownFill />
     </HStack>
   );
 };
 
 const SearchForm: React.FC<SearchFormProps> = () => {
   return (
-    <div >
+    <div>
       <chakra.form
         display="flex"
         justifyContent="space-between"
@@ -110,7 +105,7 @@ const SearchForm: React.FC<SearchFormProps> = () => {
         color="gray.300"
         w="2xs"
         p="2px"
-        boxShadow='base'
+        boxShadow="base"
       >
         <chakra.input
           type="text"

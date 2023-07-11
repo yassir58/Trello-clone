@@ -19,8 +19,8 @@ export const FlexContainer: React.FC<Props> = ({ children, width = '98%' }) => {
   const backgroundColor = useColorModeValue("rgba(236, 242, 255, 0.4)", "rgba(236, 242, 255, 0.4)");
   return (
     <div>
-      <Flex w={width} justify="start" justifySelf='center' mx='auto' flexWrap='wrap' align="start" flexDir='row'
-      rounded='md' bg={backgroundColor} p='8px' h='auto' border='none' gap='16px'
+      <Flex w={width} justify="start" justifySelf='center' mx='auto' my='12px'  flexWrap='wrap' align="start" flexDir='row'
+      rounded='md' bg={backgroundColor} px='10px' py='20px' h='auto' border='none' gap='20px'
       >
         {children}
       </Flex>
@@ -28,7 +28,7 @@ export const FlexContainer: React.FC<Props> = ({ children, width = '98%' }) => {
   );
 };
 
-export const ColumnContainer: React.FC<ColumnProps> = ({ children, width = 'xs' }) => {
+export const ColumnContainer: React.FC<ColumnProps> = ({ children, width = '2xs' }) => {
     return (
         <Flex width={width} gap='12px'  flexDir='column' h='auto' justify='start'  align='center'>
             {children}

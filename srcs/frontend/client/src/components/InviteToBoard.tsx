@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Card,
   CardBody,
@@ -11,8 +12,7 @@ import {
   Button,
   Stack,
 } from "@chakra-ui/react";
-
-import { SearchIcon } from "@chakra-ui/icons";
+import {BiSearch} from "react-icons/bi";
 
 const InviteToBoard = () => {
   return (
@@ -26,7 +26,7 @@ const InviteToBoard = () => {
       <CardBody mx={-3} marginTop={-4}>
         <InputGroup>
           <InputRightElement pointerEvents="none">
-            <SearchIcon color="gray.300" />
+            <BiSearch />
           </InputRightElement>
           <Input
             shadow="md"

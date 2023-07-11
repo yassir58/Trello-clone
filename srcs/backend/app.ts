@@ -1,78 +1,37 @@
-import express, { Express, Request, Response } from "express";
-import morgan from "morgan";
+import express, { Express, Request, Response, NextFunction } from "express";
 import { PrismaClient } from "@prisma/client";
-import { faker } from "@faker-js/faker";
+import morgan from "morgan";
 
-const prisma = new PrismaClient();
+import boardsRouter from "./routes/boardsRouter";
+import usersRouter from "./routes/usersRouter";
+import listsRouter from "./routes/listsRouter";
+
+import AppError from "./utils/AppError";
+
 const app: Express = express();
+const prisma = new PrismaClient();
 
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
 
-app.use(express.json({ limit: "10kb" }));
+app.use(express.json());
 
-app.post("/users", async (req: Request, res: Response) => {
-  const user = await prisma.user.create({
-    data: {
-      userName: faker.internet.userName(),
-      profileImage: faker.image.url(),
-    },
-  });
-  if (!user)
-    return res.status(403).json({
-      status: "fail",
-      message: "could not create user",
-    });
-  res.status(201).send(`user created succesfully: ${user.id}`);
+app.use("/api/v1/boards", boardsRouter);
+app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/lists", listsRouter);
+
+app.all("*", (req: Request, res: Response, next: NextFunction) => {
+  next(new AppError("Could not get the route", 404));
 });
 
-app.get("/users", async (req: Request, res: Response) => {
-  const users = await prisma.user.findMany({
-    include: {
-      Board: true,
-    },
-  });
-  if (!users)
-    return res.status(404).json({
-      status: "fail",
-      message: "No baords found",
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  if (err instanceof AppError) {
+    err.statusCode = err.statusCode || 500;
+    err.status = err.status || "Failure";
+    res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message,
     });
-  res.status(200).json({
-    users,
-  });
-});
-
-app.post("/boards", async (req: Request, res: Response) => {
-  const board = await prisma.board.create({
-    data: {
-      title: faker.company.catchPhrase(),
-      coverImage: faker.image.url(),
-      author: {
-        connect: { id: "85151a83-d7c3-48d2-8235-a9987a6aea6a" },
-      },
-    },
-  });
-  if (!board)
-    return res.status(403).json({
-      status: "fail",
-      message: "could not create board",
-    });
-  res.status(201).send(`Board created succesfully: ${board.id}`);
-});
-
-app.get("/boards", async (req: Request, res: Response) => {
-  const boards = await prisma.board.findMany({
-    include: {
-      users: true,
-    },
-  });
-  if (!boards)
-    return res.status(404).json({
-      status: "fail",
-      message: "No baords found",
-    });
-  res.status(200).json({
-    boards,
-  });
+  }
 });
 
 export default app;

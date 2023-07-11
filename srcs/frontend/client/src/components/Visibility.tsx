@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Text,
   Card,
@@ -11,7 +12,7 @@ import {
 
 const Visibility = () => {
   return (
-    <Card borderRadius="xl" shadow="md" marginTop={10}>
+    <Card borderRadius="xl" shadow="md" marginTop={10} size='sm'>
       <CardHeader>
         <Heading size="sm">Visibility</Heading>
         <Text size="md" color="gray">

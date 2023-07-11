@@ -16,6 +16,7 @@ interface LightButtonProps {}
 interface LargeButtonProps {
   children: React.ReactNode;
   size?: string;
+  onClickHandler?: () => void;
 }
 interface LabelProps {
     children: React.ReactNode;
@@ -47,7 +48,7 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   children, size = 'sm', onClickHandler
 }) => {
   return (
-    <div>
+    
         <Button
           mx="2px"
           size={size}
@@ -64,29 +65,28 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
           {children}
       </HStack>
         </Button>
-    </div>
   );
 };
 export const LighButton: React.FC<LightButtonProps> = () => {
   return <div></div>;
 };
-export const LargeButton: React.FC<LargeButtonProps> = ({ children, size ='xs' }) => {
+export const LargeButton: React.FC<LargeButtonProps> = ({ children, size ='2xs', onClickHandler }) => {
   return (
-    <div>
+
         <Button
           position="relative"
           width={size}
           bg="blue.100"
           color="blue.500"
-          rounded="md"
+          rounded="xl"
           py='4px'
           _hover={{ bg: "blue.200" }}
+          onClick={() => onClickHandler && onClickHandler()}
         >
       <HStack  display={'flex'} justify='space-between' width='98%'>
           {children}
       </HStack>
         </Button>
-    </div>
   );
 };
 
