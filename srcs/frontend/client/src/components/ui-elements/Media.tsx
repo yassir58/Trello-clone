@@ -11,18 +11,15 @@ import {
   IconButton,
   Avatar,
 } from "@chakra-ui/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEllipsis,
-  faComment,
-  faPaperclip,
-  faPlus,
-} from "@fortawesome/free-solid-svg-icons";
 import { ColumnContainer } from "./Containers";
 import { LargeButton, Label } from "./Buttons";
 import AddCard from "../AddCard";
 import ThreeDot from "../ThreeDot";
 import { PopOver } from "../Popover";
+import {BiPlus} from "react-icons/bi";
+import {MdComment} from "react-icons/md";
+import {BsPaperclip} from "react-icons/bs"
+import {FaEllipsis} from "react-icons/fa6"
 interface CardProps {
   card: {
     id: number;
@@ -62,6 +59,14 @@ const defaultCard = {
   members: [],
 };
 
+interface ProfileCardProps {
+  profile:{
+    name: string;
+    image: string;
+    joined: string;
+  }
+}
+
 export const CardCp: React.FC<CardProps> = ({ card = defaultCard }) => {
   return (
     <div>
@@ -95,12 +100,12 @@ export const CardCp: React.FC<CardProps> = ({ card = defaultCard }) => {
                   colorScheme="blue"
                   size="xs"
                   aria-label="Search database"
-                  icon={<FontAwesomeIcon icon={faPlus} size="lg" />}
+                  icon={<BiPlus />}
                 />
               </HStack>
               <HStack spacing={2}>
-                <CardInfo icon={faComment} value={"12"} />
-                <CardInfo icon={faPaperclip} value={"3"} />
+                <CardInfo icon={<MdComment/>} value={"12"} />
+                <CardInfo icon={<BsPaperclip/>} value={"3"} />
               </HStack>
             </Flex>
           </Stack>
@@ -113,11 +118,11 @@ export const CardCp: React.FC<CardProps> = ({ card = defaultCard }) => {
 export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
   return (
     <div>
-      <HStack spacing={2} color="gray.200">
+      <HStack spacing={2} color="gray.400">
         <chakra.small>
-          <FontAwesomeIcon icon={icon} />
+          {icon}
         </chakra.small>
-        <chakra.small color="gray.200" fontSize="xs">
+        <chakra.small color="gray.400" fontSize="xs">
           {value}
         </chakra.small>
       </HStack>
@@ -144,8 +149,9 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
             This is list title
           </Heading>
           <PopOver
-            icon={faEllipsis}
+            icon={<FaEllipsis/>}
             buttonTheme={{ bg: "transparent", color: "gray.400" }}
+            size="3xs"
           >
             <ThreeDot />
           </PopOver>
@@ -159,9 +165,25 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
         {createCard && <AddCard />}
         <LargeButton onClickHandler={createCardHandler}>
           <chakra.small>Add another Card</chakra.small>
-          <FontAwesomeIcon icon={faPlus} />
+          <BiPlus/>
         </LargeButton>
       </ColumnContainer>
     </div>
   );
 };
+
+
+
+export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
+  return (
+    <div>
+      <HStack spacing={2} align="center">
+        <Avatar size='sm' rounded="md" borderRadius='md' src={profile.image} />
+        <Stack spacing={0}>
+          <Heading size="xs">{profile.name}</Heading>
+          <chakra.small color="gray.500">{profile.joined}</chakra.small>
+        </Stack>
+      </HStack>
+    </div>
+  )
+}

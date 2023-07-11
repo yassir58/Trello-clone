@@ -12,9 +12,7 @@ import {
   Button,
   Stack,
 } from "@chakra-ui/react";
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import {BiSearch} from "react-icons/bi";
 
 const InviteToBoard = () => {
   return (
@@ -28,7 +26,7 @@ const InviteToBoard = () => {
       <CardBody mx={-3} marginTop={-4}>
         <InputGroup>
           <InputRightElement pointerEvents="none">
-            <FontAwesomeIcon icon={faSearch} size="sm"/>
+            <BiSearch />
           </InputRightElement>
           <Input
             shadow="md"

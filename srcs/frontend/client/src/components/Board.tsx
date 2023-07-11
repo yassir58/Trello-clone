@@ -3,16 +3,15 @@ import { chakra, Avatar, Flex, HStack} from "@chakra-ui/react";
 import {
     LargeButton,
 } from "./ui-elements/Buttons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPlus,
-  faEllipsis,
-} from "@fortawesome/free-solid-svg-icons";
+
 import { FlexContainer, ColumnContainer} from "./ui-elements/Containers";
 import { CardList } from "./ui-elements/Media";
 import { PopOver } from "./Popover";
-import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import Visibility from "./Visibility";
+import {Menu} from "./Menu";
+import {BsGlobeEuropeAfrica} from "react-icons/bs";
+import {BiPlus} from "react-icons/bi";
+import {FaEllipsis} from "react-icons/fa6"
 interface BoardProps {
   
   
@@ -38,20 +37,20 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
         mb="30px"
       >
         <HStack spacing={3}>
-         <PopOver icon={faGlobe} value='public' size='2xs' buttonTheme={{bg:'gray.100', color:'gray.500'}}>
+         <PopOver icon={<BsGlobeEuropeAfrica />} value='public'  size='2xs' buttonTheme={{bg:'gray.100', color:'gray.500'}}>
             <Visibility/>
          </PopOver>
           {members.map((member) => {
             return <Avatar size='sm' rounded="md" borderRadius='md' src={member} />;
           })}
 
-          <PopOver icon={faPlus}  size='2xs' buttonTheme={{bg:'blue.500', color:'white'}}>
+          <PopOver icon={<BiPlus/>}  size='2xs' buttonTheme={{bg:'blue.500', color:'white'}}>
             <small>hello fucking world</small>
           </PopOver>
          
         </HStack>
-        <PopOver icon={faEllipsis} value='Menu' size="lg" buttonTheme={{bg:'gray.100', color:'gray.500'}}>
-          <small>hello fucking world</small>
+        <PopOver icon={<FaEllipsis/>} value='Menu' header="Menu" size="md" buttonTheme={{bg:'gray.100', color:'gray.500'}}>
+         <Menu/>
         </PopOver>
       </Flex>
   </div>
@@ -83,7 +82,7 @@ export const Board: React.FC<BoardProps> = () => {
         <ColumnContainer>
         <LargeButton>
           <chakra.small>Add another list</chakra.small>
-          <FontAwesomeIcon icon={faPlus} />
+          <BiPlus/>
         </LargeButton>
         </ColumnContainer>
       </FlexContainer>
