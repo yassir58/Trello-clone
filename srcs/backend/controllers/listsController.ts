@@ -13,7 +13,7 @@ export const createList = catchAsync(async (req: Request, res: Response, next: N
   const list = await prisma.list.create({
     data: {
       name: value.name,
-      Board: { 
+      Board: {
         connect: value.boardId,
       },
     },
@@ -47,13 +47,14 @@ export const getListById = catchAsync(async (req: Request, res: Response, next: 
 
 export const updateListById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
-  const updatedFields = req.body;
+  const { error, value } = listValidator(req.body);
+  if (error) return next(new AppError(error.message, 400));
   const list = await prisma.list.update({
     where: {
       id,
     },
     data: {
-      ...updatedFields,
+      ...value,
     },
   });
   if (!list) return next(new AppError(`Could not update list ${id}`, 400));

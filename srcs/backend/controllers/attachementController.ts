@@ -1,18 +1,21 @@
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
+import { attachementValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 
 const prisma = new PrismaClient();
 
 export const createAttachement = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { error, value } = attachementValidator(req.body);
+  if (error) return next(new AppError(error.message, 400));
   const board = await prisma.attachment.create({
     data: {
-      title: req.body.title,
-      path: req.body.path,
+      title: value.title,
+      path: value.path,
       Card: {
-        connect: { id: req.body.cardId },
+        connect: { id: value.cardId },
       },
     },
   });

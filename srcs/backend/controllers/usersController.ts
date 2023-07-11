@@ -52,3 +52,21 @@ export const getUserById = catchAsync(async (req: Request, res: Response, next: 
     user,
   });
 });
+
+export const updateUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.params.id;
+  const { error, value } = userValidator(req.body);
+  if (error) return next(new AppError(error.message, 400));
+  const board = await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      ...value,
+    },
+  });
+  res.status(200).json({
+    status: "success",
+    board,
+  });
+});
