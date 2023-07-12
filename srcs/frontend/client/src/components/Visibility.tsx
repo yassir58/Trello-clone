@@ -10,36 +10,71 @@ import {
   Stack,
 } from "@chakra-ui/react";
 
+import { MdPublic } from "react-icons/md";
+import { MdLock } from "react-icons/md";
+
 const Visibility = () => {
   return (
-    <Card borderRadius="xl" shadow="md" marginTop={10} size='sm'>
+    <Card borderRadius="xl" shadow="md" width={234} height={220}>
       <CardHeader>
-        <Heading size="sm">Visibility</Heading>
-        <Text size="md" color="gray">
+        <Heading width={49} height={18} fontSize="12" as="b">
+          Visibility
+        </Heading>
+        <Text fontSize="12" color="gray">
           choose who can see the board.
         </Text>
       </CardHeader>
-      <CardBody marginTop={-4}>
-        <Stack>
-          <Button py={10} px={3} borderRadius="xl" bg="white" variant="solid">
-            <Stack>
-              <Wrap align="center">
-                <Heading size="xs">Public</Heading>
+      <CardBody paddingTop={0}>
+        <Stack px={0} mx={0}>
+          <Button
+            borderRadius="xl"
+            variant="ghost"
+            py={7}
+            marginBottom={0}
+          >
+            <Wrap>
+              <Wrap spacingX={0}>
+                <MdPublic />
+                <Heading
+                  width={49}
+                  height={18}
+                  fontSize="12"
+                  as="b"
+                  paddingLeft={0}
+                  marginLeft={0}
+                >
+                  Public
+                </Heading>
+                <Text fontSize="9" color="gray">
+                  Anyone on the internet can see this.
+                </Text>
               </Wrap>
-              <Text fontSize="sm" color="grey">
-                Anyone on the internet can see this.
-              </Text>
-            </Stack>
+            </Wrap>
           </Button>
-          <Button py={10} px={3} borderRadius="xl" bg="white" variant="solid">
-            <Stack marginLeft={-5}>
-              <Wrap align="center">
-                <Heading size="xs">Private</Heading>
+          <Button
+            borderRadius="xl"
+            variant="ghost"
+            py={7}
+            marginBottom={0}
+          >
+            <Wrap>
+              <Wrap spacingX={0}>
+                <MdLock />
+                <Heading
+                  width={49}
+                  height={18}
+                  fontSize="12"
+                  as="b"
+                  paddingLeft={0}
+                  marginLeft={0}
+                >
+                  Private
+                </Heading>
               </Wrap>
-              <Text fontSize="sm" color="grey">
+              <Text fontSize="9" color="gray">
                 only board member can see this.
               </Text>
-            </Stack>
+            </Wrap>
           </Button>
         </Stack>
       </CardBody>

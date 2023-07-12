@@ -15,7 +15,7 @@ function ThreeDot() {
       >
         <chakra.small color='gray.500'  >Rename</chakra.small>
       </Button>
-      <Divider/>
+      <Divider />
       <Button
         py={3}
         borderRadius="xl"
