@@ -72,7 +72,7 @@ export const CardCp: React.FC<CardProps> = ({ card = defaultCard }) => {
     <div>
       <Card maxW="sm" w="98%" rounded="xl">
         <CardBody>
-          <Image src={card.cardBanner} alt={card.title} borderRadius="lg" />
+          <Image src={card.cardBanner} alt={card.title} borderRadius="lg" w='' />
           <Stack mt="6" spacing="3">
             <Heading size="sm">{card.title}</Heading>
             <HStack spacing={2}>

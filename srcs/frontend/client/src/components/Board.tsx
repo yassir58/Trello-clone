@@ -4,13 +4,15 @@ import { LargeButton } from "./ui-elements/Buttons";
 
 import { FlexContainer, ColumnContainer } from "./ui-elements/Containers";
 import { CardList } from "./ui-elements/Media";
-import { PopOver } from "./Popover";
+import { PopOver, ModalComponent, NewBoard } from "./Popover";
 import Visibility from "./Visibility";
 import { Menu } from "./Menu";
 import { BsGlobeEuropeAfrica } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 import { FaEllipsis } from "react-icons/fa6";
+import InviteToBoard from "./InviteToBoard";
 interface BoardProps {}
+
 
 interface BoardMenuBarProps {
   members: string[];
@@ -52,8 +54,11 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
             size="2xs"
             buttonTheme={{ bg: "blue.500", color: "white" }}
           >
-            <small>hello fucking world</small>
+            <InviteToBoard />
           </PopOver>
+          <ModalComponent style={{size:'sm'}}>
+            <NewBoard />
+          </ModalComponent>
         </HStack>
         <PopOver
           icon={<FaEllipsis />}
