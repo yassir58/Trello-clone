@@ -60,6 +60,7 @@ model Card {
   description String
   comments    Comment[]    @relation("comments")
   attachments Attachment[] @relation("attachements")
+  labels      Label[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -91,9 +92,22 @@ model Comment {
 model Invites {
   id String @id @default(uuid())
 
-  user      User     @relation(fields: [userId], references: [id])
-  board     Board    @relation(fields: [boardId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+  board   Board  @relation(fields: [boardId], references: [id])
+  userId  String
+  boardId String
+
   createdAt DateTime @default(now())
-  userId    String
-  boardId   String
+}
+
+model Label {
+  id    String @id @default(uuid())
+  tag   String @unique
+  color String
+
+  card   Card?   @relation(fields: [cardId], references: [id])
+  cardId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

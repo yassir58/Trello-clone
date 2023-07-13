@@ -1,9 +1,10 @@
-import Joi, { ObjectSchema } from "joi";
+import { ObjectSchema } from "joi";
 import userSchema from "../models/userModel";
 import listSchema from "../models/listModel";
 import boardSchema from "../models/boardModel";
-import attachementSchema from "../models/attachementModel";
+import labelSchema from "../models/labelModel";
 import commentSchema from "../models/commentModel";
+import attachementSchema from "../models/attachementModel";
 
 const validator = (schema: ObjectSchema) => (payload: object) => schema.validate(payload, { abortEarly: true });
 
@@ -12,3 +13,4 @@ export const listValidator = validator(listSchema);
 export const boardValidator = validator(boardSchema);
 export const attachementValidator = validator(attachementSchema);
 export const commentValidator = validator(commentSchema);
+export const labelValidator = validator(labelSchema);
