@@ -57,7 +57,7 @@ model Card {
 
   list        List?        @relation("cards", fields: [listId], references: [id], onDelete: SetNull)
   listId      String?
-  description String
+  description String?
   comments    Comment[]    @relation("comments")
   attachments Attachment[] @relation("attachements")
   labels      Label[]

@@ -1,4 +1,6 @@
 import { ObjectSchema } from "joi";
+
+import cardSchema from "../models/cardModel";
 import userSchema from "../models/userModel";
 import listSchema from "../models/listModel";
 import boardSchema from "../models/boardModel";
@@ -14,3 +16,4 @@ export const boardValidator = validator(boardSchema);
 export const attachementValidator = validator(attachementSchema);
 export const commentValidator = validator(commentSchema);
 export const labelValidator = validator(labelSchema);
+export const cardValidator = validator(cardSchema);
