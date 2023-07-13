@@ -29,7 +29,7 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     err.status = err.status || "Failure";
     res.status(err.statusCode).json({
       status: err.status,
-      message: err.message,
+      message: err.message
     });
   }
 });

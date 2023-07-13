@@ -8,6 +8,6 @@ Router.route("/").get(boardsController.getAllBoards).post(boardsController.creat
 Router.route("/:id")
   .get(boardsController.getBoardById)
   .put(boardsController.updateBoardById)
-  .delete(boardsController.updateBoardById);
+  .delete(boardsController.deleteBoardById);
 
 export default Router;

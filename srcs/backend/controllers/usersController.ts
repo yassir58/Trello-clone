@@ -70,3 +70,17 @@ export const updateUserById = catchAsync(async (req: Request, res: Response, nex
     board,
   });
 });
+
+export const deleteUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.params.id;
+  const user = await prisma.user.delete({
+    where: {
+      id,
+    },
+  });
+  if (!user) return next(new AppError(`Could not delete user ${id}`, 400));
+  res.status(204).json({
+    status: "success",
+    user,
+  });
+});
