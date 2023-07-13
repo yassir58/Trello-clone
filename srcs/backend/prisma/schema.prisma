@@ -16,7 +16,7 @@ model Board {
   coverImage  String
   description String
   visibilty   Boolean @default(true)
-  author      User    @relation("authoredBoards", fields: [authorId], references: [id], onDelete: Cascade)
+  author      User    @relation("authoredBoards", fields: [authorId], references: [id])
   authorId    String
   users       User[]  @relation("Members")
   lists       List[]  @relation("lists")
@@ -47,16 +47,16 @@ model List {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Board     Board   @relation("lists",fields: [boardId], references: [id], onDelete: Cascade)
-  boardId   String
+  Board     Board?   @relation("lists", fields: [boardId], references: [id], onDelete: SetNull)
+  boardId   String?
 }
 
 model Card {
   id    String @id @default(uuid())
   title String
 
-  list        List         @relation("cards", fields: [listId], references: [id], onDelete: Cascade)
-  listId      String
+  list        List?        @relation("cards", fields: [listId], references: [id], onDelete: SetNull)
+  listId      String?
   description String
   comments    Comment[]    @relation("comments")
   attachments Attachment[] @relation("attachements")
@@ -72,16 +72,17 @@ model Attachment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Card      Card?    @relation("attachements", fields: [cardId], references: [id], onDelete: Cascade)
+  Card      Card?    @relation("attachements", fields: [cardId], references: [id], onDelete: SetNull)
   cardId    String?
 }
 
 model Comment {
-  id     String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id])
-  card   Card   @relation("comments", fields: [cardId], references: [id], onDelete: Cascade)
-  userId String
-  cardId String
+  id      String  @id @default(uuid())
+  user    User    @relation(fields: [userId], references: [id])
+  card    Card?   @relation("comments", fields: [cardId], references: [id], onDelete: SetNull)
+  cardId  String?
+  userId  String
+  content String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

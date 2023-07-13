@@ -78,6 +78,12 @@ export const deleteUserById = catchAsync(async (req: Request, res: Response, nex
       id,
     },
   });
+  // Find all the boards the user created and contributed to
+
+  // Remove the user from the asscociated board
+
+  // Delete the user
+
   if (!user) return next(new AppError(`Could not delete user ${id}`, 400));
   res.status(204).json({
     status: "success",

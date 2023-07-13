@@ -50,6 +50,9 @@ export const getAllAttachements = catchAsync(async (req: Request, res: Response,
 
 export const deleteAttachementById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
+  // Search for all the card this attachements associated with
+  // Disconnect it from all the cards
+  // Delete the attachement
   const list = await prisma.attachment.delete({
     where: {
       id,
