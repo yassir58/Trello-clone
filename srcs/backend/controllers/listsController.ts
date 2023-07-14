@@ -5,6 +5,8 @@ import { listValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 
+import * as UtilsCtrl from "./factoryController";
+
 const prisma = new PrismaClient();
 
 export const createList = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -71,6 +73,11 @@ export const deleteListById = catchAsync(async (req: Request, res: Response, nex
       id,
     },
   });
+
+  await UtilsCtrl.deleteNullCards();
+  await UtilsCtrl.deleteNullComments();
+  // I should delete all the cards associated with that list
+  // And all the comments associated with that card
   if (!list) return next(new AppError(`Could not delete list ${id}`, 400));
   res.status(204).json({
     status: "success",

@@ -94,8 +94,6 @@ export const deleteBoardById = catchAsync(async (req: Request, res: Response, ne
   await UtilsCtrl.deleteNullLists();
   await UtilsCtrl.deleteNullCards();
   await UtilsCtrl.deleteNullComments();
-  await UtilsCtrl.deleteNullAttachement();
-  await UtilsCtrl.deleteNullLabels();
 
   if (!board) return next(new AppError(`Could not find board ${id}`, 404));
   res.status(204).json({

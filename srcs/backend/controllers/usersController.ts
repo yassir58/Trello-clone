@@ -73,20 +73,37 @@ export const updateUserById = catchAsync(async (req: Request, res: Response, nex
 
 export const deleteUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
-  const user = await prisma.user.delete({
+
+  const myBoards = await prisma.board.findMany({
+    where: { author: { id } },
+  });
+
+  const contriBoards = await prisma.board.findMany({
+    where: { users: { some: { id } } },
+  });
+
+  const disconnectUser = contriBoards.map((board) =>
+    prisma.board.update({
+      where: { id: board.id },
+      data: { users: { disconnect: { id } } },
+    })
+  );
+
+  const deleteAuthor = myBoards.map((board) =>
+    prisma.board.delete({
+      where: { id: board.id },
+    })
+  );
+
+  await Promise.all(disconnectUser);
+  await Promise.all(deleteAuthor);
+  await prisma.user.delete({
     where: {
       id,
     },
   });
-  // Find all the boards the user created and contributed to
 
-  // Remove the user from the asscociated board
-
-  // Delete the user
-
-  if (!user) return next(new AppError(`Could not delete user ${id}`, 400));
   res.status(204).json({
     status: "success",
-    user,
   });
 });

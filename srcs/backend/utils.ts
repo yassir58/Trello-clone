@@ -6,12 +6,12 @@ const prisma = new PrismaClient();
 const main = async () => {
   const board = await prisma.board.update({
     where: {
-      id: "8ea28ace-9c94-47ea-921a-aa8a35d16d3c",
+      id: "c1ee403d-31d0-4eda-800b-c04825a15b6b",
     },
     data: {
       users: {
         connect: {
-          id: "6113a62b-c1a9-45dc-bded-457328457fb0",
+          id: "68aa460f-d52d-4383-a06f-f4835675eb6e",
         },
       },
     },
