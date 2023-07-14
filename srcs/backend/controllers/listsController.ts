@@ -60,7 +60,7 @@ export const updateListById = catchAsync(async (req: Request, res: Response, nex
     },
   });
   if (!list) return next(new AppError(`Could not update list ${id}`, 400));
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
     list,
   });

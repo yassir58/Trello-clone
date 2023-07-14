@@ -17,7 +17,7 @@ export const createCard = catchAsync(async (req: Request, res: Response, next: N
       title: value.title,
       description: value.description,
       list: {
-        connect: value.listId,
+        connect: { id: value.listId },
       },
     },
   });
