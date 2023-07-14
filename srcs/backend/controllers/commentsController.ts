@@ -35,6 +35,7 @@ export const getCommentById = catchAsync(async (req: Request, res: Response, nex
       id,
     },
   });
+  if (!comment) return (next(new AppError(`Could not find comment: ${id}`, 404)))
   res.status(200).json({
     status: "success",
     comment,

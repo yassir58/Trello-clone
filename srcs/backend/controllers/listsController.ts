@@ -14,7 +14,7 @@ export const createList = catchAsync(async (req: Request, res: Response, next: N
     data: {
       name: value.name,
       Board: {
-        connect: value.boardId,
+        connect: { id: value.boardId },
       },
     },
   });

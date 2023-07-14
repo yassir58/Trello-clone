@@ -4,6 +4,7 @@ import { NextFunction, Request, Response } from "express";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 import { boardValidator } from "../utils/validator";
+import * as UtilsCtrl from "./factoryController";
 
 const prisma = new PrismaClient();
 
@@ -35,6 +36,7 @@ export const getAllBoards = catchAsync(async (req: Request, res: Response, next:
     include: {
       author: true,
       users: true,
+      lists: true,
     },
   });
   res.status(200).json({
@@ -56,6 +58,7 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
       lists: true,
     },
   });
+  if (!board) return next(new AppError(`Could not find board: ${id}`, 404));
   res.status(200).json({
     status: "success",
     board,
@@ -87,7 +90,14 @@ export const deleteBoardById = catchAsync(async (req: Request, res: Response, ne
       id,
     },
   });
-  if (!board) return next(new AppError(`Could not delete board ${id}`, 400));
+
+  await UtilsCtrl.deleteNullLists();
+  await UtilsCtrl.deleteNullCards();
+  await UtilsCtrl.deleteNullComments();
+  await UtilsCtrl.deleteNullAttachement();
+  await UtilsCtrl.deleteNullLabels();
+
+  if (!board) return next(new AppError(`Could not find board ${id}`, 404));
   res.status(204).json({
     status: "success",
     board,

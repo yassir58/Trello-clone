@@ -19,7 +19,7 @@ model Board {
   author      User    @relation("authoredBoards", fields: [authorId], references: [id])
   authorId    String
   users       User[]  @relation("Members")
-  lists       List[]  @relation("lists")
+  lists       List[]  @relation("lists") 
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -105,7 +105,7 @@ model Label {
   tag   String @unique
   color String
 
-  card   Card?   @relation(fields: [cardId], references: [id])
+  card   Card?   @relation(fields: [cardId], references: [id], onDelete: SetDefault)
   cardId String?
 
   createdAt DateTime @default(now())
