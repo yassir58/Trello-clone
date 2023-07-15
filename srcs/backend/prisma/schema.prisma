@@ -73,7 +73,7 @@ model Attachment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Card      Card?    @relation("attachements", fields: [cardId], references: [id], onDelete: SetNull)
+  card      Card?    @relation("attachements", fields: [cardId], references: [id], onDelete: SetNull)
   cardId    String?
 }
 

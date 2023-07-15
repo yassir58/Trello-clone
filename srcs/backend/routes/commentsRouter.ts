@@ -1,7 +1,7 @@
 import express from "express";
 import * as commentsController from "../controllers/commentsController";
 
-const Router = express.Router();
+const Router = express.Router({mergeParams: true});
 
 Router.route("/").get(commentsController.getAllComments).post(commentsController.createComment);
 

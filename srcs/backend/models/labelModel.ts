@@ -4,8 +4,8 @@ const uuidExpr: RegExp = new RegExp(/^[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a
 
 const labelSchema = Joi.object({
   color: Joi.string().min(6).max(6),
-  tag: Joi.string().min(3).max(10),
-  cardId: Joi.string().regex(uuidExpr).required(),
+  tag: Joi.string().min(3).max(20),
+  cardId: Joi.string().regex(uuidExpr).optional(),
 });
 
 export default labelSchema;

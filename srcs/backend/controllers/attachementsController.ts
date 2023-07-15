@@ -9,13 +9,15 @@ const prisma = new PrismaClient();
 
 export const createAttachement = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { error, value } = attachementValidator(req.body);
+  const cardId = req.params.cardId || value.cardId;
+  if (!cardId) return next(new AppError("No card id was provided", 400));
   if (error) return next(new AppError(error.message, 400));
   const board = await prisma.attachment.create({
     data: {
       title: value.title,
       path: value.path,
-      Card: {
-        connect: { id: value.cardId },
+      card: {
+        connect: { id: cardId },
       },
     },
   });
@@ -40,19 +42,24 @@ export const getAttachementById = catchAsync(async (req: Request, res: Response,
 });
 
 export const getAllAttachements = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const boards = await prisma.attachment.findMany();
+  const attachements = await prisma.attachment.findMany({
+    where: {
+      card: {
+        id: req.params.cardId ?? undefined,
+      },
+    },
+  });
   res.status(200).json({
     status: "success",
-    boards,
-    count: boards.length,
+    attachements,
+    count: attachements.length,
   });
 });
 
 export const deleteAttachementById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  //? Gonna need the current board id
+  //! @validation: This should be deleted only if the user is a memeber or author of the memeber which the cards belong to
   const id = req.params.id;
-  // Search for all the card this attachements associated with
-  // Disconnect it from all the cards
-  // Delete the attachement
   const list = await prisma.attachment.delete({
     where: {
       id,

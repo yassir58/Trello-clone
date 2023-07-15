@@ -9,13 +9,15 @@ const prisma = new PrismaClient();
 
 export const createLabel = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { error, value } = labelValidator(req.body);
+  const cardId = req.params.cardId || value.cardId;
+  if (!cardId) return next(new AppError("No card id was provided", 400));
   if (error) return next(new AppError(error.message, 400));
   const label = await prisma.label.create({
     data: {
       color: value.color,
       tag: value.tag,
       card: {
-        connect: { id: value.cardId },
+        connect: { id: cardId },
       },
     },
   });
@@ -27,7 +29,13 @@ export const createLabel = catchAsync(async (req: Request, res: Response, next: 
 });
 
 export const getAllLabels = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const labels = await prisma.label.findMany();
+  const labels = await prisma.label.findMany({
+    where: {
+      card: {
+        id: req.params.cardId ?? undefined,
+      },
+    },
+  });
   res.status(200).json({
     status: "success",
     labels,
@@ -37,9 +45,6 @@ export const getAllLabels = catchAsync(async (req: Request, res: Response, next:
 
 export const deleteLabelById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
-  // Search for all the card this label associated with
-  // Disconnect it from all the cards
-  // Delete the Label
   const list = await prisma.label.delete({
     where: {
       id,

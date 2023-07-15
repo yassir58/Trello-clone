@@ -82,6 +82,10 @@ export const deleteUserById = catchAsync(async (req: Request, res: Response, nex
     where: { users: { some: { id } } },
   });
 
+  const userComments = await prisma.comment.findMany({
+    where: { user: { id } },
+  });
+
   const disconnectUser = contriBoards.map((board) =>
     prisma.board.update({
       where: { id: board.id },
@@ -95,8 +99,17 @@ export const deleteUserById = catchAsync(async (req: Request, res: Response, nex
     })
   );
 
+  const deleteComments = userComments.map((comment) =>
+    prisma.comment.delete({
+      where: {
+        id: comment.id,
+      },
+    })
+  );
+
   await Promise.all(disconnectUser);
   await Promise.all(deleteAuthor);
+  await Promise.all(deleteComments);
   await prisma.user.delete({
     where: {
       id,

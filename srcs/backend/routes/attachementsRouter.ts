@@ -1,7 +1,7 @@
 import express from "express";
 import * as attachementsCtrl from "../controllers/attachementsController";
 
-const Router = express.Router();
+const Router = express.Router({ mergeParams: true });
 
 Router.route("/").get(attachementsCtrl.getAllAttachements).post(attachementsCtrl.createAttachement);
 

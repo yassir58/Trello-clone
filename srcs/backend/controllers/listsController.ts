@@ -76,8 +76,6 @@ export const deleteListById = catchAsync(async (req: Request, res: Response, nex
 
   await UtilsCtrl.deleteNullCards();
   await UtilsCtrl.deleteNullComments();
-  // I should delete all the cards associated with that list
-  // And all the comments associated with that card
   if (!list) return next(new AppError(`Could not delete list ${id}`, 400));
   res.status(204).json({
     status: "success",
