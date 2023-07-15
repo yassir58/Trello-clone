@@ -4,7 +4,6 @@ import { NextFunction, Request, Response } from "express";
 import { commentValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
-import { log } from "console";
 
 const prisma = new PrismaClient();
 
@@ -14,8 +13,6 @@ export const createComment = catchAsync(async (req: Request, res: Response, next
   if (!cardId) return next(new AppError("No card id was provided", 400));
   if (error) return next(new AppError(error.message, 400));
   //! This should be changed to userId comming from the @restriction Middlware.
-  log(cardId);
-  log(value.userId);
   const comment = await prisma.comment.create({
     data: {
       content: value.content,
