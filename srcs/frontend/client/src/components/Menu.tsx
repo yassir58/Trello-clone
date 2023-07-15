@@ -103,7 +103,7 @@ export const Menu: React.FC = () => {
 interface MyEditableProps {
   // value: string;
 }
-const MyEditableTextarea: React.FC<MyEditableProps> = () => {
+export const MyEditableTextarea: React.FC<MyEditableProps> = () => {
   const [value, setValue] = useState("");
 
   const handleChange = (event: any) => {

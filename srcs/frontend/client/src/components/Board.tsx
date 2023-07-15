@@ -4,13 +4,15 @@ import { LargeButton } from "./ui-elements/Buttons";
 
 import { FlexContainer, ColumnContainer } from "./ui-elements/Containers";
 import { CardList } from "./ui-elements/Media";
-import { PopOver, ModalComponent, NewBoard } from "./Popover";
+import { PopOver } from "./Popover";
 import Visibility from "./Visibility";
 import { Menu } from "./Menu";
 import { BsGlobeEuropeAfrica } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 import { FaEllipsis } from "react-icons/fa6";
-import InviteToBoard from "./InviteToBoard";
+// import InviteToBoard from "./InviteToBoard";
+// import { AddLable } from "./AddLable";
+import { ChangeCover } from "./ChangeCover";
 interface BoardProps {}
 
 
@@ -19,6 +21,8 @@ interface BoardMenuBarProps {
 }
 
 export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
+
+  
   return (
     <div>
       <Flex
@@ -35,7 +39,7 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
             icon={<BsGlobeEuropeAfrica />}
             value="public"
             size="2xs"
-            buttonTheme={{ bg: "gray.100", color: "gray.500" }}
+            buttonTheme={{ colorScheme: 'gray', size:'sm', color:'#828282' }}
           >
             <Visibility />
           </PopOver>
@@ -52,20 +56,19 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
               </chakra.span>
             }
             size="2xs"
-            buttonTheme={{ bg: "blue.500", color: "white" }}
+            buttonTheme={{ colorScheme:'blue', size: "sm" }}
           >
-            <InviteToBoard />
+            {/* <AddLable /> */}
+            <ChangeCover />
           </PopOver>
-          <ModalComponent style={{size:'sm'}}>
-            <NewBoard />
-          </ModalComponent>
+    
         </HStack>
         <PopOver
           icon={<FaEllipsis />}
           value="Menu"
           header="Menu"
           size="md"
-          buttonTheme={{ bg: "gray.100", color: "gray.500" }}
+          buttonTheme={{ colorScheme: "gray", size: "sm", color: "#828282" }}
         >
           <Menu />
         </PopOver>
@@ -96,7 +99,7 @@ export const Board: React.FC<BoardProps> = () => {
         <CardList cards={cards} />
         <CardList />
         <ColumnContainer>
-          <LargeButton>
+          <LargeButton size="96%">
             <chakra.small>Add another list</chakra.small>
             <BiPlus />
           </LargeButton>
