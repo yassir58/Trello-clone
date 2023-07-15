@@ -5,6 +5,8 @@ import { listValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 
+import * as UtilsCtrl from "./factoryController";
+
 const prisma = new PrismaClient();
 
 export const createList = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -13,8 +15,8 @@ export const createList = catchAsync(async (req: Request, res: Response, next: N
   const list = await prisma.list.create({
     data: {
       name: value.name,
-      Board: { 
-        connect: value.boardId,
+      Board: {
+        connect: { id: value.boardId },
       },
     },
   });
@@ -47,17 +49,18 @@ export const getListById = catchAsync(async (req: Request, res: Response, next: 
 
 export const updateListById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
-  const updatedFields = req.body;
+  const { error, value } = listValidator(req.body);
+  if (error) return next(new AppError(error.message, 400));
   const list = await prisma.list.update({
     where: {
       id,
     },
     data: {
-      ...updatedFields,
+      ...value,
     },
   });
   if (!list) return next(new AppError(`Could not update list ${id}`, 400));
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
     list,
   });
@@ -70,6 +73,9 @@ export const deleteListById = catchAsync(async (req: Request, res: Response, nex
       id,
     },
   });
+
+  await UtilsCtrl.deleteNullCards();
+  await UtilsCtrl.deleteNullComments();
   if (!list) return next(new AppError(`Could not delete list ${id}`, 400));
   res.status(204).json({
     status: "success",

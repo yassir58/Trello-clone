@@ -5,6 +5,9 @@ const Router = express.Router();
 
 Router.route("/").get(usersController.getAllUsers).post(usersController.createUser);
 
-Router.route("/:id").get(usersController.getUserById);
+Router.route("/:id")
+  .get(usersController.getUserById)
+  .put(usersController.updateUserById)
+  .delete(usersController.deleteUserById);
 
 export default Router;

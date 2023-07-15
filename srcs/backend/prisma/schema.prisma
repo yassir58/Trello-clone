@@ -19,7 +19,7 @@ model Board {
   author      User    @relation("authoredBoards", fields: [authorId], references: [id])
   authorId    String
   users       User[]  @relation("Members")
-  lists       List[]
+  lists       List[]  @relation("lists") 
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -43,11 +43,11 @@ model User {
 model List {
   id   String @id @default(uuid())
   name String @unique
-  card Card[]
+  card Card[] @relation("cards")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Board     Board?   @relation(fields: [boardId], references: [id])
+  Board     Board?   @relation("lists", fields: [boardId], references: [id], onDelete: SetNull)
   boardId   String?
 }
 
@@ -55,11 +55,12 @@ model Card {
   id    String @id @default(uuid())
   title String
 
-  list        List         @relation(fields: [listId], references: [id])
-  listId      String
-  description String
-  comments    Comment[]
-  attachments Attachment[]
+  list        List?        @relation("cards", fields: [listId], references: [id], onDelete: SetNull)
+  listId      String?
+  description String?
+  comments    Comment[]    @relation("comments")
+  attachments Attachment[] @relation("attachements")
+  labels      Label[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -72,16 +73,17 @@ model Attachment {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Card      Card?    @relation(fields: [cardId], references: [id])
+  card      Card?    @relation("attachements", fields: [cardId], references: [id], onDelete: SetNull)
   cardId    String?
 }
 
 model Comment {
-  id     String @id @default(uuid())
-  user   User   @relation(fields: [userId], references: [id])
-  card   Card   @relation(fields: [cardId], references: [id])
-  userId String
-  cardId String
+  id      String  @id @default(uuid())
+  user    User    @relation(fields: [userId], references: [id])
+  card    Card?   @relation("comments", fields: [cardId], references: [id], onDelete: SetNull)
+  cardId  String?
+  userId  String
+  content String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -90,9 +92,22 @@ model Comment {
 model Invites {
   id String @id @default(uuid())
 
-  user      User     @relation(fields: [userId], references: [id])
-  board     Board    @relation(fields: [boardId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+  board   Board  @relation(fields: [boardId], references: [id])
+  userId  String
+  boardId String
+
   createdAt DateTime @default(now())
-  userId    String
-  boardId   String
+}
+
+model Label {
+  id    String @id @default(uuid())
+  tag   String @unique
+  color String
+
+  card   Card?   @relation(fields: [cardId], references: [id], onDelete: SetDefault)
+  cardId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
