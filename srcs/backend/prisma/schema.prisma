@@ -23,7 +23,7 @@ model Board {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Invites   Invites[]
+  Invites   Invite[]
 }
 
 model User {
@@ -37,7 +37,7 @@ model User {
   updatedAt DateTime  @updatedAt
   myBoards  Board[]   @relation("authoredBoards")
   comments  Comment[]
-  Invites   Invites[]
+  Invites   Invite[]
 }
 
 model List {
@@ -89,7 +89,7 @@ model Comment {
   updatedAt DateTime @updatedAt
 }
 
-model Invites {
+model Invite {
   id String @id @default(uuid())
 
   user    User   @relation(fields: [userId], references: [id])

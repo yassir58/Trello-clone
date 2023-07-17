@@ -7,6 +7,7 @@ import boardSchema from "../models/boardModel";
 import labelSchema from "../models/labelModel";
 import commentSchema from "../models/commentModel";
 import attachementSchema from "../models/attachementModel";
+import inviteSchema from "../models/inviteModel";
 
 const validator = (schema: ObjectSchema) => (payload: object) => schema.validate(payload, { abortEarly: true });
 
@@ -17,3 +18,4 @@ export const attachementValidator = validator(attachementSchema);
 export const commentValidator = validator(commentSchema);
 export const labelValidator = validator(labelSchema);
 export const cardValidator = validator(cardSchema);
+export const inviteValidator = validator(inviteSchema);
