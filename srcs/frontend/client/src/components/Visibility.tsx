@@ -26,12 +26,7 @@ const Visibility = () => {
       </CardHeader>
       <CardBody paddingTop={0}>
         <Stack px={0} mx={0}>
-          <Button
-            borderRadius="xl"
-            variant="ghost"
-            py={7}
-            marginBottom={0}
-          >
+          <Button borderRadius="xl" variant="ghost" py={7} marginBottom={0}>
             <Wrap>
               <Wrap spacingX={0}>
                 <MdPublic />
@@ -51,12 +46,7 @@ const Visibility = () => {
               </Wrap>
             </Wrap>
           </Button>
-          <Button
-            borderRadius="xl"
-            variant="ghost"
-            py={7}
-            marginBottom={0}
-          >
+          <Button borderRadius="xl" variant="ghost" py={7} marginBottom={0}>
             <Wrap>
               <Wrap spacingX={0}>
                 <MdLock />
