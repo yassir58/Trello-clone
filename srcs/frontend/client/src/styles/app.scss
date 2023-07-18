@@ -1,15 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap");
 
 html {
   padding: 0px;
-  margin:0px;
+  margin: 0px;
   font-size: 16px;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
-
-
-$shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
+$shadow-md-color: rgba(0, 0, 0, 0.2); // Customize the shadow color if needed
 
 @mixin box-shadow-bottom {
   position: relative;
@@ -18,29 +17,27 @@ $shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -1px;  // Adjust the distance of the shadow from the element
-    height: 1px;  // Adjust the height of the shadow
+    bottom: -1px; // Adjust the distance of the shadow from the element
+    height: 1px; // Adjust the height of the shadow
     background-color: $shadow-md-color;
-    filter: blur(1px);  // Adjust the blur radius if desired
+    filter: blur(1px); // Adjust the blur radius if desired
   }
 }
 
 // Usage example
 .header {
   // Your element's styles here
-  
+
   @include box-shadow-bottom;
-    @media screen and (max-width: 1200px) {
+  @media screen and (max-width: 1200px) {
     // Styles for all children of parent element at or below 768px width
 
-      > * {
-        // border:1px solid red;
-        display: hidden;
-      }
+    > * {
+      // border:1px solid red;
+      display: hidden;
+    }
   }
-
 }
-
 
 .BoardSection {
   width: 95%;
@@ -52,4 +49,3 @@ $shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
   border-radius: 22px;
   object-fit: cover;
 }
-
