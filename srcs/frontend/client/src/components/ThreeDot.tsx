@@ -13,7 +13,7 @@ function ThreeDot() {
         alignItems="center"
         justifyContent="flex-start"
       >
-        <chakra.small color='gray.500'  >Rename</chakra.small>
+        <chakra.small color='gray.500'  fontWeight='normal'>Rename</chakra.small>
       </Button>
       <Divider />
       <Button
@@ -24,7 +24,7 @@ function ThreeDot() {
         alignItems="center"
         justifyContent="flex-start"
       >
-        <chakra.small color='gray.500'  >Delete this list</chakra.small>
+        <chakra.small color='gray.500'  fontWeight='normal'>Delete this list</chakra.small>
       </Button>
     </Stack>
   );

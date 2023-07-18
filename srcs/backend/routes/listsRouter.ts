@@ -1,7 +1,10 @@
 import express from "express";
+import cardsRouter from './cardsRouter';
 import * as listsController from "../controllers/listsController";
 
 const Router = express.Router();
+
+Router.use("/:listId/cards", cardsRouter);
 
 Router.route("/").get(listsController.getAllLists).post(listsController.createList);
 

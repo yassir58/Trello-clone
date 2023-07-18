@@ -15,7 +15,7 @@ import { MdLock } from "react-icons/md";
 
 const Visibility = () => {
   return (
-    <Card borderRadius="xl" shadow="md" width={234} height={220}>
+    <Card borderRadius="xl" boxShadow='none' border='none' width={234} height={220}>
       <CardHeader>
         <Heading width={49} height={18} fontSize="12" as="b">
           Visibility
@@ -37,10 +37,11 @@ const Visibility = () => {
                   as="b"
                   paddingLeft={0}
                   marginLeft={0}
+                  color="gray.600"
                 >
                   Public
                 </Heading>
-                <Text fontSize="9" color="gray">
+                <Text fontSize="11" fontWeight='normal' color="gray">
                   Anyone on the internet can see this.
                 </Text>
               </Wrap>
@@ -57,11 +58,12 @@ const Visibility = () => {
                   as="b"
                   paddingLeft={0}
                   marginLeft={0}
+                  color="gray.600"
                 >
                   Private
                 </Heading>
               </Wrap>
-              <Text fontSize="9" color="gray">
+              <Text fontSize="11" fontWeight='normal' color="gray">
                 only board member can see this.
               </Text>
             </Wrap>

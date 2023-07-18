@@ -2,7 +2,8 @@ import React from "react";
 import { Flex, chakra, Avatar, HStack } from "@chakra-ui/react";
 import "../../styles/app.scss";
 import { SecondaryButton, PrimaryButton } from "../ui-elements/Buttons";
-import { BsFillGrid3X3GapFill , BsCaretDownFill} from "react-icons/bs";
+import { BsFillGrid3X3GapFill, BsCaretDownFill } from "react-icons/bs";
+import { Link } from "react-router-dom";
 interface HeaderProps {}
 interface NavProps {}
 interface ProfileHeaderProps {}
@@ -14,25 +15,25 @@ const Header: React.FC<HeaderProps> = () => {
     <div>
       <Flex
         className="header"
-        px="18px"
-        py="10px"
+        px={6}
+        py={4}
         justify="space-between"
         align="center"
       >
-        <Flex width="40%" justify="space-between" align="center">
+        <HStack spacing={8}>
           <SmallLogo />
           <Nav />
-        </Flex>
-        <Flex justify="space-between" width="35%" align="center">
+        </HStack>
+        <HStack spacing={5}>
           <SearchForm />
           <ProfileHeader />
-        </Flex>
+        </HStack>
       </Flex>
     </div>
   );
 };
 
-const Nav: React.FC<NavProps> = () => {
+export const Nav: React.FC<NavProps> = () => {
   return (
     <Flex justify="space-between" align="center">
       <chakra.h3 px="5px">DevChallenges Board</chakra.h3>
@@ -43,41 +44,45 @@ const Nav: React.FC<NavProps> = () => {
         bg="gray.200"
         mx="1.5rem"
       ></chakra.div>
-      <SecondaryButton>
-        <BsFillGrid3X3GapFill />
-        <chakra.small>All boards</chakra.small>
-      </SecondaryButton>
+      <Link to="/AllBoards">
+        <SecondaryButton>
+          <BsFillGrid3X3GapFill />
+          <chakra.small>All boards</chakra.small>
+        </SecondaryButton>
+      </Link>
     </Flex>
   );
 };
 
-const SmallLogo: React.FC<LogoProps> = () => {
+export const SmallLogo: React.FC<LogoProps> = () => {
   return (
-    <Flex justify="space-between" align="center" p="2px">
-      <svg
-        width="32"
-        height="29"
-        viewBox="0 0 32 29"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M0 4C0 1.79086 1.79086 0 4 0H10C12.2091 0 14 1.79086 14 4V25C14 27.2091 12.2091 29 10 29H4C1.79086 29 0 27.2091 0 25V4Z"
-          fill="#2F80ED"
-        />
-        <path
-          d="M18 4C18 1.79086 19.7909 0 22 0H28C30.2091 0 32 1.79086 32 4V14C32 16.2091 30.2091 18 28 18H22C19.7909 18 18 16.2091 18 14V4Z"
-          fill="#2F80ED"
-        />
-      </svg>
-      <chakra.h3 fontSize="1.2rem" fontWeight="bold" px="5px">
-        Thello
-      </chakra.h3>
-    </Flex>
+    <Link to="/">
+      <Flex justify="space-between" align="center" p="2px">
+        <svg
+          width="32"
+          height="29"
+          viewBox="0 0 32 29"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M0 4C0 1.79086 1.79086 0 4 0H10C12.2091 0 14 1.79086 14 4V25C14 27.2091 12.2091 29 10 29H4C1.79086 29 0 27.2091 0 25V4Z"
+            fill="#2F80ED"
+          />
+          <path
+            d="M18 4C18 1.79086 19.7909 0 22 0H28C30.2091 0 32 1.79086 32 4V14C32 16.2091 30.2091 18 28 18H22C19.7909 18 18 16.2091 18 14V4Z"
+            fill="#2F80ED"
+          />
+        </svg>
+        <chakra.h3 fontSize="1.2rem" fontWeight="bold" px="5px">
+          Thello
+        </chakra.h3>
+      </Flex>
+    </Link>
   );
 };
 
-const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
+export const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   return (
     <HStack spacing={3} color="gray.600">
       <Avatar
@@ -93,7 +98,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
   );
 };
 
-const SearchForm: React.FC<SearchFormProps> = () => {
+export const SearchForm: React.FC<SearchFormProps> = () => {
   return (
     <div>
       <chakra.form
@@ -117,7 +122,8 @@ const SearchForm: React.FC<SearchFormProps> = () => {
           border="0"
           fontSize="xs"
           outline="none"
-          value={"keywords ..."}
+          placeholder={"keywords ..."}
+          color="gray.600"
         />
         <PrimaryButton>
           <chakra.small>Search</chakra.small>

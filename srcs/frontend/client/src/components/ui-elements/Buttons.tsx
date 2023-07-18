@@ -28,13 +28,12 @@ export const PrimaryButton: React.FC<PrimaryButtonProps> = ({ children , size = 
   return (
     <div>
       <Button
-        bg="blue.500"
+        colorScheme="blue"
         color="white"
         size={size}
         mx="2px"
         rounded="md"
-        fontSize="xs"
-        _hover={{ bg: "blue.600" }}
+        fontSize="sm"
         outline="none"
       >
       <HStack spacing={4}>
@@ -52,12 +51,11 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
         <Button
           mx="2px"
           size={size}
-          bg="gray.100"
+          colorScheme="gray"
           border="0"
           outline="none"
-          color="gray.500"
+          color="#828282"
           rounded="md"
-          _hover={{ bg: "gray.200" }}
           fontSize="sm"
           onClick={() => onClickHandler && onClickHandler()}
         >
@@ -97,7 +95,8 @@ export const Label: React.FC<LabelProps> = ({color, children , size ='sm'}) => {
         bg={`${color}.100`}
         color={`${color}.600`}
         mx="2px"
-        px="8px"
+        px={4}
+        py={1}
         size={size}
         rounded="xl"
         fontSize="xs"
