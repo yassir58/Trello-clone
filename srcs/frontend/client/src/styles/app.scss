@@ -28,19 +28,27 @@ $shadow-md-color: rgba(0, 0, 0, 0.2);  // Customize the shadow color if needed
 // Usage example
 .header {
   // Your element's styles here
-  
+  position: fixed !important;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
   @include box-shadow-bottom;
     @media screen and (max-width: 1200px) {
     // Styles for all children of parent element at or below 768px width
 
       > * {
-        // border:1px solid red;
-        display: hidden;
+        display: none;
+        visibility: hidden;
       }
   }
 
 }
 
+.spacer {
+  height: 80px;
+}
 
 .BoardSection {
   width: 95%;

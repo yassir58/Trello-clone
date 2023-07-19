@@ -15,7 +15,6 @@ interface SecondaryButtonProps {
 interface LightButtonProps {}
 interface LargeButtonProps {
   children: React.ReactNode;
-  size?: string;
   onClickHandler?: () => void;
 }
 interface LabelProps {
@@ -68,12 +67,12 @@ export const SecondaryButton: React.FC<SecondaryButtonProps> = ({
 export const LighButton: React.FC<LightButtonProps> = () => {
   return <div></div>;
 };
-export const LargeButton: React.FC<LargeButtonProps> = ({ children, size ='2xs', onClickHandler }) => {
+export const LargeButton: React.FC<LargeButtonProps> = ({ children, onClickHandler }) => {
   return (
 
         <Button
           position="relative"
-          width={size}
+          width='260px'
           bg="blue.100"
           color="blue.500"
           rounded="xl"

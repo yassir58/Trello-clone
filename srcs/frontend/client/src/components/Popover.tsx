@@ -18,6 +18,14 @@ import {
   ModalBody,
   Text,
   Heading,
+  Drawer,
+  DrawerBody,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  DrawerHeader,
+  useDisclosure,
+  Divider
   // Lorem
 } from "@chakra-ui/react";
 import { BiSolidUserCircle } from "react-icons/bi";
@@ -47,6 +55,12 @@ interface PopOverProps {
   value?: string;
 }
 
+interface DrawerCpProps {
+  children: React.ReactNode;
+  header: string;
+  buttonValue:React.ReactNode;
+}
+
 export const PopOver: React.FC<PopOverProps> = ({
   children,
   icon,
@@ -54,13 +68,12 @@ export const PopOver: React.FC<PopOverProps> = ({
   buttonTheme = {
     colorScheme: "blue",
     size: "sm",
-    color: 'black',
+    color: "black",
     width: "",
-    variant:''
+    variant: "",
   },
   header,
   value,
-
 }) => {
   const PopOverHeader = () => {
     return (
@@ -305,16 +318,24 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
         {card.cardBanner && (
           <>
             <EditCardCover image={card.cardBanner} />
-            <HStack justify="space-between" mx="auto" px={3} py={2} width='100%' >
-              <Stack w='70%'>
-                <Heading fontSize='lg'>{card.title ? card.title : "Add card title"}</Heading>
+            <HStack
+              justify="space-between"
+              mx="auto"
+              px={3}
+              py={2}
+              width="100%"
+            >
+              <Stack w="70%">
+                <Heading fontSize="lg">
+                  {card.title ? card.title : "Add card title"}
+                </Heading>
                 <Text fontSize="xs" fontWeight="normal" color="#828282">
                   In list
-                  <chakra.small px={1}  color="black" fontWeight="bold">
+                  <chakra.small px={1} color="black" fontWeight="bold">
                     In Progress
                   </chakra.small>
                 </Text>
-                <HStack spacing={4} pt={5} pb={3} >
+                <HStack spacing={4} pt={5} pb={3}>
                   <CardInfo icon={<MdDescription />} value="Description" />
                   <Button
                     variant="outline"
@@ -322,7 +343,7 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
                     colorScheme="gray"
                     borderRadius="lg"
                     border="1px solid #828282"
-                    color='#828282'
+                    color="#828282"
                   >
                     <HStack spacing={3}>
                       <FaPen />
@@ -337,7 +358,12 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
                 <PopOver
                   value={"Members"}
                   icon={<FaUserGroup />}
-                  buttonTheme={{ colorScheme: "gray", width: "100%" , size:'lg' , color:"#828282"}}
+                  buttonTheme={{
+                    colorScheme: "gray",
+                    width: "100%",
+                    size: "lg",
+                    color: "#828282",
+                  }}
                   size="2xs"
                 >
                   <InviteToBoard />
@@ -345,7 +371,12 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
                 <PopOver
                   value={"Labels"}
                   icon={<MdLabel />}
-                  buttonTheme={{ colorScheme: "gray", width: "100%" , size:'lg' , color:"#828282"}}
+                  buttonTheme={{
+                    colorScheme: "gray",
+                    width: "100%",
+                    size: "lg",
+                    color: "#828282",
+                  }}
                   size="2xs"
                 >
                   <AddLable />
@@ -353,7 +384,12 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
                 <PopOver
                   value={"Cover"}
                   icon={<FaImage />}
-                  buttonTheme={{ colorScheme: "gray", width: "100%" , size:'lg' , color:"#828282"}}
+                  buttonTheme={{
+                    colorScheme: "gray",
+                    width: "100%",
+                    size: "lg",
+                    color: "#828282",
+                  }}
                   size="2xs"
                 >
                   <ChangeCover />
@@ -364,5 +400,32 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
         )}
       </Stack>
     </div>
+  );
+};
+
+export const DrawerCp: React.FC<DrawerCpProps> = ({ children, header, buttonValue }) => {
+  // const btnRef = React.useRef()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  return (
+    <>
+      <Button size="sm" color="#828282" colorScheme="gray" onClick={onOpen}>
+        {buttonValue}
+      </Button>
+      <Drawer
+        size={"sm"}
+        isOpen={isOpen}
+        placement="right"
+        onClose={onClose}
+        // finalFocusRef={btnRef}
+      >
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerCloseButton />
+          <DrawerHeader>{header}</DrawerHeader>
+          <Divider />
+          <DrawerBody>{children}</DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </>
   );
 };

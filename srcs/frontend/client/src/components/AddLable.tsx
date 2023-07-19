@@ -71,8 +71,8 @@ export const AddLable: React.FC = () => {
               <Button
                 colorScheme={color}
                 borderRadius="lg"
-                w="40px"
-                h="20px"
+                w="45px"
+                h="30px"
                 sx={{
                     _hover: {
                       opacity: 0.8,

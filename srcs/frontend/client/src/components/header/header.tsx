@@ -12,9 +12,9 @@ interface LogoProps {}
 
 const Header: React.FC<HeaderProps> = () => {
   return (
-    <div>
-      <Flex
-        className="header"
+
+      <Flex 
+       className="header"
         px={6}
         py={4}
         justify="space-between"
@@ -29,7 +29,6 @@ const Header: React.FC<HeaderProps> = () => {
           <ProfileHeader />
         </HStack>
       </Flex>
-    </div>
   );
 };
 

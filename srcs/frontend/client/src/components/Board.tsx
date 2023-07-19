@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { chakra, Avatar, Flex, HStack } from "@chakra-ui/react";
+import { chakra, Avatar, Flex, HStack , Stack, Text} from "@chakra-ui/react";
 import { LargeButton } from "./ui-elements/Buttons";
 
 import { FlexContainer, ColumnContainer } from "./ui-elements/Containers";
 import { CardList } from "./ui-elements/Media";
-import { PopOver } from "./Popover";
+import { PopOver , DrawerCp} from "./Popover";
 import Visibility from "./Visibility";
 import { Menu } from "./Menu";
 import { BsGlobeEuropeAfrica } from "react-icons/bs";
@@ -22,9 +22,10 @@ interface BoardMenuBarProps {
 
 export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
 
+
   
   return (
-    <div>
+    <Stack >
       <Flex
         justify="space-between"
         align="center"
@@ -63,17 +64,16 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
           </PopOver>
     
         </HStack>
-        <PopOver
-          icon={<FaEllipsis />}
-          value="Menu"
-          header="Menu"
-          size="md"
-          buttonTheme={{ colorScheme: "gray", size: "sm", color: "#828282" }}
-        >
+        <DrawerCp header='Menu' buttonValue={
+          <HStack spacing={2}>
+            <Text fontSize={'xs'} fontWeight={'normal'}>Menu</Text>
+            <FaEllipsis />
+          </HStack>
+        }>
           <Menu />
-        </PopOver>
+        </DrawerCp>
       </Flex>
-    </div>
+    </Stack>
   );
 };
 
@@ -93,18 +93,18 @@ export const Board: React.FC<BoardProps> = () => {
       .then((data) => setCards(data));
   }, []);
   return (
-    <div>
+    <Stack mt='80px'>
       <BoardMenuBar members={members} />
       <FlexContainer>
         <CardList cards={cards} />
         <CardList />
         <ColumnContainer>
-          <LargeButton size="96%">
+          <LargeButton>
             <chakra.small>Add another list</chakra.small>
             <BiPlus />
           </LargeButton>
         </ColumnContainer>
       </FlexContainer>
-    </div>
+    </Stack>
   );
 };
