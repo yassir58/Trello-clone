@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button, Input, Wrap, HStack } from "@chakra-ui/react";
+import { Box, Button, Input, Wrap, HStack, Stack } from "@chakra-ui/react";
 
 interface AddCardProps {
   cancelHandler: () => void;
@@ -14,16 +14,12 @@ const AddCard:React.FC<AddCardProps> = ({cancelHandler}) => {
           placeholder="Enter a title for this card..."
         />
         <HStack>
-        <Button borderRadius="xl" px={5} py={2} size="sm" colorScheme="green" onClick={()=>{
+        <Button variant='green' onClick={()=>{
           cancelHandler();
         }}>
           Save
         </Button>
-        <Button borderRadius='xl' size='sm' variant='ghost' color='red' sx={{
-          _hover:{
-            border:'1px solid red'
-          }
-        }}
+        <Button variant="ghost"
         onClick={cancelHandler}
         >
           cancel
@@ -33,5 +29,21 @@ const AddCard:React.FC<AddCardProps> = ({cancelHandler}) => {
     </Box>
   );
 };
+
+interface addListProps {
+  cancelHandler: () => void;
+}
+
+export const AddList:React.FC<addListProps> = ({cancelHandler}) => {
+  return (
+    <Stack>
+      <Input variant={'outline'} placeholder={'Enter list title...'} bg='white' />
+      <HStack>
+        <Button variant='green' onClick={()=>{}} >add</Button>
+        <Button variant='ghost' onClick={cancelHandler} >cancel</Button>
+      </HStack>
+    </Stack>
+  )
+}
 
 export default AddCard;

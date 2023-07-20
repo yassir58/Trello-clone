@@ -105,7 +105,7 @@ model Label {
   tag   String @unique
   color String
 
-  card   Card?   @relation(fields: [cardId], references: [id], onDelete: SetDefault)
+  card   Card?   @relation(fields: [cardId], references: [id], onDelete: SetNull)
   cardId String?
 
   createdAt DateTime @default(now())

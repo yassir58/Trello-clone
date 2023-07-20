@@ -58,27 +58,25 @@ export const AddLable: React.FC = () => {
         </chakra.small>
         <Input
           placeholder="Label..."
-          boxShadow="md"
-          borderRadius="lg"
           w="98%"
-          fontSize="sm"
+          variant="outline"
           value={value}
           onChange={onChange}
         />
-        <HStack flexWrap='wrap' justify='center'>
+        <HStack flexWrap='wrap' justify='center' w='100%'>
           {colors.map((color) => {
             return (
               <Button
-                colorScheme={color}
+                bg={`${color}.400`}
                 borderRadius="lg"
-                w="45px"
+                w="50px"
                 h="30px"
                 sx={{
                     _hover: {
                       opacity: 0.8,
                     },
                     _focus: {
-                      outline: "none",
+                      outline: "1px solid #2A9AF3",
                       boxShadow: "0 0 0 3px rgba(66, 153, 225, 0.6)",
                     },
                   }}
@@ -100,7 +98,7 @@ export const AddLable: React.FC = () => {
                 })
             }
         </HStack>
-        <Button size="md" fontSize="md" fontWeight='normal' mx="auto" onClick={addLabel} colorScheme="blue">
+        <Button size="md" variant='primary' mx="auto" onClick={addLabel} >
           Add
         </Button>
       </Stack>

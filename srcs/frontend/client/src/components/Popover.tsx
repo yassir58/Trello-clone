@@ -24,8 +24,8 @@ import {
   DrawerContent,
   DrawerCloseButton,
   DrawerHeader,
-  useDisclosure,
-  Divider
+  Divider,
+  PlacementWithLogical,
   // Lorem
 } from "@chakra-ui/react";
 import { BiSolidUserCircle } from "react-icons/bi";
@@ -42,38 +42,28 @@ import { FaPen } from "react-icons/fa6";
 interface PopOverProps {
   // trigger:any;
   children: React.ReactNode;
-  icon?: any;
+  button: React.ReactNode;
   size?: string;
-  buttonTheme?: {
-    colorScheme: string;
-    size: string;
-    color?: string;
-    width?: string;
-    variant?: string;
-  };
+  variant?: string;
   header?: string;
-  value?: string;
+  placement?: PlacementWithLogical | undefined;
 }
 
 interface DrawerCpProps {
   children: React.ReactNode;
   header: string;
-  buttonValue:React.ReactNode;
+  buttonValue: React.ReactNode;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }
 
 export const PopOver: React.FC<PopOverProps> = ({
   children,
-  icon,
   size = "xs",
-  buttonTheme = {
-    colorScheme: "blue",
-    size: "sm",
-    color: "black",
-    width: "",
-    variant: "",
-  },
+  button,
   header,
-  value,
+  placement = "bottom",
 }) => {
   const PopOverHeader = () => {
     return (
@@ -85,23 +75,8 @@ export const PopOver: React.FC<PopOverProps> = ({
   };
   return (
     <div>
-      <Popover>
-        <PopoverTrigger>
-          <Button
-            colorScheme={buttonTheme.colorScheme}
-            fontWeight="normal"
-            fontSize="sm"
-            size={buttonTheme.size}
-            width={buttonTheme.width}
-            color={buttonTheme.color}
-            variant={buttonTheme.variant}
-          >
-            <HStack spacing={3}>
-              {icon}
-              {value && <chakra.small>{value}</chakra.small>}
-            </HStack>
-          </Button>
-        </PopoverTrigger>
+      <Popover placement={placement}>
+        <PopoverTrigger>{button}</PopoverTrigger>
         <PopoverContent width={size} mx="10px">
           {header && <PopOverHeader />}
           <PopoverBody>{children}</PopoverBody>
@@ -158,6 +133,7 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
 import { BoardProps } from "./AllBoards";
 import { ChangeCover } from "./ChangeCover";
 import { MyEditableTextarea } from "./Menu";
+import { FaTrash } from "react-icons/fa6";
 interface newBoardProps {
   action: any;
   state: BoardProps[];
@@ -188,6 +164,7 @@ export const NewBoard: React.FC<newBoardProps> = ({
 
   return (
     <Stack spacing={4} justify="center">
+      <CloseButton onClose={onClose} />
       <EditCardCover
         image={`https://source.unsplash.com/random?sig=${state.length + 1}`}
       />
@@ -205,7 +182,7 @@ export const NewBoard: React.FC<newBoardProps> = ({
         onChange={handleOnchange}
       />
       <HStack spacing={4} justifyContent="center">
-        <Button size="sm" px="30px" py="5" bg="#F2F2F2" color="#828282">
+        <Button variant="secondary">
           <HStack spacing={3}>
             <chakra.span fontSize="lg">
               <FaImage />
@@ -216,7 +193,7 @@ export const NewBoard: React.FC<newBoardProps> = ({
           </HStack>
         </Button>
 
-        <Button size="sm" px="30px" py="5" bg="#F2F2F2" color="#828282">
+        <Button variant="secondary">
           <HStack spacing={3}>
             <chakra.span fontSize="lg">
               <FaUnlockKeyhole />
@@ -228,14 +205,7 @@ export const NewBoard: React.FC<newBoardProps> = ({
         </Button>
       </HStack>
       <HStack spacing={2} justifyContent="flex-end">
-        <Button
-          variant="ghost"
-          fontSize="md"
-          mx="10px"
-          color="gray.500"
-          fontWeight="normal"
-          onClick={onClose}
-        >
+        <Button variant="ghostSecondary" onClick={onClose}>
           cancel
         </Button>
         <Button
@@ -284,39 +254,47 @@ export const EditCardCover: React.FC<EditCoverProps> = ({ image }) => {
           height="100%"
         />
       </Box>
-      <RemoveCover />
     </Box>
-  );
-};
-
-export const RemoveCover: React.FC = () => {
-  return (
-    <Button
-      position="absolute"
-      top="0"
-      boxShadow="md"
-      borderRadius="lg"
-      right="-5px"
-      colorScheme="blue"
-      size="sm"
-      fontSize="lg"
-      zIndex="2"
-    >
-      <FaXmark size="lg" />
-    </Button>
   );
 };
 
 interface EditCardProps {
   card: CardElementProps;
+
+  onClose: () => void;
 }
 
-export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
+interface CloseButtonProps {
+  onClose: () => void;
+}
+
+export const CloseButton: React.FC<CloseButtonProps> = ({ onClose }) => {
+  return (
+    <Button
+      position="absolute"
+      top="0"
+      right="0"
+      mr={3}
+      mt={3}
+      variant={"primary"}
+      zIndex="2"
+      onClick={onClose}
+    >
+      <FaXmark />
+    </Button>
+  );
+};
+
+export const EditCardComponent: React.FC<EditCardProps> = ({
+  card,
+  onClose,
+}) => {
   return (
     <div>
-      <Stack spacing={4} justify="center">
+      <Stack spacing={4}>
         {card.cardBanner && (
           <>
+            <CloseButton onClose={onClose} />
             <EditCardCover image={card.cardBanner} />
             <HStack
               justify="space-between"
@@ -324,6 +302,7 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
               px={3}
               py={2}
               width="100%"
+              alignItems="flex-start"
             >
               <Stack w="70%">
                 <Heading fontSize="lg">
@@ -337,14 +316,7 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
                 </Text>
                 <HStack spacing={4} pt={5} pb={3}>
                   <CardInfo icon={<MdDescription />} value="Description" />
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    colorScheme="gray"
-                    borderRadius="lg"
-                    border="1px solid #828282"
-                    color="#828282"
-                  >
+                  <Button variant="outlineSecondary">
                     <HStack spacing={3}>
                       <FaPen />
                       <chakra.small>Edit</chakra.small>
@@ -353,47 +325,17 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
                 </HStack>
                 <MyEditableTextarea />
               </Stack>
-              <Stack w="25%" spacing={3}>
+              <Stack w="25%" spacing={3} py={4}>
                 <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
-                <PopOver
-                  value={"Members"}
-                  icon={<FaUserGroup />}
-                  buttonTheme={{
-                    colorScheme: "gray",
-                    width: "100%",
-                    size: "lg",
-                    color: "#828282",
-                  }}
-                  size="2xs"
-                >
-                  <InviteToBoard />
-                </PopOver>
-                <PopOver
-                  value={"Labels"}
-                  icon={<MdLabel />}
-                  buttonTheme={{
-                    colorScheme: "gray",
-                    width: "100%",
-                    size: "lg",
-                    color: "#828282",
-                  }}
-                  size="2xs"
-                >
-                  <AddLable />
-                </PopOver>
-                <PopOver
-                  value={"Cover"}
-                  icon={<FaImage />}
-                  buttonTheme={{
-                    colorScheme: "gray",
-                    width: "100%",
-                    size: "lg",
-                    color: "#828282",
-                  }}
-                  size="2xs"
-                >
-                  <ChangeCover />
-                </PopOver>
+                <MembersPopOver />
+                <LabelPopOver />
+                <CoverPopOver />
+                <Button variant="outlineRed">
+                  <HStack spacing={3}>
+                    <FaTrash />
+                    <Text fontSize={"sm"}> Delete Card </Text>
+                  </HStack>
+                </Button>
               </Stack>
             </HStack>
           </>
@@ -403,12 +345,19 @@ export const EditCardComponent: React.FC<EditCardProps> = ({ card }) => {
   );
 };
 
-export const DrawerCp: React.FC<DrawerCpProps> = ({ children, header, buttonValue }) => {
+export const DrawerCp: React.FC<DrawerCpProps> = ({
+  children,
+  header,
+  buttonValue,
+  isOpen,
+  onOpen,
+  onClose,
+}) => {
   // const btnRef = React.useRef()
-  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
-    <>
-      <Button size="sm" color="#828282" colorScheme="gray" onClick={onOpen}>
+    <div>
+      <Button variant="secondary" onClick={onOpen}>
         {buttonValue}
       </Button>
       <Drawer
@@ -426,6 +375,63 @@ export const DrawerCp: React.FC<DrawerCpProps> = ({ children, header, buttonValu
           <DrawerBody>{children}</DrawerBody>
         </DrawerContent>
       </Drawer>
-    </>
+    </div>
+  );
+};
+
+export const MembersPopOver: React.FC = () => {
+  return (
+    <PopOver
+      button={
+        <Button variant="secondary" width="100%">
+          <HStack spacing={3}>
+            <FaUserGroup />
+            <Text fontSize="sm">Members</Text>
+          </HStack>
+        </Button>
+      }
+      size="2xs"
+      placement="left"
+    >
+      <InviteToBoard />
+    </PopOver>
+  );
+};
+
+export const LabelPopOver: React.FC = () => {
+  return (
+    <PopOver
+      button={
+        <Button variant="secondary" width="100%">
+          <HStack spacing={3}>
+            <MdLabel />
+            <Text fontSize="sm">Labels</Text>
+          </HStack>
+        </Button>
+      }
+      size="300px"
+      placement="left"
+    >
+      <AddLable />
+    </PopOver>
+  );
+};
+
+export const CoverPopOver: React.FC = () => {
+  return (
+    <PopOver
+      button={
+        <Button variant="secondary" width="100%">
+          <HStack spacing={3}>
+            <FaImage />
+            <Text fontSize="sm">Cover</Text>
+          </HStack>
+        </Button>
+      }
+      size="2xs"
+      placement="left"
+    >
+      <ChangeCover />
+    </PopOver>
   );
 };

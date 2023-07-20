@@ -12,7 +12,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { ColumnContainer } from "./Containers";
-import { Label, LargeButton } from "./Buttons";
+import { Label } from "./Buttons";
 import AddCard from "../AddCard";
 import ThreeDot from "../ThreeDot";
 import { EditCardComponent, ModalComponent, PopOver } from "../Popover";
@@ -137,7 +137,7 @@ export const CardCp: React.FC<CardProps> = ({
                       );
                     }
                   })}
-                <Button size="xs" fontSize="lg" colorScheme="blue">
+                <Button variant='primary'>
                   <BiPlus />
                 </Button>
               </HStack>
@@ -187,6 +187,7 @@ export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
 };
 
 export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
+  
   const [createCard, setCreateCard] = React.useState(false);
   const createCardHandler = () => {
     setCreateCard(!createCard);
@@ -214,13 +215,7 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
             This is list title
           </Heading>
           <PopOver
-            icon={<FaEllipsis />}
-            buttonTheme={{
-              colorScheme: "",
-              size: "sm",
-              color: "#828282",
-              variant: "ghost",
-            }}
+            button={<Button variant={'ghost'}><FaEllipsis/></Button>}
             size="3xs"
           >
             <ThreeDot />
@@ -230,10 +225,10 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
         {createCard ? (
           <AddCard cancelHandler={createCardHandler}/>
         ) : (
-          <LargeButton onClickHandler={createCardHandler}>
+          <Button onClick={createCardHandler} variant='largePrimary'>
             <chakra.small>Add another Card</chakra.small>
             <BiPlus />
-          </LargeButton>
+          </Button>
         )}
 
         <ColumnContainer>
@@ -248,7 +243,7 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
                     onOpen={onOpen}
                     onClose={onClose}
                   >
-                    <EditCardComponent card={item} />
+                    <EditCardComponent onClose={onClose} card={item} />
                   </ModalComponent>
                 </Box>
               );

@@ -38,7 +38,7 @@ export const ChangeCover:React.FC<ChangeCoverProps> = ({}) => {
                         boxShadow: 'none'
                     }
                 }} />
-                <Button colorScheme='blue' fontSize='lg'>
+                <Button variant="primary">
                 <FaSistrix />
                 </Button>
             </HStack>

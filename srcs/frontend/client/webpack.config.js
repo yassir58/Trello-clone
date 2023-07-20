@@ -1,46 +1,44 @@
-const path = require('path');
-const webpack = require ('webpack')
+const path = require("path");
+const webpack = require("webpack");
 module.exports = {
-  mode: 'development',
-  entry: './src/index.tsx',
+  mode: "development",
+  entry: "./src/index.tsx",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
-    publicPath: '/dist/',
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
+    publicPath: "/dist/",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js'],
+    extensions: [".ts", ".tsx", ".js"],
   },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader',
+        use: "ts-loader",
         exclude: /node_modules/,
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
+        use: ["style-loader", "css-loader", "postcss-loader"],
       },
       {
-        test:/\.scss$/,
-        use:['style-loader','css-loader','sass-loader']
+        test: /\.scss$/,
+        use: ["style-loader", "css-loader", "sass-loader"],
       },
       {
         test: /\.json$/,
-        use: 'cson-loader',
+        use: "cson-loader",
       },
     ],
   },
-  plugins:[
-    new webpack.HotModuleReplacementPlugin(),
-  ],
+  plugins: [new webpack.HotModuleReplacementPlugin()],
   devServer: {
     static: {
-      directory:path.resolve(__dirname, 'dist'),
+      directory: path.resolve(__dirname, "dist"),
     },
     compress: true,
     port: 3000,
   },
-  watch:true
+  watch: true,
 };

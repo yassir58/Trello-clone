@@ -1,6 +1,7 @@
 import express, { Express, Request, Response, NextFunction } from "express";
 import morgan from "morgan";
 
+// Routers
 import usersRouter from "./routes/usersRouter";
 import listsRouter from "./routes/listsRouter";
 import cardsRouter from "./routes/cardsRouter";
@@ -10,7 +11,9 @@ import invitesRouter from "./routes/invitesRouter";
 import commentsRouter from "./routes/commentsRouter";
 import attachementsRouter from "./routes/attachementsRouter";
 
+// Error handling
 import AppError from "./utils/AppError";
+import handleErrors from "./controllers/errorController";
 
 const app: Express = express();
 
@@ -28,18 +31,9 @@ app.use("/api/v1/comments", commentsRouter);
 app.use("/api/v1/attachements", attachementsRouter);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {
-  next(new AppError("Could not get the route", 404));
+  next(new AppError(`Error 404 Not Found: http://{HOST}${req.originalUrl} does not exist`, 404));
 });
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  if (err instanceof AppError) {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || "Failure";
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-    });
-  }
-});
+app.use(handleErrors);
 
 export default app;
