@@ -28,9 +28,10 @@ model Board {
 
 model User {
   id           String  @id @default(uuid())
-  userName     String  @unique
+  fullname     String  @unique
   email        String  @unique
-  profileImage String
+  profileImage String ?
+  password     String
   contriBoards Board[] @relation("Members")
 
   createdAt DateTime  @default(now())

@@ -15,6 +15,7 @@ const handleOperationErrors = (err: Error): any => {
     else if (err.code === "P1008") return new AppError(`Timeout Error : Operations timed out `, 400);
     else if (err.code === "P1008") return new AppError(`Timeout Error : Operations timed out `, 400);
   }
+  console.log(err);
   // Handle authentification and errors related to JWT
   // Handle generic errors
   return new AppError("Something went very wrong", 400);

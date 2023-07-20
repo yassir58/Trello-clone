@@ -8,6 +8,7 @@
 - [x] Handler for getting all the board information by id including the lists
 - [x] Handler for updating the board information might the be the visibility or name, description etc.
 - [x] Handler for deleting a board by id \*\* after disconnecting all the users and list associated with that board
+- [ ] Allow to search for a board by name
 
 ## Users:
 
@@ -15,6 +16,7 @@
 - [x] Handler for getting the user information
 - [x] Handler for updating user information name or email, profilePicture
 - [x] Handler for deleting a user by id \*\* before that the user should be disconnected from every card or table
+- [ ] Allow to search for user by name
 
 ## Lists:
 

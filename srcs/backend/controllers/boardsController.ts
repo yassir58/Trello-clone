@@ -35,7 +35,11 @@ export const getAllBoards = catchAsync(async (req: Request, res: Response, next:
     },
     include: {
       author: true,
-      users: true,
+      users: {
+        select: {
+          password: false,
+        },
+      },
       lists: true,
     },
   });
@@ -54,7 +58,11 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
     },
     include: {
       author: true,
-      users: true,
+      users: {
+        select: {
+          password: false,
+        },
+      },
       lists: true,
     },
   });
