@@ -28,6 +28,33 @@ const formatSecureUserResponse = (user: any) => {
   return { fullname: user.fullname, profileImage: user.profileImage, email: user.email };
 };
 
+export const updatePassword = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+
+    if (!oldPassword || !newPassword || !confirmPassword)
+      return next(new AppError("Please provide the old and new password.", 400));
+
+    const hashedPassword = await hashPassword(newPassword);
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.id,
+      },
+    });
+    if (!user || !(await checkPassword(oldPassword, user.password)))
+      return next(new AppError("Incorrect password please enter the correct one.", 401));
+
+    await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        password: hashedPassword,
+      },
+    });
+  }
+);
+
 export const signup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { error, value } = userValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
@@ -49,14 +76,15 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
 
 export const login = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
-  if (!(email && password)) return next(new AppError("Please provide your email and password", 400));
+  if (!(email && password))
+    return next(new AppError("Please provide your email and password", 400));
   const user = await prisma.user.findUnique({
     where: {
       email,
     },
   });
 
-  if (!user || (await checkPassword(password, user.password)))
+  if (!user || !(await checkPassword(password, user.password)))
     return next(new AppError("Incorrect email or password", 401));
   const token = generateToken(user.id);
   res.status(200).json({
