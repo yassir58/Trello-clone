@@ -10,8 +10,8 @@ import { userValidator } from "../utils/validator";
 const prisma = new PrismaClient();
 
 const generateToken = (id: string | undefined) => {
-  console.log(process.env.JWT_SECRET);
-  return jwt.sign({ id }, "test", {
+  if (!process.env.JWT_SECRET) return null;
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
 };
@@ -28,32 +28,32 @@ const formatSecureUserResponse = (user: any) => {
   return { fullname: user.fullname, profileImage: user.profileImage, email: user.email };
 };
 
-export const updatePassword = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { oldPassword, newPassword, confirmPassword } = req.body;
+// export const updatePassword = catchAsync(
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const { oldPassword, newPassword, confirmPassword } = req.body;
 
-    if (!oldPassword || !newPassword || !confirmPassword)
-      return next(new AppError("Please provide the old and new password.", 400));
+//     if (!oldPassword || !newPassword || !confirmPassword)
+//       return next(new AppError("Please provide the old and new password.", 400));
 
-    const hashedPassword = await hashPassword(newPassword);
-    const user = await prisma.user.findUnique({
-      where: {
-        id: req.user.id,
-      },
-    });
-    if (!user || !(await checkPassword(oldPassword, user.password)))
-      return next(new AppError("Incorrect password please enter the correct one.", 401));
+//     const hashedPassword = await hashPassword(newPassword);
+//     const user = await prisma.user.findUnique({
+//       where: {
+//         id: req.user.id ?? undefined,
+//       },
+//     });
+//     if (!user || !(await checkPassword(oldPassword, user.password)))
+//       return next(new AppError("Incorrect password please enter the correct one.", 401));
 
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        password: hashedPassword,
-      },
-    });
-  }
-);
+//     await prisma.user.update({
+//       where: {
+//         id: user.id,
+//       },
+//       data: {
+//         password: hashedPassword,
+//       },
+//     });
+//   }
+// );
 
 export const signup = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { error, value } = userValidator(req.body);
@@ -67,6 +67,7 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
     },
   });
   const token = generateToken(user.id);
+  if (!token) return new AppError("Internal Error: auth module error", 500);
   res.status(200).json({
     status: "success",
     token,
@@ -87,6 +88,7 @@ export const login = catchAsync(async (req: Request, res: Response, next: NextFu
   if (!user || !(await checkPassword(password, user.password)))
     return next(new AppError("Incorrect email or password", 401));
   const token = generateToken(user.id);
+  if (!token) return new AppError("Internal Error: auth module error", 500);
   res.status(200).json({
     status: "success",
     token,
