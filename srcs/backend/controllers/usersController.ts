@@ -8,15 +8,15 @@ import catchAsync from "../utils/catchAsync";
 const prisma = new PrismaClient();
 
 export const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const search  = req.query.search as string;
+  const search = req.query.search as string;
   const users = await prisma.user.findMany({
     select: { id: true, fullname: true, email: true, profileImage: true },
     where: {
       fullname: {
-        contains: search ?? undefined, 
-        mode: 'insensitive'
-      }
-    }
+        contains: search ?? undefined,
+        mode: "insensitive",
+      },
+    },
   });
   res.status(200).json({
     status: "success",

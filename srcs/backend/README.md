@@ -8,7 +8,7 @@
 - [x] Handler for getting all the board information by id including the lists
 - [x] Handler for updating the board information might the be the visibility or name, description etc.
 - [x] Handler for deleting a board by id \*\* after disconnecting all the users and list associated with that board
-- [ ] Allow to search for a board by name
+- [x] Allow to search for a board by name
 
 ## Users:
 
@@ -16,7 +16,7 @@
 - [x] Handler for getting the user information
 - [x] Handler for updating user information name or email, profilePicture
 - [x] Handler for deleting a user by id \*\* before that the user should be disconnected from every card or table
-- [ ] Allow to search for user by name
+- [x] Allow to search for user by name
 
 ## Lists:
 
@@ -60,14 +60,15 @@
 
 ## Authentication
 
-- [ ] Sign up route
-- [ ] Login route
+- [x] Sign up route
+- [x] Login route
 - [ ] Password reset route
+- [x] Update password route
 - [ ] Logout route
 - [ ] Implement rate limiting
 - [ ] Add security headers
 - [ ] Add authorization middleware
-- [ ] Email sender function for the reset password functionality
+- [x] Email sender function for the reset password functionality
 
 ## Upload
 

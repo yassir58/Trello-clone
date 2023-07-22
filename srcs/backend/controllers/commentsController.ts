@@ -31,64 +31,72 @@ export const createComment = catchAsync(async (req: Request, res: Response, next
   });
 });
 
-export const getCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const comment = await prisma.comment.findUnique({
-    where: {
-      id,
-    },
-  });
-  if (!comment) return next(new AppError(`Could not find comment: ${id}`, 404));
-  res.status(200).json({
-    status: "success",
-    comment,
-  });
-});
-
-export const getAllComments = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const comments = await prisma.comment.findMany({
-    where: {
-      card: {
-        id: req.params.cardId ?? undefined,
+export const getCommentById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const comment = await prisma.comment.findUnique({
+      where: {
+        id,
       },
-    },
-  });
-  res.status(200).json({
-    status: "success",
-    comments,
-    count: comments.length,
-  });
-});
+    });
+    if (!comment) return next(new AppError(`Could not find comment: ${id}`, 404));
+    res.status(200).json({
+      status: "success",
+      comment,
+    });
+  }
+);
 
-export const updateCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  //! @validation: Check that the author of the comment is the same as the user who's making the reques
-  const id = req.params.id;
-  const { error, value } = commentValidator(req.body);
-  if (error) return next(new AppError(error.message, 400));
-  const board = await prisma.comment.update({
-    where: {
-      id,
-    },
-    data: {
-      ...value,
-    },
-  });
-  res.status(200).json({
-    status: "success",
-    board,
-  });
-});
+export const getAllComments = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const comments = await prisma.comment.findMany({
+      where: {
+        card: {
+          id: req.params.cardId ?? undefined,
+        },
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      comments,
+      count: comments.length,
+    });
+  }
+);
 
-export const deleteCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  //! @validation: Check that the author of the comment is the same as the user who's making the request
-  const id = req.params.id;
-  const list = await prisma.comment.delete({
-    where: {
-      id,
-    },
-  });
-  res.status(204).json({
-    status: "success",
-    list,
-  });
-});
+export const updateCommentById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    //! @validation: Check that the author of the comment is the same as the user who's making the reques
+    const id = req.params.id;
+    const { error, value } = commentValidator(req.body);
+    if (error) return next(new AppError(error.message, 400));
+    const board = await prisma.comment.update({
+      where: {
+        id,
+      },
+      data: {
+        ...value,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      board,
+    });
+  }
+);
+
+export const deleteCommentById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    //! @validation: Check that the author of the comment is the same as the user who's making the request
+    const id = req.params.id;
+    const list = await prisma.comment.delete({
+      where: {
+        id,
+      },
+    });
+    res.status(204).json({
+      status: "success",
+      list,
+    });
+  }
+);

@@ -4,8 +4,8 @@ type User = {
   id: string;
   fullname: string;
   email: string;
-  profileImage: string;
-  password: string;
+  profileImage: string | null;
+  passwordChangedAt: Date | null;
 };
 
 declare global {

@@ -47,38 +47,42 @@ export const getListById = catchAsync(async (req: Request, res: Response, next: 
   });
 });
 
-export const updateListById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const { error, value } = listValidator(req.body);
-  if (error) return next(new AppError(error.message, 400));
-  const list = await prisma.list.update({
-    where: {
-      id,
-    },
-    data: {
-      ...value,
-    },
-  });
-  if (!list) return next(new AppError(`Could not update list ${id}`, 400));
-  res.status(200).json({
-    status: "success",
-    list,
-  });
-});
+export const updateListById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const { error, value } = listValidator(req.body);
+    if (error) return next(new AppError(error.message, 400));
+    const list = await prisma.list.update({
+      where: {
+        id,
+      },
+      data: {
+        ...value,
+      },
+    });
+    if (!list) return next(new AppError(`Could not update list ${id}`, 400));
+    res.status(200).json({
+      status: "success",
+      list,
+    });
+  }
+);
 
-export const deleteListById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const list = await prisma.list.delete({
-    where: {
-      id,
-    },
-  });
+export const deleteListById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const list = await prisma.list.delete({
+      where: {
+        id,
+      },
+    });
 
-  await UtilsCtrl.deleteNullCards();
-  await UtilsCtrl.deleteNullComments();
-  if (!list) return next(new AppError(`Could not delete list ${id}`, 400));
-  res.status(204).json({
-    status: "success",
-    list,
-  });
-});
+    await UtilsCtrl.deleteNullCards();
+    await UtilsCtrl.deleteNullComments();
+    if (!list) return next(new AppError(`Could not delete list ${id}`, 400));
+    res.status(204).json({
+      status: "success",
+      list,
+    });
+  }
+);
