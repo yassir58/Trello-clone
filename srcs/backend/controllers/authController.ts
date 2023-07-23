@@ -11,6 +11,10 @@ import { userValidator } from "../utils/validator";
 
 const prisma = new PrismaClient();
 
+interface AuthRequest extends Request {
+  currentUser: string;
+}
+
 const generateToken = (id: string | undefined) => {
   if (!process.env.JWT_SECRET) return null;
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -44,32 +48,30 @@ const formatSecureUserResponse = (user: any) => {
   return { fullname: user.fullname, profileImage: user.profileImage, email: user.email };
 };
 
-export const updatePassword = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const { oldPassword, newPassword, confirmPassword } = req.body;
+export const updatePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { oldPassword, newPassword, confirmPassword } = req.body;
 
-    if (!oldPassword || !newPassword || !confirmPassword)
-      return next(new AppError("Please provide the old and new password.", 400));
+  if (!oldPassword || !newPassword || !confirmPassword)
+    return next(new AppError("Please provide the old and new password.", 400));
 
-    const hashedPassword = await hashPassword(newPassword);
-    const user = await prisma.user.findUnique({
-      where: {
-        id: req.user.id ?? undefined,
-      },
-    });
-    if (!user || !(await checkPassword(oldPassword, user.password)))
-      return next(new AppError("Incorrect password please enter the correct one.", 401));
+  const hashedPassword = await hashPassword(newPassword);
+  const user = await prisma.user.findUnique({
+    where: {
+      id: req.currentUser ?? undefined,
+    },
+  });
+  if (!user || !(await checkPassword(oldPassword, user.password)))
+    return next(new AppError("Incorrect password please enter the correct one.", 401));
 
-    await prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        password: hashedPassword,
-      },
-    });
-  }
-);
+  await prisma.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      password: hashedPassword,
+    },
+  });
+});
 
 export const forgotPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const user = await prisma.user.findUnique({
@@ -123,7 +125,7 @@ export const authorizeRoute = catchAsync(async (req: Request, res: Response, nex
   if (!user) return next(new AppError("The user associated with this token has been deleted.", 401));
   if (decodedToken.iat && user.passwordChangedAt && checkPasswordChanged(decodedToken.iat, user.passwordChangedAt))
     return next(new AppError("User password has been changed, please login with the new password", 401));
-  req.user = user;
+  req.currentUser = "1234455";
   next();
 });
 
@@ -195,5 +197,18 @@ export const login = catchAsync(async (req: Request, res: Response, next: NextFu
     status: "success",
     token,
     user: formatSecureUserResponse(user),
+  });
+});
+
+export const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    expires: new Date(Date.now() + 10 * 1000),
+  };
+
+  res.cookie("jwt", "disconnected", cookieOptions);
+  res.status(200).json({
+    status: "success",
   });
 });

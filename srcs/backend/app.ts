@@ -1,5 +1,7 @@
-import express, { Express, Request, Response, NextFunction } from "express";
+import helmet from "helmet";
 import morgan from "morgan";
+import { rateLimit } from "express-rate-limit";
+import express, { Express, Request, Response, NextFunction } from "express";
 
 // Routers
 import usersRouter from "./routes/usersRouter";
@@ -19,7 +21,20 @@ const app: Express = express();
 
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
 
-app.use(express.json());
+// The rate limiter is configured to serve 5000Req/Hour
+app.use(
+  rateLimit({
+    windowMs: 60 * 60 * 1000,
+    max: 5000,
+  })
+);
+
+// app.use(cookieParser());
+
+app.use(express.json({limit: '10kb'}));
+
+app.use(helmet());
+
 
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/lists", listsRouter);
@@ -37,3 +52,7 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
 app.use(handleErrors);
 
 export default app;
+function cookieParser(): any {
+  throw new Error("Function not implemented.");
+}
+
