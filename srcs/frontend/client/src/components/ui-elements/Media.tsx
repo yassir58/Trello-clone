@@ -12,7 +12,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { ColumnContainer } from "./Containers";
-import { Label, LargeButton } from "./Buttons";
+import { Label } from "./Buttons";
 import AddCard from "../AddCard";
 import ThreeDot from "../ThreeDot";
 import { EditCardComponent, ModalComponent, PopOver } from "../Popover";
@@ -22,14 +22,13 @@ import { BsPaperclip } from "react-icons/bs";
 import { FaEllipsis } from "react-icons/fa6";
 
 export interface CardElementProps {
-    id: number;
-    title: string;
-    cardBanner?: string;
-    tags?: Array<{ value: string; color: string }>;
-    members?: Array<string>;
-    commentCount?: number;
-    attachmentCount?: number;
-  
+  id: number;
+  title: string;
+  cardBanner?: string;
+  tags?: Array<{ value: string; color: string }>;
+  members?: Array<string>;
+  commentCount?: number;
+  attachmentCount?: number;
 }
 export interface CardProps {
   card: CardElementProps;
@@ -76,17 +75,23 @@ interface ProfileCardProps {
 
 export const CardCp: React.FC<CardProps> = ({
   card = defaultCard,
-  width = "280px",
+  width = "260px",
   boardCard = false,
-  onClick
+  onClick,
 }) => {
   return (
     <div>
-      <Box w={width} boxShadow="lg" borderRadius="lg" onClick={onClick} sx={{
-        _hover: { 
-          boxShadow: "xl",
-        }
-      }}>
+      <Box
+        w={width}
+        boxShadow="lg"
+        borderRadius="lg"
+        onClick={onClick}
+        sx={{
+          _hover: {
+            boxShadow: "xl",
+          },
+        }}
+      >
         <Stack justify="center" spacing={1}>
           {card.cardBanner && (
             <Box height="150px" borderRadius="lg" mx="auto" my={2} w="90%">
@@ -132,7 +137,7 @@ export const CardCp: React.FC<CardProps> = ({
                       );
                     }
                   })}
-                <Button size="xs" fontSize="lg" colorScheme="blue">
+                <Button variant='primary'>
                   <BiPlus />
                 </Button>
               </HStack>
@@ -182,11 +187,12 @@ export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
 };
 
 export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
+  
   const [createCard, setCreateCard] = React.useState(false);
   const createCardHandler = () => {
     setCreateCard(!createCard);
   };
-  const {isOpen, onClose, onOpen} = useDisclosure()
+  const { isOpen, onClose, onOpen } = useDisclosure();
   return (
     <div>
       <ColumnContainer>
@@ -198,33 +204,51 @@ export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
           w="100%"
           px={4}
         >
-          <Heading size="sm" fontWeight="500" lineHeight='normal' color='#333' letterSpacing='-0.49px' fontFamily='Poppins'>
+          <Heading
+            size="sm"
+            fontWeight="500"
+            lineHeight="normal"
+            color="#333"
+            letterSpacing="-0.49px"
+            fontFamily="Poppins"
+          >
             This is list title
           </Heading>
           <PopOver
-            icon={<FaEllipsis />}
-            buttonTheme={{ colorScheme:'', size:'sm', color:'#828282', variant:'ghost'}}
+            button={<Button variant={'ghost'}><FaEllipsis/></Button>}
             size="3xs"
           >
             <ThreeDot />
           </PopOver>
         </HStack>
+
+        {createCard ? (
+          <AddCard cancelHandler={createCardHandler}/>
+        ) : (
+          <Button onClick={createCardHandler} variant='largePrimary'>
+            <chakra.small>Add another Card</chakra.small>
+            <BiPlus />
+          </Button>
+        )}
+
         <ColumnContainer>
           {cards &&
             cards.map((item) => {
-              return <Box>
-                <CardCp card={item} boardCard={true} onClick={onOpen}/>
-                <ModalComponent style={{size:'2xl'}} isOpen={isOpen} onOpen={onOpen} onClose={onClose}>
-                  <EditCardComponent card={item} />
-                </ModalComponent>
-              </Box>;
+              return (
+                <Box>
+                  <CardCp card={item} boardCard={true} onClick={onOpen} />
+                  <ModalComponent
+                    style={{ size: "2xl" }}
+                    isOpen={isOpen}
+                    onOpen={onOpen}
+                    onClose={onClose}
+                  >
+                    <EditCardComponent onClose={onClose} card={item} />
+                  </ModalComponent>
+                </Box>
+              );
             })}
         </ColumnContainer>
-        {createCard && <AddCard />}
-        <LargeButton onClickHandler={createCardHandler} size='90%'>
-          <chakra.small>Add another Card</chakra.small>
-          <BiPlus />
-        </LargeButton>
       </ColumnContainer>
     </div>
   );

@@ -59,38 +59,42 @@ export const getAllCards = catchAsync(async (req: Request, res: Response, next: 
   });
 });
 
-export const updateCardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const { error, value } = cardValidator(req.body);
-  if (error) return next(new AppError(error.message, 400));
-  const board = await prisma.card.update({
-    where: {
-      id,
-    },
-    data: {
-      ...value,
-    },
-  });
-  res.status(200).json({
-    status: "success",
-    board,
-  });
-});
+export const updateCardById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const { error, value } = cardValidator(req.body);
+    if (error) return next(new AppError(error.message, 400));
+    const board = await prisma.card.update({
+      where: {
+        id,
+      },
+      data: {
+        ...value,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      board,
+    });
+  }
+);
 
-export const deleteCardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  // Delete the Card
-  const list = await prisma.card.delete({
-    where: {
-      id,
-    },
-  });
+export const deleteCardById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    // Delete the Card
+    const list = await prisma.card.delete({
+      where: {
+        id,
+      },
+    });
 
-  await UtilsCtrl.deleteNullComments();
-  await UtilsCtrl.deleteNullAttachement();
-  await UtilsCtrl.deleteNullLabels();
-  res.status(204).json({
-    status: "success",
-    list,
-  });
-});
+    await UtilsCtrl.deleteNullComments();
+    await UtilsCtrl.deleteNullAttachement();
+    await UtilsCtrl.deleteNullLabels();
+    res.status(204).json({
+      status: "success",
+      list,
+    });
+  }
+);

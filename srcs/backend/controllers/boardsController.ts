@@ -29,13 +29,22 @@ export const createBoard = catchAsync(async (req: Request, res: Response, next: 
 });
 
 export const getAllBoards = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const search = req.query.search as string;
   const boards = await prisma.board.findMany({
     where: {
       visibilty: true,
+      title: {
+        contains: search ?? undefined,
+        mode: "insensitive",
+      },
     },
     include: {
       author: true,
-      users: true,
+      users: {
+        select: {
+          password: false,
+        },
+      },
       lists: true,
     },
   });
@@ -54,7 +63,11 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
     },
     include: {
       author: true,
-      users: true,
+      users: {
+        select: {
+          password: false,
+        },
+      },
       lists: true,
     },
   });
@@ -65,39 +78,43 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
   });
 });
 
-export const updateBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const { error, value } = boardValidator(req.body);
-  if (error) return next(new AppError(error.message, 400));
-  const board = await prisma.board.update({
-    where: {
-      id,
-    },
-    data: {
-      ...value,
-    },
-  });
-  res.status(200).json({
-    status: "success",
-    board,
-  });
-});
+export const updateBoardById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const { error, value } = boardValidator(req.body);
+    if (error) return next(new AppError(error.message, 400));
+    const board = await prisma.board.update({
+      where: {
+        id,
+      },
+      data: {
+        ...value,
+      },
+    });
+    res.status(200).json({
+      status: "success",
+      board,
+    });
+  }
+);
 
-export const deleteBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const board = await prisma.board.delete({
-    where: {
-      id,
-    },
-  });
+export const deleteBoardById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const board = await prisma.board.delete({
+      where: {
+        id,
+      },
+    });
 
-  await UtilsCtrl.deleteNullLists();
-  await UtilsCtrl.deleteNullCards();
-  await UtilsCtrl.deleteNullComments();
+    await UtilsCtrl.deleteNullLists();
+    await UtilsCtrl.deleteNullCards();
+    await UtilsCtrl.deleteNullComments();
 
-  if (!board) return next(new AppError(`Could not find board ${id}`, 404));
-  res.status(204).json({
-    status: "success",
-    board,
-  });
-});
+    if (!board) return next(new AppError(`Could not find board ${id}`, 404));
+    res.status(204).json({
+      status: "success",
+      board,
+    });
+  }
+);

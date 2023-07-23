@@ -82,15 +82,17 @@ export const getAllInvites = catchAsync(async (req: Request, res: Response, next
   });
 });
 
-export const deleteInviteById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const list = await prisma.label.delete({
-    where: {
-      id,
-    },
-  });
-  res.status(204).json({
-    status: "success",
-    list,
-  });
-});
+export const deleteInviteById = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
+    const id = req.params.id;
+    const list = await prisma.label.delete({
+      where: {
+        id,
+      },
+    });
+    res.status(204).json({
+      status: "success",
+      list,
+    });
+  }
+);

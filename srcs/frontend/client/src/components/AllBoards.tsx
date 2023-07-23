@@ -54,8 +54,8 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
   const [boards, setBoards] = useState<BoardProps[]>([])
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <div>
-      <Stack spacing={10}>
+    
+      <Stack spacing={10} mt='120px'>
         <Flex
           className="header"
           px={6}
@@ -119,6 +119,5 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
           </HStack>
         </Stack>
       </Stack>
-    </div>
   );
 };

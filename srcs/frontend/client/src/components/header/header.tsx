@@ -1,7 +1,6 @@
 import React from "react";
-import { Flex, chakra, Avatar, HStack } from "@chakra-ui/react";
+import { Flex, chakra, Avatar, HStack, Button } from "@chakra-ui/react";
 import "../../styles/app.scss";
-import { SecondaryButton, PrimaryButton } from "../ui-elements/Buttons";
 import { BsFillGrid3X3GapFill, BsCaretDownFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 interface HeaderProps {}
@@ -12,24 +11,22 @@ interface LogoProps {}
 
 const Header: React.FC<HeaderProps> = () => {
   return (
-    <div>
-      <Flex
-        className="header"
-        px={6}
-        py={4}
-        justify="space-between"
-        align="center"
-      >
-        <HStack spacing={8}>
-          <SmallLogo />
-          <Nav />
-        </HStack>
-        <HStack spacing={5}>
-          <SearchForm />
-          <ProfileHeader />
-        </HStack>
-      </Flex>
-    </div>
+    <Flex
+      className="header"
+      px={6}
+      justify="space-between"
+      align="center"
+      h='60px'
+    >
+      <HStack spacing={8}>
+        <SmallLogo />
+        <Nav />
+      </HStack>
+      <HStack spacing={5}>
+        <SearchForm />
+        <ProfileHeader />
+      </HStack>
+    </Flex>
   );
 };
 
@@ -45,10 +42,12 @@ export const Nav: React.FC<NavProps> = () => {
         mx="1.5rem"
       ></chakra.div>
       <Link to="/AllBoards">
-        <SecondaryButton>
-          <BsFillGrid3X3GapFill />
-          <chakra.small>All boards</chakra.small>
-        </SecondaryButton>
+        <Button variant="secondary">
+          <HStack spacing={2}>
+            <BsFillGrid3X3GapFill />
+            <chakra.small>All boards</chakra.small>
+          </HStack>
+        </Button>
       </Link>
     </Flex>
   );
@@ -93,7 +92,11 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = () => {
       <chakra.small color="gray.600" mx="10px">
         Javier lima
       </chakra.small>
-      <BsCaretDownFill />
+      <Link to="/login">
+        <Button variant="ghost">
+          <BsCaretDownFill />
+        </Button>
+      </Link>
     </HStack>
   );
 };
@@ -125,9 +128,9 @@ export const SearchForm: React.FC<SearchFormProps> = () => {
           placeholder={"keywords ..."}
           color="gray.600"
         />
-        <PrimaryButton>
+        <Button variant="primary">
           <chakra.small>Search</chakra.small>
-        </PrimaryButton>
+        </Button>
       </chakra.form>
     </div>
   );

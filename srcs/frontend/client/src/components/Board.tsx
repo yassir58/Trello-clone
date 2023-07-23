@@ -1,45 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { chakra, Avatar, Flex, HStack } from "@chakra-ui/react";
-import { LargeButton } from "./ui-elements/Buttons";
+import {
+  chakra,
+  Avatar,
+  Flex,
+  HStack,
+  Stack,
+  Text,
+  Button,
+  useDisclosure,
+} from "@chakra-ui/react";
 
 import { FlexContainer, ColumnContainer } from "./ui-elements/Containers";
 import { CardList } from "./ui-elements/Media";
-import { PopOver } from "./Popover";
+import { PopOver, DrawerCp} from "./Popover";
 import Visibility from "./Visibility";
 import { Menu } from "./Menu";
 import { BsGlobeEuropeAfrica } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 import { FaEllipsis } from "react-icons/fa6";
-// import InviteToBoard from "./InviteToBoard";
-// import { AddLable } from "./AddLable";
+import {EditBoard} from "./EditBoard";
 import { ChangeCover } from "./ChangeCover";
+import { AddList } from "./AddCard";
 interface BoardProps {}
-
 
 interface BoardMenuBarProps {
   members: string[];
 }
 
 export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
-
-  
+  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <div>
+    <Stack>
       <Flex
         justify="space-between"
         align="center"
         w="98%"
         h="auto"
         mx="auto"
-        mt="20px"
-        mb="30px"
+        mt="30px"
+        mb="25px"
       >
         <HStack spacing={3}>
           <PopOver
-            icon={<BsGlobeEuropeAfrica />}
-            value="public"
+            button={
+              <Button variant={"secondary"}>
+                <HStack>
+                  <BsGlobeEuropeAfrica />
+                  <Text fontSize={"xs"} fontWeight={"normal"}>Public</Text>
+                </HStack>
+              </Button>
+            }
             size="2xs"
-            buttonTheme={{ colorScheme: 'gray', size:'sm', color:'#828282' }}
           >
             <Visibility />
           </PopOver>
@@ -50,30 +61,36 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
           })}
 
           <PopOver
-            icon={
-              <chakra.span fontSize="lg">
-                <BiPlus />
-              </chakra.span>
-            }
             size="2xs"
-            buttonTheme={{ colorScheme:'blue', size: "sm" }}
+            button={
+              <Button variant={"primary"}>
+                <BiPlus />
+              </Button>
+            }
           >
             {/* <AddLable /> */}
             <ChangeCover />
           </PopOver>
-    
+          <EditBoard />
         </HStack>
-        <PopOver
-          icon={<FaEllipsis />}
-          value="Menu"
+        <DrawerCp
+          isOpen={isOpen}
+          onClose={onClose}
+          onOpen={onOpen}
           header="Menu"
-          size="md"
-          buttonTheme={{ colorScheme: "gray", size: "sm", color: "#828282" }}
+          buttonValue={
+            <HStack spacing={2}>
+              <Text fontSize={"xs"} fontWeight={"normal"}>
+                Menu
+              </Text>
+              <FaEllipsis />
+            </HStack>
+          }
         >
           <Menu />
-        </PopOver>
+        </DrawerCp>
       </Flex>
-    </div>
+    </Stack>
   );
 };
 
@@ -85,7 +102,10 @@ export const Board: React.FC<BoardProps> = () => {
   ];
 
   const [cards, setCards] = useState([]);
+  const [addList, setAddList] = useState(false);
   const endPoint = "http://localhost:3001/Data";
+
+  const handleToggle = () => setAddList(!addList);
 
   useEffect(() => {
     fetch(endPoint)
@@ -93,18 +113,22 @@ export const Board: React.FC<BoardProps> = () => {
       .then((data) => setCards(data));
   }, []);
   return (
-    <div>
+    <Stack mt="60px" bg={"white"}>
       <BoardMenuBar members={members} />
       <FlexContainer>
         <CardList cards={cards} />
         <CardList />
         <ColumnContainer>
-          <LargeButton size="96%">
-            <chakra.small>Add another list</chakra.small>
-            <BiPlus />
-          </LargeButton>
+          {addList ? (
+            <AddList cancelHandler={handleToggle} />
+          ) : (
+            <Button variant="largePrimary" onClick={handleToggle}>
+              <chakra.small>Add another list</chakra.small>
+              <BiPlus />
+            </Button>
+          )}
         </ColumnContainer>
       </FlexContainer>
-    </div>
+    </Stack>
   );
 };

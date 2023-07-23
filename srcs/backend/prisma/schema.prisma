@@ -19,19 +19,23 @@ model Board {
   author      User    @relation("authoredBoards", fields: [authorId], references: [id])
   authorId    String
   users       User[]  @relation("Members")
-  lists       List[]  @relation("lists") 
+  lists       List[]  @relation("lists")
 
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
   Invites   Invite[]
 }
 
 model User {
-  id           String  @id @default(uuid())
-  userName     String  @unique
-  email        String  @unique
-  profileImage String
-  contriBoards Board[] @relation("Members")
+  id                   String    @id @default(uuid())
+  fullname             String    @unique
+  email                String    @unique
+  profileImage         String?
+  password             String
+  passwordChangedAt    DateTime?
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
+  contriBoards         Board[]   @relation("Members")
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -105,7 +109,7 @@ model Label {
   tag   String @unique
   color String
 
-  card   Card?   @relation(fields: [cardId], references: [id], onDelete: SetDefault)
+  card   Card?   @relation(fields: [cardId], references: [id], onDelete: SetNull)
   cardId String?
 
   createdAt DateTime @default(now())

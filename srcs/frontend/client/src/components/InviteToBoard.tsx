@@ -37,13 +37,13 @@ const InviteToBoard = () => {
           />
         </InputGroup>
         <Stack marginTop={7} borderRadius="xl" shadow="md">
-          <Button py={8} px={3} borderRadius="xl" bg="white" variant="solid">
+          <Button variant='ghost'>
             SomeRandomUser
           </Button>
-          <Button py={8} px={3} borderRadius="xl" bg="white" variant="solid">
+          <Button variant='ghost'>
             SomeRandomUser
           </Button>
-          <Button py={8} px={3} borderRadius="xl" bg="white" variant="solid">
+          <Button variant='ghost'>
             SomeRandomUser
           </Button>
         </Stack>

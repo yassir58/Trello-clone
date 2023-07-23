@@ -14,7 +14,6 @@ import {
   Heading,
   chakra,
   FormControl,
-  FormLabel,
   Textarea,
 } from "@chakra-ui/react";
 
@@ -71,18 +70,12 @@ export const Menu: React.FC = () => {
           <MyEditableTextarea />
         </Box>
         <HStack spacing={3}>
-          <Button borderRadius="xl" px={5} py={2} size="sm" colorScheme="green">
+          <Button  variant='green'>
             Save
           </Button>
           <Button
             onClick={removeFocus}
-            borderRadius="xl"
-            px={5}
-            py={2}
-            size="sm"
-            bg="transparent"
-            fontWeight="normal"
-            color="gray.500"
+            variant="ghostSecondary"
           >
             Cancel
           </Button>
@@ -120,7 +113,6 @@ export const MyEditableTextarea: React.FC<MyEditableProps> = () => {
 
   return (
     <FormControl>
-      <FormLabel>Editable Textarea</FormLabel>
       <Textarea
         ref={textareaRef}
         value={value}
@@ -167,7 +159,7 @@ export const TeamMemberCard: React.FC<teamMemberProps> = ({ profile }) => {
         {profile.admin ? (
           <chakra.small> admin </chakra.small>
         ) : (
-          <Button size="xs" colorScheme="red" variant="outline">
+          <Button variant='outlineRed'>
             {" "}
             remove{" "}
           </Button>
