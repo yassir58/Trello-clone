@@ -25,7 +25,7 @@ const handleErrors = (err: Error, req: Request, res: Response, next: NextFunctio
   if (!(err instanceof AppError)) err = handleOperationErrors(err);
   if (err instanceof AppError) {
     err.statusCode = err.statusCode || 500;
-    err.status = err.status || "Failure";
+    err.status = err.status || "failure";
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,

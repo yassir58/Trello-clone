@@ -11,10 +11,6 @@ import { userValidator } from "../utils/validator";
 
 const prisma = new PrismaClient();
 
-interface AuthRequest extends Request {
-  currentUser: string;
-}
-
 const generateToken = (id: string | undefined) => {
   if (!process.env.JWT_SECRET) return null;
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -91,7 +87,7 @@ export const forgotPassword = catchAsync(async (req: Request, res: Response, nex
       passwordResetExpires: new Date(new Date().getTime() + 10 * 60 * 1000).toISOString(),
     },
   });
-  const resetLink = `${req.protocol}//${req.hostname}/resetPassword/${token}`;
+  const resetLink = `${req.protocol}://${req.hostname}/resetPassword/${token}`;
   const message = `You can reset your password using the following link:\n${resetLink}`;
 
   try {
@@ -121,11 +117,17 @@ export const authorizeRoute = catchAsync(async (req: Request, res: Response, nex
     where: {
       id: decodedToken.id,
     },
+    select: {
+      id: true,
+      passwordChangedAt: true,
+    }
   });
   if (!user) return next(new AppError("The user associated with this token has been deleted.", 401));
-  if (decodedToken.iat && user.passwordChangedAt && checkPasswordChanged(decodedToken.iat, user.passwordChangedAt))
+  if (decodedToken.iat && user.passwordChangedAt)
+    console.log(checkPasswordChanged(decodedToken.iat, user.passwordChangedAt));
+  if ((decodedToken.iat && user.passwordChangedAt) && checkPasswordChanged(decodedToken.iat, user.passwordChangedAt))
     return next(new AppError("User password has been changed, please login with the new password", 401));
-  req.currentUser = "1234455";
+  req.currentUser = user.id;
   next();
 });
 
@@ -152,6 +154,8 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
     data: {
       password: await hashPassword(newPassword),
       passwordChangedAt: new Date().toISOString(),
+      passwordResetToken: null,
+      passwordResetExpires: null
     },
   });
   res.status(200).json({

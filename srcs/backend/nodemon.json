@@ -1,8 +1,4 @@
 {
-    "watch": ["src"],
-    "ext": "ts",
-    "ignore": ["src/**/*.spec.ts"],
-    "exec": "ts-node --files --project tsconfig.json",
-    "inspect": true,
-    "verbose": true
-  }
+  "ignore": ["src/**/*.spec.ts"],
+  "exec": "ts-node --files --project tsconfig.json"
+}
