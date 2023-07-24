@@ -8,10 +8,11 @@ import sendMail from "../utils/Email";
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
 import { userValidator } from "../utils/validator";
+import EncryptText from "../utils/Encyption";
 
 const prisma = new PrismaClient();
 
-const generateToken = (id: string | undefined) => {
+const generateToken = async (id: string | undefined) => {
   if (!process.env.JWT_SECRET) return null;
   return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,
@@ -21,7 +22,7 @@ const generateToken = (id: string | undefined) => {
 const checkPasswordChanged = (tokenIssueAt: number, passwordChanged: Date | undefined) => {
   if (!passwordChanged) return false;
   const passwordTime = Math.round(new Date(passwordChanged).getTime() / 1000);
-  passwordTime > tokenIssueAt ? true : false;
+  return passwordTime > tokenIssueAt ? true : false;
 };
 
 const generatePasswordResetToken = async () => {
@@ -33,6 +34,7 @@ const hashToken = async (token: string) => {
 };
 
 const hashPassword = async (password: string) => {
+  crypto.createCipheriv
   return await bcrypt.hash(password, 12);
 };
 
@@ -42,6 +44,17 @@ const checkPassword = async (candidatePassword: string, userPassword: string) =>
 
 const formatSecureUserResponse = (user: any) => {
   return { fullname: user.fullname, profileImage: user.profileImage, email: user.email };
+};
+
+const sendAuthToken = async (res: Response, next: NextFunction, userId: string) => {
+  const token = await generateToken(userId);
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    expires: new Date(Date.now() + parseInt(process.env.JWT_EXPIRES_IN || "90") * 24 * 3600000),
+  };
+  if (!token) return next(new AppError("Internal Error: auth module error", 500));
+  res.cookie("jwt", token, cookieOptions);
 };
 
 export const updatePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -108,10 +121,15 @@ export const forgotPassword = catchAsync(async (req: Request, res: Response, nex
 
 export const authorizeRoute = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   let decodedToken;
-  if (!req.headers.authorization)
+  let token;
+
+  if (!process.env.JWT_SECRET) return next(new AppError("Auth error: could not sign token, please contact admin.", 400));
+  if (!req.headers.authorization && !req.cookies.jwt)
     return next(new AppError("No authorization token has been provided please login again.", 401));
-  const token = req.headers.authorization.split(" ")[1];
-  if (!process.env.JWT_SECRET) return console.log("Authorization Route: Check JWT env variables.");
+  //? I gave priority to authorization header so the user can override the jwt cookie
+  if (req.headers.authorization) token = req.headers.authorization.split(" ")[1];
+
+  token = req.cookies.jwt;
   decodedToken = (await jwt.verify(token, process.env.JWT_SECRET)) as JwtPayload;
   const user = await prisma.user.findUnique({
     where: {
@@ -123,17 +141,16 @@ export const authorizeRoute = catchAsync(async (req: Request, res: Response, nex
     },
   });
   if (!user) return next(new AppError("The user associated with this token has been deleted.", 401));
-  if (decodedToken.iat && user.passwordChangedAt)
-    console.log(checkPasswordChanged(decodedToken.iat, user.passwordChangedAt));
   if (decodedToken.iat && user.passwordChangedAt && checkPasswordChanged(decodedToken.iat, user.passwordChangedAt))
     return next(new AppError("User password has been changed, please login with the new password", 401));
   req.currentUser = user.id;
-  //! Set the board id here too
+  req.boardId = new EncryptText(req.cookies.boardId).decrypt() || null;
   next();
 });
 
 export const preventUnauthorized = (level: string | undefined) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    if (!req.boardId) return next(new AppError("Board id is not selected please reload the application", 400));
     const board = await prisma.board.findUnique({
       where: {
         id: req.boardId,
@@ -203,11 +220,9 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
       password,
     },
   });
-  const token = generateToken(user.id);
-  if (!token) return new AppError("Internal Error: auth module error", 500);
+  await sendAuthToken(res, next, user.id);
   res.status(200).json({
     status: "success",
-    token,
     user: formatSecureUserResponse(user),
   });
 });
@@ -223,11 +238,9 @@ export const login = catchAsync(async (req: Request, res: Response, next: NextFu
 
   if (!user || !(await checkPassword(password, user.password)))
     return next(new AppError("Incorrect email or password", 401));
-  const token = generateToken(user.id);
-  if (!token) return new AppError("Internal Error: auth module error", 500);
+  await sendAuthToken(res, next, user.id);
   res.status(200).json({
     status: "success",
-    token,
     user: formatSecureUserResponse(user),
   });
 });

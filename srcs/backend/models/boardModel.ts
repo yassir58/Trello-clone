@@ -2,6 +2,7 @@ import Joi from "joi";
 import { Request, Response, NextFunction } from "express";
 import { Board, PrismaClient } from "@prisma/client";
 import AppError from "../utils/AppError";
+import EncryptText from "../utils/Encyption";
 
 const prisma = new PrismaClient();
 
@@ -21,20 +22,20 @@ export const validateBoardAction = async (req: Request, next: NextFunction): Pro
   });
 
   if (!board) return next(new AppError(`Could not find board ${id}`, 404));
-  if (board.authorId != req.currentUser)
-    return next(new AppError(`This action can only be performed by board admin`, 401));
   return board;
 };
 
 export const sendBoardId = async (boardId: string, res: Response) => {
   // Set the board id
+  const encryptedBoardId = new EncryptText(boardId).encrypt();
+
   const cookieOptions = {
     httpOnly: true,
     secure: true,
     expires: new Date(Date.now() + 2160 * 60 * 601000),
   };
 
-  res.cookie("boardId", boardId, cookieOptions);
+  res.cookie("boardId", encryptedBoardId, cookieOptions);
 };
 
 export default boardSchema;

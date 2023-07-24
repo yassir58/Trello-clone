@@ -85,7 +85,7 @@ export const updateBoardById = catchAsync(async (req: Request, res: Response, ne
   const board = (await validateBoardAction(req, next)) as Board;
   const { error, value } = boardValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
-  await prisma.board.update({
+  const newBoard = await prisma.board.update({
     where: {
       id: board.id,
     },
@@ -95,7 +95,7 @@ export const updateBoardById = catchAsync(async (req: Request, res: Response, ne
   });
   res.status(200).json({
     status: "success",
-    board,
+    newBoard,
   });
 });
 

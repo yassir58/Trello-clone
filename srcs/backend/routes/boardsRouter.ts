@@ -1,6 +1,6 @@
 import express from "express";
 import * as boardsController from "../controllers/boardsController";
-import * as authController from '../controllers/authController';
+import * as authController from "../controllers/authController";
 
 const Router = express.Router();
 
@@ -10,7 +10,7 @@ Router.route("/").get(boardsController.getAllBoards).post(boardsController.creat
 
 Router.route("/:id")
   .get(boardsController.getBoardById)
-  .put(boardsController.updateBoardById)
-  .delete(boardsController.deleteBoardById);
+  .put(authController.preventUnauthorized("admin"), boardsController.updateBoardById)
+  .delete(authController.preventUnauthorized("admin"), boardsController.deleteBoardById);
 
 export default Router;

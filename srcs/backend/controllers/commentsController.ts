@@ -1,9 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Comment } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
 import { commentValidator } from "../utils/validator";
-import catchAsync from "../utils/catchAsync";
+import { validateCommentAction } from "../models/commentModel";
 import AppError from "../utils/AppError";
+import catchAsync from "../utils/catchAsync";
 
 const prisma = new PrismaClient();
 
@@ -30,72 +31,70 @@ export const createComment = catchAsync(async (req: Request, res: Response, next
   });
 });
 
-export const getCommentById = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const comment = await prisma.comment.findUnique({
-      where: {
-        id,
-      },
-    });
-    if (!comment) return next(new AppError(`Could not find comment: ${id}`, 404));
-    res.status(200).json({
-      status: "success",
-      comment,
-    });
-  }
-);
+export const getCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.params.id;
+  const comment = await prisma.comment.findUnique({
+    where: {
+      id,
+    },
+  });
+  if (!comment) return next(new AppError(`Could not find comment: ${id}`, 404));
+  res.status(200).json({
+    status: "success",
+    comment,
+  });
+});
 
-export const getAllComments = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const comments = await prisma.comment.findMany({
-      where: {
-        card: {
-          id: req.params.cardId ?? undefined,
+export const getAllComments = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const comments = await prisma.comment.findMany({
+    where: {
+      card: {
+        id: req.params.cardId ?? undefined,
+      },
+    },
+    include: {
+      user: {
+        select: {
+          fullname: true,
+          profileImage: true,
         },
       },
-    });
-    res.status(200).json({
-      status: "success",
-      comments,
-      count: comments.length,
-    });
-  }
-);
+    },
+  });
+  res.status(200).json({
+    status: "success",
+    comments,
+    count: comments.length,
+  });
+});
 
-export const updateCommentById = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    //! @validation: Check that the author of the comment is the same as the user who's making the reques
-    const id = req.params.id;
-    const { error, value } = commentValidator(req.body);
-    if (error) return next(new AppError(error.message, 400));
-    const board = await prisma.comment.update({
-      where: {
-        id,
-      },
-      data: {
-        ...value,
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      board,
-    });
-  }
-);
+export const updateCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const { error, value } = commentValidator(req.body);
+  if (error) return next(new AppError(error.message, 400));
+  const comment = (await validateCommentAction(req, next)) as Comment;
+  await prisma.comment.update({
+    where: {
+      id: comment.id,
+    },
+    data: {
+      ...value,
+    },
+  });
+  res.status(200).json({
+    status: "success",
+    comment,
+  });
+});
 
-export const deleteCommentById = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    //! @validation: Check that the author of the comment is the same as the user who's making the request
-    const id = req.params.id;
-    const list = await prisma.comment.delete({
-      where: {
-        id,
-      },
-    });
-    res.status(204).json({
-      status: "success",
-      list,
-    });
-  }
-);
+export const deleteCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const comment = (await validateCommentAction(req, next)) as Comment;
+
+  await prisma.comment.delete({
+    where: {
+      id: comment.id,
+    },
+  });
+  res.status(204).json({
+    status: "success",
+  });
+});

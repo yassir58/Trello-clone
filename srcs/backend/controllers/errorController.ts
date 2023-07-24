@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { JsonWebTokenError } from 'jsonwebtoken'
 import { Prisma } from "@prisma/client";
 
 import AppError from "../utils/AppError";
@@ -14,6 +15,12 @@ const handleOperationErrors = (err: Error): any => {
     else if (err.code === "P1008") return new AppError(`Timeout Error : Operations timed out `, 400);
     else if (err.code === "P1008") return new AppError(`Timeout Error : Operations timed out `, 400);
   }
+  else if (err instanceof JsonWebTokenError)
+  {
+    if (err.name === "JsonWebTokenError")
+      return new AppError("the user is logged in anymore or jwt is in bad format", 400);
+  }
+  //? THis should stay here for the logs
   console.log(err);
   // Handle authentification and errors related to JWT
   // Handle generic errors

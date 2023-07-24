@@ -1,4 +1,4 @@
-# Trello API Version 1.0 Tasks List
+# Thullo API Version 1.0 Tasks List
 
 ### Backend API v1 for the trello clone project, its connected to postgresql database using prisma ORM which handles all the data management operations
 
@@ -70,7 +70,7 @@
 - [x] Add authorization middleware
 - [x] Email sender function for the reset password functionality
 - [x] Filter action based on the role of the user
-- [x] Base the filter process on board id which is provided by cookie
+- [x] Base the filter process on the encrypted board id which is provided by cookie
 
 ## Upload
 
