@@ -4,34 +4,17 @@ import {
   Image,
   Stack,
   Heading,
-  Button,
   HStack,
-  // IconButton,
-  useDisclosure,
   Avatar,
   Box,
+  Button,
 } from "@chakra-ui/react";
-import { ColumnContainer } from "./Containers";
 import { Label } from "./Buttons";
-import AddCard from "../AddCard";
-import ThreeDot from "../ThreeDot";
-import { EditCardComponent, ModalComponent, PopOver } from "../Popover";
-import { BiPlus } from "react-icons/bi";
-import { MdComment } from "react-icons/md";
-import { BsPaperclip } from "react-icons/bs";
-import { FaEllipsis } from "react-icons/fa6";
-
-export interface CardElementProps {
-  id: number;
-  title: string;
-  cardBanner?: string;
-  tags?: Array<{ value: string; color: string }>;
-  members?: Array<string>;
-  commentCount?: number;
-  attachmentCount?: number;
-}
+import { Card, Board } from "../../context/ContextScheme";
+import { Container } from "./Wrappers";
+import { FaPlus, FaPaperclip, FaComment } from "react-icons/fa6";
 export interface CardProps {
-  card: CardElementProps;
+  card: Card;
   width?: string;
   boardCard?: boolean;
   height?: string;
@@ -43,27 +26,7 @@ interface CardInfoProps {
   icon: any;
 }
 
-interface CardListProps {
-  cards?: Array<{
-    id: number;
-    title: string;
-    cardBanner: string;
-    tags: Array<{ value: string; color: string }>;
-    members: Array<string>;
-    commentCount: number;
-    attachmentCount: number;
-  }>;
-}
-
-const defaultCard = {
-  id: 1,
-  cardBanner: "",
-  title: "",
-  commentCount: 0,
-  attachmentCount: 0,
-  tags: [],
-  members: [],
-};
+interface CardFooterProps {}
 
 interface ProfileCardProps {
   profile: {
@@ -74,101 +37,26 @@ interface ProfileCardProps {
 }
 
 export const CardCp: React.FC<CardProps> = ({
-  card = defaultCard,
-  width = "260px",
+  card,
   boardCard = false,
   onClick,
 }) => {
   return (
     <div>
-      <Box
-        w={width}
-        boxShadow="lg"
-        borderRadius="lg"
-        onClick={onClick}
-        sx={{
-          _hover: {
-            boxShadow: "xl",
-          },
-        }}
-      >
-        <Stack justify="center" spacing={1}>
-          {card.cardBanner && (
-            <Box height="150px" borderRadius="lg" mx="auto" my={2} w="90%">
-              <Image
-                src={card.cardBanner}
-                objectFit="cover"
-                w="100%"
-                h="100%"
-                borderRadius="lg"
-              />
-            </Box>
-          )}
-          <Heading
-            size={width === "2xs" ? "sm" : "md"}
-            pl={4}
-            pr={2}
-            py={2}
-            fontWeight="normal"
-          >
-            {card.title}
-          </Heading>
+      <Container variant="Card" onClick={onClick}>
+        
+          {card.cover && <CardCover image={card.cover} />}
+          <Heading variant={'cardTitle'}>{card.title}</Heading>
           {boardCard && (
             <HStack spacing={2} px={4} py={2}>
-              {card.tags &&
-                card.tags.map((tag) => {
+              {card.labels &&
+                card.labels.map((tag) => {
                   return <Label color={tag.color}>{tag.value}</Label>;
                 })}
             </HStack>
           )}
-          {boardCard ? (
-            <HStack justify="space-between" px={2} py={3}>
-              <HStack spacing={2} px={4} py={2}>
-                {card.members &&
-                  card.members.map((member, index) => {
-                    if (index < 2) {
-                      return (
-                        <Avatar
-                          size="xs"
-                          borderRadius="lg"
-                          name={member}
-                          src={member}
-                        />
-                      );
-                    }
-                  })}
-                <Button variant='primary'>
-                  <BiPlus />
-                </Button>
-              </HStack>
-              <HStack>
-                <CardInfo
-                  value={card.commentCount ? card.commentCount + "" : "0"}
-                  icon={<MdComment />}
-                />
-                <CardInfo
-                  value={card.attachmentCount ? card.attachmentCount + "" : "0"}
-                  icon={<BsPaperclip />}
-                />
-              </HStack>
-            </HStack>
-          ) : (
-            <HStack spacing={2} px={4} py={2}>
-              {card.members &&
-                card.members.map((member) => {
-                  return (
-                    <Avatar
-                      size="sm"
-                      borderRadius="lg"
-                      name={member}
-                      src="https://bit.ly/dan-abramov"
-                    />
-                  );
-                })}
-            </HStack>
-          )}
-        </Stack>
-      </Box>
+          <CardFooter/>
+      </Container>
     </div>
   );
 };
@@ -176,7 +64,7 @@ export const CardCp: React.FC<CardProps> = ({
 export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
   return (
     <div>
-      <HStack spacing={1} color="#BDBDBD">
+      <HStack spacing={1} color="#BDBDBD" alignItems={"center"}>
         <chakra.small>{icon}</chakra.small>
         <chakra.small color="#BDBDBD" fontSize="xs">
           {value}
@@ -186,71 +74,19 @@ export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
   );
 };
 
-export const CardList: React.FC<CardListProps> = ({ cards = null }) => {
-  
-  const [createCard, setCreateCard] = React.useState(false);
-  const createCardHandler = () => {
-    setCreateCard(!createCard);
-  };
-  const { isOpen, onClose, onOpen } = useDisclosure();
+export const CardFooter: React.FC<CardFooterProps> = () => {
   return (
-    <div>
-      <ColumnContainer>
-        <HStack
-          mx="auto"
-          justify="space-between"
-          alignItems="center"
-          py={2}
-          w="100%"
-          px={4}
-        >
-          <Heading
-            size="sm"
-            fontWeight="500"
-            lineHeight="normal"
-            color="#333"
-            letterSpacing="-0.49px"
-            fontFamily="Poppins"
-          >
-            This is list title
-          </Heading>
-          <PopOver
-            button={<Button variant={'ghost'}><FaEllipsis/></Button>}
-            size="3xs"
-          >
-            <ThreeDot />
-          </PopOver>
-        </HStack>
-
-        {createCard ? (
-          <AddCard cancelHandler={createCardHandler}/>
-        ) : (
-          <Button onClick={createCardHandler} variant='largePrimary'>
-            <chakra.small>Add another Card</chakra.small>
-            <BiPlus />
-          </Button>
-        )}
-
-        <ColumnContainer>
-          {cards &&
-            cards.map((item) => {
-              return (
-                <Box>
-                  <CardCp card={item} boardCard={true} onClick={onOpen} />
-                  <ModalComponent
-                    style={{ size: "2xl" }}
-                    isOpen={isOpen}
-                    onOpen={onOpen}
-                    onClose={onClose}
-                  >
-                    <EditCardComponent onClose={onClose} card={item} />
-                  </ModalComponent>
-                </Box>
-              );
-            })}
-        </ColumnContainer>
-      </ColumnContainer>
-    </div>
+    <Container variant="mdSpaceBetween">
+      <HStack spacing={1}>
+        <Button variant="primary">
+          <FaPlus />
+        </Button>
+      </HStack>
+      <HStack spacing={2}>
+        <CardInfo icon={<FaPaperclip />} value={"0"} />
+        <CardInfo icon={<FaComment />} value={"0"} />
+      </HStack>
+    </Container>
   );
 };
 
@@ -265,5 +101,38 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
         </Stack>
       </HStack>
     </div>
+  );
+};
+
+interface CardCoverProps {
+  image: string;
+}
+
+export const CardCover: React.FC<CardCoverProps> = ({ image }) => {
+  return (
+    <Box height="150px" borderRadius="lg" mx="auto" my={2} w="90%">
+      <Image
+        src={image}
+        objectFit="cover"
+        w="100%"
+        h="100%"
+        borderRadius="lg"
+      />
+    </Box>
+  );
+};
+interface BoardCardProps {
+  Board: Board;
+}
+export const BoardCard: React.FC<BoardCardProps> = ({ Board }) => {
+  return (
+    <Container variant="Card">
+      <Stack spacing={2} justify="center" align="center">
+        {Board.cover && <CardCover image={Board.cover} />}
+        <Heading size="md" fontWeight="normal">
+          {Board.title}
+        </Heading>
+      </Stack>
+    </Container>
   );
 };

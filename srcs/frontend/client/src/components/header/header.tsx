@@ -1,8 +1,9 @@
 import React from "react";
-import { Flex, chakra, Avatar, HStack, Button } from "@chakra-ui/react";
+import { Flex, chakra, Avatar, HStack, Button, Box } from "@chakra-ui/react";
 import "../../styles/app.scss";
 import { BsFillGrid3X3GapFill, BsCaretDownFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { Container } from "../ui-elements/Wrappers";
 interface HeaderProps {}
 interface NavProps {}
 interface ProfileHeaderProps {}
@@ -11,22 +12,18 @@ interface LogoProps {}
 
 const Header: React.FC<HeaderProps> = () => {
   return (
-    <Flex
-      className="header"
-      px={6}
-      justify="space-between"
-      align="center"
-      h='60px'
-    >
-      <HStack spacing={8}>
-        <SmallLogo />
-        <Nav />
-      </HStack>
-      <HStack spacing={5}>
-        <SearchForm />
-        <ProfileHeader />
-      </HStack>
-    </Flex>
+    <Box className="header">
+      <Container variant="mdSpaceBetween">
+        <HStack spacing={8}>
+          <SmallLogo />
+          <Nav />
+        </HStack>
+        <HStack spacing={5}>
+          <SearchForm />
+          <ProfileHeader />
+        </HStack>
+      </Container>
+    </Box>
   );
 };
 

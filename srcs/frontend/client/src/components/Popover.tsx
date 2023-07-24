@@ -31,7 +31,7 @@ import {
 import { BiSolidUserCircle } from "react-icons/bi";
 import { BiPlus } from "react-icons/bi";
 import { FaUnlockKeyhole, FaImage, FaXmark } from "react-icons/fa6";
-import { CardElementProps } from "./ui-elements/Media";
+import { Card } from "../context/ContextScheme";
 import { CardInfo } from "./ui-elements/Media";
 import { FaUserGroup } from "react-icons/fa6";
 import { MdLabel } from "react-icons/md";
@@ -39,6 +39,7 @@ import { AddLable } from "./AddLable";
 import InviteToBoard from "./InviteToBoard";
 import { MdDescription } from "react-icons/md";
 import { FaPen } from "react-icons/fa6";
+import { ChangeCover } from "./ChangeCover";
 interface PopOverProps {
   // trigger:any;
   children: React.ReactNode;
@@ -130,19 +131,15 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({
     </>
   );
 };
-import { BoardProps } from "./AllBoards";
-import { ChangeCover } from "./ChangeCover";
 import { MyEditableTextarea } from "./Menu";
 import { FaTrash } from "react-icons/fa6";
 interface newBoardProps {
   action: any;
-  state: BoardProps[];
   onClose: () => void;
 }
 
 export const NewBoard: React.FC<newBoardProps> = ({
   action,
-  state,
   onClose,
 }) => {
   const [title, setTitle] = useState<string>("");
@@ -152,21 +149,14 @@ export const NewBoard: React.FC<newBoardProps> = ({
   };
 
   const handleOnSubmit = () => {
-    const temp: BoardProps[] = state.slice();
-    const id = temp.length + 1;
-    temp.push({
-      id: id,
-      title: title,
-      image: `https://source.unsplash.com/random?sig=${id}`,
-    });
-    action(temp);
+    action(title);
   };
 
   return (
     <Stack spacing={4} justify="center">
       <CloseButton onClose={onClose} />
       <EditCardCover
-        image={`https://source.unsplash.com/random?sig=${state.length + 1}`}
+        image={`https://source.unsplash.com/random?sig=${Math.random() + 1}`}
       />
 
       <chakra.input
@@ -259,7 +249,7 @@ export const EditCardCover: React.FC<EditCoverProps> = ({ image }) => {
 };
 
 interface EditCardProps {
-  card: CardElementProps;
+  card: Card;
 
   onClose: () => void;
 }
@@ -292,10 +282,10 @@ export const EditCardComponent: React.FC<EditCardProps> = ({
   return (
     <div>
       <Stack spacing={4}>
-        {card.cardBanner && (
+        {card.cover && (
           <>
             <CloseButton onClose={onClose} />
-            <EditCardCover image={card.cardBanner} />
+            <EditCardCover image={card.cover} />
             <HStack
               justify="space-between"
               mx="auto"

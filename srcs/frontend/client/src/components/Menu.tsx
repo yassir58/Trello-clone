@@ -115,6 +115,7 @@ export const MyEditableTextarea: React.FC<MyEditableProps> = () => {
     <FormControl>
       <Textarea
         ref={textareaRef}
+        placeholder="Enter description ..."
         value={value}
         border="none"
         sx={{
