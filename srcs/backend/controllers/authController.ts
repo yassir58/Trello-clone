@@ -120,16 +120,44 @@ export const authorizeRoute = catchAsync(async (req: Request, res: Response, nex
     select: {
       id: true,
       passwordChangedAt: true,
-    }
+    },
   });
   if (!user) return next(new AppError("The user associated with this token has been deleted.", 401));
   if (decodedToken.iat && user.passwordChangedAt)
     console.log(checkPasswordChanged(decodedToken.iat, user.passwordChangedAt));
-  if ((decodedToken.iat && user.passwordChangedAt) && checkPasswordChanged(decodedToken.iat, user.passwordChangedAt))
+  if (decodedToken.iat && user.passwordChangedAt && checkPasswordChanged(decodedToken.iat, user.passwordChangedAt))
     return next(new AppError("User password has been changed, please login with the new password", 401));
   req.currentUser = user.id;
+  //! Set the board id here too
   next();
 });
+
+export const preventUnauthorized = (level: string | undefined) => {
+  return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+    const board = await prisma.board.findUnique({
+      where: {
+        id: req.boardId,
+      },
+      include: {
+        users: {
+          select: {
+            id: true,
+          },
+        },
+      },
+    });
+    if (!board) return next(new AppError("The board that you've request does not exists", 400));
+    if (level === "admin") {
+      if (board.authorId != req.currentUser)
+        return next(new AppError("Sorry this action can only be performed by the board admin", 401));
+    } else {
+      const users = board.users.map((item) => item.id);
+      if (!users.includes(req.currentUser))
+        return next(new AppError("User is authorized to perform this action on this baord", 401));
+    }
+    next();
+  });
+};
 
 export const resetPassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const resetToken = await hashToken(req.params.token);
@@ -155,7 +183,7 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
       password: await hashPassword(newPassword),
       passwordChangedAt: new Date().toISOString(),
       passwordResetToken: null,
-      passwordResetExpires: null
+      passwordResetExpires: null,
     },
   });
   res.status(200).json({

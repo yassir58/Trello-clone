@@ -12,7 +12,6 @@ export const createComment = catchAsync(async (req: Request, res: Response, next
   const cardId = req.params.cardId || value.cardId;
   if (!cardId) return next(new AppError("No card id was provided", 400));
   if (error) return next(new AppError(error.message, 400));
-  //! This should be changed to userId comming from the @restriction Middlware.
   const comment = await prisma.comment.create({
     data: {
       content: value.content,
@@ -20,7 +19,7 @@ export const createComment = catchAsync(async (req: Request, res: Response, next
         connect: { id: cardId },
       },
       user: {
-        connect: { id: value.userId },
+        connect: { id: req.currentUser },
       },
     },
   });

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { Request, NextFunction } from "express";
+import { Request, Response, NextFunction } from "express";
 import { Board, PrismaClient } from "@prisma/client";
 import AppError from "../utils/AppError";
 
@@ -24,6 +24,17 @@ export const validateBoardAction = async (req: Request, next: NextFunction): Pro
   if (board.authorId != req.currentUser)
     return next(new AppError(`This action can only be performed by board admin`, 401));
   return board;
+};
+
+export const sendBoardId = async (boardId: string, res: Response) => {
+  // Set the board id
+  const cookieOptions = {
+    httpOnly: true,
+    secure: true,
+    expires: new Date(Date.now() + 2160 * 60 * 601000),
+  };
+
+  res.cookie("boardId", boardId, cookieOptions);
 };
 
 export default boardSchema;

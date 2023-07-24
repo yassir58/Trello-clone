@@ -6,7 +6,7 @@ import * as UtilsCtrl from "./factoryController";
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
 import { boardValidator } from "../utils/validator";
-import { validateBoardAction } from "../models/boardModel";
+import { validateBoardAction, sendBoardId } from "../models/boardModel";
 
 const prisma = new PrismaClient();
 
@@ -74,6 +74,7 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
     },
   });
   if (!board) return next(new AppError(`Could not find board: ${id}`, 404));
+  sendBoardId(board.id, res);
   res.status(200).json({
     status: "success",
     board,

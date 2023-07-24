@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 import AppError from "../utils/AppError";
 
-const client = new PrismaClient();
 
 const handleOperationErrors = (err: Error): any => {
   // Handle database errors
