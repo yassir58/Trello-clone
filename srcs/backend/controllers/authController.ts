@@ -34,7 +34,7 @@ const hashToken = async (token: string) => {
 };
 
 const hashPassword = async (password: string) => {
-  crypto.createCipheriv
+  crypto.createCipheriv;
   return await bcrypt.hash(password, 12);
 };
 
@@ -123,7 +123,8 @@ export const authorizeRoute = catchAsync(async (req: Request, res: Response, nex
   let decodedToken;
   let token;
 
-  if (!process.env.JWT_SECRET) return next(new AppError("Auth error: could not sign token, please contact admin.", 400));
+  if (!process.env.JWT_SECRET)
+    return next(new AppError("Auth error: could not sign token, please contact admin.", 400));
   if (!req.headers.authorization && !req.cookies.jwt)
     return next(new AppError("No authorization token has been provided please login again.", 401));
   //? I gave priority to authorization header so the user can override the jwt cookie
