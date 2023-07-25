@@ -48,6 +48,12 @@ export const acceptInvite = catchAsync(async (req: Request, res: Response, next:
       },
     },
   });
+  // After accepting the invite delete it
+  await prisma.invite.delete({
+    where: {
+      id: inviteId,
+    },
+  });
   res.status(200).json({
     status: "success",
     message: "user added succesfully.",
@@ -72,7 +78,7 @@ export const getInviteById = catchAsync(async (req: Request, res: Response, next
 export const getAllInvites = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const invites = await prisma.invite.findMany({
     where: {
-      userId: req.body.userId ?? undefined,
+      userId: req.currentUser,
     },
   });
   res.status(200).json({
@@ -82,17 +88,14 @@ export const getAllInvites = catchAsync(async (req: Request, res: Response, next
   });
 });
 
-export const deleteInviteById = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const list = await prisma.label.delete({
-      where: {
-        id,
-      },
-    });
-    res.status(204).json({
-      status: "success",
-      list,
-    });
-  }
-);
+export const deleteInviteById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.params.id;
+  await prisma.invite.delete({
+    where: {
+      id,
+    },
+  });
+  res.status(204).json({
+    status: "success",
+  });
+});

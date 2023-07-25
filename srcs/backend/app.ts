@@ -1,5 +1,6 @@
 import helmet from "helmet";
 import morgan from "morgan";
+import cookieParser from 'cookie-parser';
 import { rateLimit } from "express-rate-limit";
 import express, { Express, Request, Response, NextFunction } from "express";
 
@@ -20,6 +21,10 @@ import handleErrors from "./controllers/errorController";
 const app: Express = express();
 
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
+
+// Parse cookies
+
+app.use(cookieParser());
 
 // The rate limiter is configured to serve 5000Req/Hour
 app.use(
@@ -52,7 +57,3 @@ app.all("*", (req: Request, res: Response, next: NextFunction) => {
 app.use(handleErrors);
 
 export default app;
-function cookieParser(): any {
-  throw new Error("Function not implemented.");
-}
-

@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { PrismaClient, Prisma } from "@prisma/client";
+import { JsonWebTokenError } from 'jsonwebtoken'
+import { Prisma } from "@prisma/client";
 
 import AppError from "../utils/AppError";
 
-const client = new PrismaClient();
 
 const handleOperationErrors = (err: Error): any => {
   // Handle database errors
@@ -15,6 +15,12 @@ const handleOperationErrors = (err: Error): any => {
     else if (err.code === "P1008") return new AppError(`Timeout Error : Operations timed out `, 400);
     else if (err.code === "P1008") return new AppError(`Timeout Error : Operations timed out `, 400);
   }
+  else if (err instanceof JsonWebTokenError)
+  {
+    if (err.name === "JsonWebTokenError")
+      return new AppError("the user is logged in anymore or jwt is in bad format", 400);
+  }
+  //? THis should stay here for the logs
   console.log(err);
   // Handle authentification and errors related to JWT
   // Handle generic errors
@@ -25,7 +31,7 @@ const handleErrors = (err: Error, req: Request, res: Response, next: NextFunctio
   if (!(err instanceof AppError)) err = handleOperationErrors(err);
   if (err instanceof AppError) {
     err.statusCode = err.statusCode || 500;
-    err.status = err.status || "Failure";
+    err.status = err.status || "failure";
     res.status(err.statusCode).json({
       status: err.status,
       message: err.message,

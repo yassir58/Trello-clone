@@ -12,8 +12,8 @@ const sendMail = async (options: emailOptions) => {
     host: "sandbox.smtp.mailtrap.io",
     port: 25,
     auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS,
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
 
@@ -24,6 +24,7 @@ const sendMail = async (options: emailOptions) => {
     text: options.text,
   };
 
+  console.log(email);
   transporter.sendMail(email);
 };
 

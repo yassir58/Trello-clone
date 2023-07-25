@@ -45,8 +45,8 @@ export const AddLable: React.FC = () => {
     "cyan",
     "purple",
     "pink",
-    "brown" ,
-    "indigo",
+    "white" ,
+    "black",
 
   ];
   return (

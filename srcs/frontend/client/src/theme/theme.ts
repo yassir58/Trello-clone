@@ -2,6 +2,7 @@ import {
   extendTheme,
   ThemeConfig,
   ComponentStyleConfig,
+  defineStyleConfig,
 } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
@@ -65,9 +66,8 @@ const ButtonStyle: ComponentStyleConfig = {
       fontWeight: "500",
       _hover: {
         backgroundColor: "transparent",
-        border: "1px solid #828282"
+        border: "1px solid #828282",
       },
-
     },
     largePrimary: {
       padding: "12px 24px",
@@ -79,7 +79,7 @@ const ButtonStyle: ComponentStyleConfig = {
       fontFamily: "Poppins",
       fontWeight: "500",
       fontSize: "sm",
-      width:"260px",
+      width: "260px",
       borderRadius: "8px",
       _hover: {
         backgroundColor: "transparent",
@@ -90,77 +90,77 @@ const ButtonStyle: ComponentStyleConfig = {
         backgroundColor: "#fff",
         outline: "2px solid #5497f0",
         color: "primary",
-      }
+      },
     },
-    ghost:{
+    ghost: {
       padding: "8px 14px",
       backgroundColor: "transparent",
-      color:"#828282",
+      color: "#828282",
       fontFamily: "Poppins",
-      fontWeight: "500",                                            
+      fontWeight: "500",
       fontSize: "sm",
       borderRadius: "8px",
       _hover: {
         backgroundColor: "gray.100",
-      }
+      },
     },
-    green:{
+    green: {
       padding: "8px 14px",
       backgroundColor: "green.400",
-      color:"#fff",
+      color: "#fff",
       fontFamily: "Poppins",
       fontWeight: "500",
       fontSize: "sm",
       borderRadius: "8px",
       _hover: {
         backgroundColor: "green.500",
-      }
+      },
     },
     ghostSecondary: {
       padding: "8px 14px",
       backgroundColor: "transparent",
       border: "1px solid white",
-      color:"#828282",
+      color: "#828282",
       fontFamily: "Poppins",
       fontWeight: "500",
       fontSize: "sm",
       borderRadius: "8px",
       _hover: {
         backgroundColor: "transparent",
-        border: "1px solid #828282"
-      }
+        border: "1px solid #828282",
+      },
     },
-    ghostRed:{
+    ghostRed: {
       padding: "8px 14px",
       backgroundColor: "transparent",
       border: "1px solid white",
-      color:'red',
+      color: "red",
       fontFamily: "Poppins",
       fontWeight: "500",
       fontSize: "sm",
       borderRadius: "8px",
       _hover: {
-        border: "1px solid red"
-      }
+        border: "1px solid red",
+      },
     },
     outlineRed: {
       padding: "8px 14px",
       backgroundColor: "transparent",
-      color:'red',
-      fontFamily: "Poppins",      
+      color: "red",
+      fontFamily: "Poppins",
       fontWeight: "500",
       fontSize: "sm",
       borderRadius: "8px",
       border: "1px solid red",
       _hover: {
         backgroundColor: "red",
-        color: "#fff"
-      }
+        color: "#fff",
+      },
     },
     outlineSecondary: {
       padding: "8px 14px",
       backgroundColor: "transparent",
-      color:"#828282",
+      color: "#828282",
       fontFamily: "Poppins",
       fontWeight: "500",
       fontSize: "sm",
@@ -168,10 +168,9 @@ const ButtonStyle: ComponentStyleConfig = {
       border: "1px solid #828282",
       _hover: {
         backgroundColor: "#828282",
-        color: "#fff"
-      }
-
-    }
+        color: "#fff",
+      },
+    },
   },
   // default values for 'size', 'variant' and 'colorScheme'
   defaultProps: {
@@ -214,12 +213,119 @@ const InputStyle: ComponentStyleConfig = {
   },
 };
 
+const HeadingStyle: ComponentStyleConfig = {
+  baseStyle: {},
+  sizes: {},
+  variants: {
+    cardTitle: {
+      color: "#000",
+      fontFamily: "Noto Sans",
+      fontSize: "16px",
+      fontStyle: "normal",
+      fontWeight: 400,
+      lineHeight: "normal",
+      letterSpacing: "-0.56px",
+      padding: "5px",
+    },
+    listTitle: {
+      color: "#333",
+      fontFamily: "Poppins",
+      fontSize: "14px",
+      fontStyle: "normal",
+      fontWeight: "500",
+      lineHeight: "normal",
+      letterSpacing: "-0.49px",
+    },
+    HeaderTitle: {
+      color: "#333",
+      fontFamily: "Poppins",
+      fontSize: "18px",
+      fontStyle: "normal",
+      fontWeight: "500",
+      lineHeight: "normal",
+      letterSpacing: "-0.63px",
+    },
+  },
+};
+
+const BoxStyle = defineStyleConfig({
+  // style object for base or default style
+  baseStyle: {},
+  sizes: {},
+  variants: {
+    smallSpaceBetween: {
+      display: "flex",
+      margin: "10px auto",
+      justifyContent: "space-between",
+      width: "90%",
+    },
+    mdSpaceBetween: {
+      display: "flex",
+      margin: "10px auto",
+      justifyContent: "space-between",
+      width: "96%",
+      py: "10px",
+    },
+    boardStack: {
+      width: "96%",
+      margin: "10px auto",
+      boxShadow: "sm",
+      display: "flex",
+      justifyContent: "flex-start",
+      gap: "25px",
+      alignItems: "flex-start",
+      padding: "18px 14px",
+      overflowX: "scroll",
+      bg: "#F8F9FD",
+      borderRadius: "8px",
+      maxHeight: "75vh",
+      minHeight: "75vh",
+    },
+    listStack: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "flex-start",
+      overflowY: "scroll",
+      height: "100%",
+      maxHeight: "100%",
+      gap: "18px",
+      padding: "10px",
+    },
+    Card: {
+      width: "260px",
+      px: "5px",
+      py: "8px",
+      border: "none",
+      borderRadius: "8px",
+      minHeight: "80px",
+      boxShadow: "0px 4px 12px 0px rgba(0, 0, 0, 0.05)",
+      _hover: {
+        boxShadow: "0px 4px 12px 0px rgba(0, 0, 0, 0.1)",
+      },
+      _active: {
+        outline: "2px solid #5497f0",
+      },
+    },
+    placeHolder: {
+      width: "90%",
+      height: "70vh",
+      borderRadius: "lg",
+      bg: "gray.100",
+      mx:'auto',
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+    },
+  },
+});
+
 const theme = extendTheme({
   config,
   styles: {
     global: {
       body: {
-        bg: "#F8F9FD",
+        // bg: "#F8F9FD",
       },
     },
   },
@@ -231,6 +337,8 @@ const theme = extendTheme({
     Input: InputStyle,
     Button: ButtonStyle,
     FormLabel: FormLabelStyle,
+    Heading: HeadingStyle,
+    BoxStyle: BoxStyle,
     Link: {
       baseStyle: {
         fontFamily: "Poppins",

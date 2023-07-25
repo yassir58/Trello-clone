@@ -1,107 +1,120 @@
-import React from "react";
-import { createContext } from "react";
+import React, { createContext, useState , useEffect} from "react";
 
 interface Props {
   children: React.ReactNode;
 }
 
-interface User {
-  state: {
-    id: number;
-    userName: string;
-    Boards: Board[];
-    Comments: Comment[];
-    profilePicture?: string;
-    email: string;
-  };
-  setState: React.Dispatch<React.SetStateAction<{}>>;
+export interface Boards {
+  state: Board[];
+  setState: React.Dispatch<React.SetStateAction<Board[]>>;
+}
+export interface User {
+ state: {
+  id: number;
+  userName: string;
+  Boards: Boards;
+  Comments: Comment[];
+  profilePicture?: string;
+  email: string;
+} | null;
+  setState?: any;
 }
 
 interface Comment {
-    state:{
-        id: number;
-        text: string;
-        createdAt: string;
-        editedAt: string;
-        cardId: number;
-        userId: number
-    }
+  id: number;
+  text: string;
+  createdAt: string;
+  editedAt: string;
+  cardId: number;
+  userId: number;
 }
 interface Attachment {
-    state: {
-        id :String; 
-        title :String; 
-        path  :String ;
-        createdAt : string;
-        updatedAt: string;
-        cardId     :number;
-    }
-    setState: React.Dispatch<React.SetStateAction<{}>>;
+  id: String;
+  title: String;
+  path: String;
+  createdAt: string;
+  updatedAt: string;
+  cardId: number;
 }
 interface Checklist {}
 
-interface List {
-  state: {
-    id: number;
-    title: string;
-    cards: Card[];
-    creationDate: string;
-    editDate: string;
-    boardId: number;
-  };
-  setState: React.Dispatch<React.SetStateAction<{}>>;
+export interface List {
+  id: number;
+  title: string;
+  cards: Card[];
+  creationDate: string;
+  editDate: string;
+  boardId: number;
 }
 
-interface Card {
-  state: {
-    id: number;
-    title: string;
-    description: string;
-    cover?: string;
-    members: User[];
-    labels: string[];
-    comments: Comment[];
-    attachments: Attachment[]; // not the correct type but will do for now
-    checklists: Checklist[]; // not the correct type but will do for now
-    creationDate: string;
-    editDate: string;
-    listId: number;
-    BoardId: number;
-
-  };
-  setState: React.Dispatch<React.SetStateAction<{}>>;
+export interface Label {
+  value: string;
+  color: string;
+}
+export interface Card {
+  id: number;
+  title: string;
+  description?: string;
+  cover?: string;
+  members?: User[];
+  labels?: Label[];
+  comments?: Comment[];
+  attachments?: Attachment[]; // not the correct type but will do for now
+  checklists?: Checklist[]; // not the correct type but will do for now
+  creationDate: string;
+  editDate: string;
+  listId: number;
+  BoardId: number;
 }
 
-
-
-interface Board {
-  state: {
+export interface Board {
     id: number;
     title: string;
     cover?: string;
     private: boolean;
-    members: User[];
-    lists: List[];
-    Owner: User;
-    OwnerId: number;
-    creationDate: string;
-    editDate: string;
-  };
-  setState: React.Dispatch<React.SetStateAction<{}>>;
+    members?: User[];
+    lists?: List[];
+    Owner?: User;
+    OwnerId?: number;
+    creationDate?: string;
+    editDate?: string;
 }
-
 export interface GlobalContext {
-  LogedInUser: User;
-  PublicBoards: Board[];
-  Users: User[];
+  LogedInUser?: User | null;
+  PublicBoards?: {
+    state?: Board[] | null;
+    setState?: React.Dispatch<React.SetStateAction<Board[]>> | null;
+  } | null;
+  Users?: User[] | null;
 }
+export interface GlobalState {
+  globalState?: GlobalContext;
+  setGlobalState?: any;
+}
+export const AppContext = createContext<GlobalState>({});
 
-const BoardsContext = createContext({});
+export const GlobalContext: React.FC<Props> = ({ children }) => {
+  const [publicBoards, setPublicBoards] = useState<Board[]>([]);
+  const [userBoards, setUserBoards] = useState<Board[]>([]);
+  const [LogedInUser, setLogedInUser] = useState<User['state'] | null>(null);
+  const [globalState, setGlobalState] = useState<GlobalContext>({
+    LogedInUser: null,
+    PublicBoards: null,
+    Users: null,
+  });
 
-export const BoardList: React.FC<Props> = ({ children }) => {
+
+  useEffect (()=>{
+    const tmpUser:User['state'] = {id:1, userName:"test", Boards:{state:userBoards, setState:setUserBoards}, Comments:[], profilePicture:"", email:""}
+    setLogedInUser (tmpUser)
+    const tmp:GlobalContext = {LogedInUser:{state:LogedInUser, setState:setLogedInUser}, PublicBoards:{state:publicBoards, setState:setPublicBoards}, Users:[]}
+    setGlobalState (tmp)
+  },[])
   return (
     <div>
-      <BoardsContext.Provider value={"divk"}>{children}</BoardsContext.Provider>
+      <AppContext.Provider value={{ globalState, setGlobalState }}>
+        {children}
+      </AppContext.Provider>
     </div>
   );
 };

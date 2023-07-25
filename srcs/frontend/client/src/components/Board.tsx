@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
   chakra,
-  Avatar,
-  Flex,
   HStack,
   Stack,
   Text,
@@ -10,8 +8,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-import { FlexContainer, ColumnContainer } from "./ui-elements/Containers";
-import { CardList } from "./ui-elements/Media";
+
 import { PopOver, DrawerCp} from "./Popover";
 import Visibility from "./Visibility";
 import { Menu } from "./Menu";
@@ -21,25 +18,22 @@ import { FaEllipsis } from "react-icons/fa6";
 import {EditBoard} from "./EditBoard";
 import { ChangeCover } from "./ChangeCover";
 import { AddList } from "./AddCard";
-interface BoardProps {}
-
-interface BoardMenuBarProps {
-  members: string[];
+import {   List } from "../context/ContextScheme";
+import { CardList } from "./CardList";
+import {Container} from "./ui-elements/Wrappers";
+interface BoardProps {
+  // BoardId:number
 }
 
-export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
+interface BoardMenuBarProps {
+  // BoarStateSetter:any
+}
+
+export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({}) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Stack>
-      <Flex
-        justify="space-between"
-        align="center"
-        w="98%"
-        h="auto"
-        mx="auto"
-        mt="30px"
-        mb="25px"
-      >
+      <Container variant='mdSpaceBetween'>
         <HStack spacing={3}>
           <PopOver
             button={
@@ -54,11 +48,11 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
           >
             <Visibility />
           </PopOver>
-          {members.map((member) => {
+          {/* {BoardState.members.map((member) => {
             return (
-              <Avatar size="sm" rounded="md" borderRadius="md" src={member} />
+              <Avatar size="sm" rounded="md" borderRadius="md" src={member.profilePicture} />
             );
-          })}
+          })} */}
 
           <PopOver
             size="2xs"
@@ -89,46 +83,45 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ members }) => {
         >
           <Menu />
         </DrawerCp>
-      </Flex>
+      </Container>
     </Stack>
   );
 };
 
 export const Board: React.FC<BoardProps> = () => {
-  const members = [
-    "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-    "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60",
-    "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60",
-  ];
 
-  const [cards, setCards] = useState([]);
-  const [addList, setAddList] = useState(false);
-  const endPoint = "http://localhost:3001/Data";
+  const [lists, setLists] = useState<List[]>([])
+  const [addList, setAddList] = useState<boolean>(false);
 
   const handleToggle = () => setAddList(!addList);
-
-  useEffect(() => {
-    fetch(endPoint)
-      .then((response) => response.json())
-      .then((data) => setCards(data));
-  }, []);
+  const handleAddList = (title:string) => {
+    const tmp:List[] = lists.slice();
+    tmp.push({id:new Date().getTime (),title:title, cards:[], creationDate:"2021-05-01T00:00:00.000Z", editDate:"2021-05-01T00:00:00.000Z", boardId:1});
+    setLists(tmp);
+    handleToggle();
+  }
+  
   return (
-    <Stack mt="60px" bg={"white"}>
-      <BoardMenuBar members={members} />
-      <FlexContainer>
-        <CardList cards={cards} />
-        <CardList />
-        <ColumnContainer>
+    <Stack mt="90px">
+      <BoardMenuBar  />
+      <Container variant='boardStack'>
+        
+        {lists.map((list:List) => {
+          return (
+            <CardList list={list} state={lists} stateSetter={setLists} />
+          )
+        })}
+        <Stack>
           {addList ? (
-            <AddList cancelHandler={handleToggle} />
+            <AddList cancelHandler={handleToggle} actionHandler={handleAddList}  />
           ) : (
             <Button variant="largePrimary" onClick={handleToggle}>
               <chakra.small>Add another list</chakra.small>
               <BiPlus />
             </Button>
           )}
-        </ColumnContainer>
-      </FlexContainer>
+        </Stack>
+      </Container>
     </Stack>
   );
 };

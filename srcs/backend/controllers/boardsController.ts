@@ -1,10 +1,12 @@
-import { PrismaClient } from "@prisma/client";
+import { Board, PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
-import catchAsync from "../utils/catchAsync";
-import AppError from "../utils/AppError";
-import { boardValidator } from "../utils/validator";
 import * as UtilsCtrl from "./factoryController";
+
+import AppError from "../utils/AppError";
+import catchAsync from "../utils/catchAsync";
+import { boardValidator } from "../utils/validator";
+import { validateBoardAction, sendBoardId } from "../models/boardModel";
 
 const prisma = new PrismaClient();
 
@@ -17,7 +19,7 @@ export const createBoard = catchAsync(async (req: Request, res: Response, next: 
       coverImage: value.coverImage,
       description: value.description,
       author: {
-        connect: { id: value.authorId },
+        connect: { id: req.currentUser },
       },
     },
   });
@@ -39,11 +41,11 @@ export const getAllBoards = catchAsync(async (req: Request, res: Response, next:
       },
     },
     include: {
-      author: true,
+      author: {
+        select: { id: true, fullname: true, email: true, profileImage: true },
+      },
       users: {
-        select: {
-          password: false,
-        },
+        select: { id: true, fullname: true, email: true, profileImage: true },
       },
       lists: true,
     },
@@ -62,59 +64,56 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
       id,
     },
     include: {
-      author: true,
+      author: {
+        select: { id: true, fullname: true, email: true, profileImage: true },
+      },
       users: {
-        select: {
-          password: false,
-        },
+        select: { id: true, fullname: true, email: true, profileImage: true },
       },
       lists: true,
     },
   });
   if (!board) return next(new AppError(`Could not find board: ${id}`, 404));
+  sendBoardId(board.id, res);
   res.status(200).json({
     status: "success",
     board,
   });
 });
 
-export const updateBoardById = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const { error, value } = boardValidator(req.body);
-    if (error) return next(new AppError(error.message, 400));
-    const board = await prisma.board.update({
-      where: {
-        id,
-      },
-      data: {
-        ...value,
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      board,
-    });
-  }
-);
+export const updateBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const board = (await validateBoardAction(req, next)) as Board;
+  const { error, value } = boardValidator(req.body);
+  if (error) return next(new AppError(error.message, 400));
+  const newBoard = await prisma.board.update({
+    where: {
+      id: board.id,
+    },
+    data: {
+      ...value,
+    },
+  });
+  res.status(200).json({
+    status: "success",
+    newBoard,
+  });
+});
 
-export const deleteBoardById = catchAsync(
-  async (req: Request, res: Response, next: NextFunction) => {
-    const id = req.params.id;
-    const board = await prisma.board.delete({
-      where: {
-        id,
-      },
-    });
+export const deleteBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const board = (await validateBoardAction(req, next)) as Board;
 
-    await UtilsCtrl.deleteNullLists();
-    await UtilsCtrl.deleteNullCards();
-    await UtilsCtrl.deleteNullComments();
+  await prisma.board.delete({
+    where: {
+      id: board.id,
+    },
+  });
 
-    if (!board) return next(new AppError(`Could not find board ${id}`, 404));
-    res.status(204).json({
-      status: "success",
-      board,
-    });
-  }
-);
+  await UtilsCtrl.deleteNullLists();
+  await UtilsCtrl.deleteNullCards();
+  await UtilsCtrl.deleteNullComments();
+
+  res.status(204).json({
+    status: "success",
+    board,
+  });
+});
