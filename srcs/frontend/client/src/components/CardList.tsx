@@ -7,27 +7,34 @@ import { FaEllipsis } from "react-icons/fa6";
 import {  List, Card } from "../context/ContextScheme";
 import { EditCardComponent, ModalComponent, PopOver } from "./Popover";
 import { Container } from "./ui-elements/Wrappers";
-import ThreeDot from "./ThreeDot";
+import {ListOptions} from "./ThreeDot";
 import AddCard from "./AddCard";
 
 interface CardListProps {
     // Board:Board,
-    list:List
+    list:List,
+    state:List[] ,
+    stateSetter: React.Dispatch<React.SetStateAction<List[]>> ;
 
 }
 
 
-export const CardList: React.FC<CardListProps> = ({list}) => {
+export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) => {
   
-    const [cards, setCards] =useState<Card[]> ([])
+    const [cards, setCards] = useState<Card[]> ([])
     const [createCard, setCreateCard] = useState(false);
     const createCardToggler = () => {
       setCreateCard(!createCard);
     };
+    const handleRemoveList = (id:number,state:List[], stateSetter:React.Dispatch<React.SetStateAction<List[]>>)=>{
+      console.log (state)
+      const tmp:List[] = state.slice ().filter (list=>list.id != id);
+      stateSetter (tmp)
+    }
     const createCardHandler = (title:string) => {
       const tmp:Card[] = cards?.slice();
       const card:Card = {
-        id: tmp.length + 1,
+        id: new Date().getTime(),
         title: title,
         listId: list.id,
         creationDate: "2021-05-01T00:00:00.000Z",
@@ -50,7 +57,7 @@ export const CardList: React.FC<CardListProps> = ({list}) => {
               button={<Button variant={'ghost'}><FaEllipsis/></Button>}
               size="3xs"
             >
-              <ThreeDot />
+              <ListOptions removeList={()=>handleRemoveList(list.id, state, stateSetter)}/>
             </PopOver>
           </Container>
   
@@ -68,14 +75,14 @@ export const CardList: React.FC<CardListProps> = ({list}) => {
               cards.map((item, index) => {
                 return (
                   <Box>
-                    <CardCp card={item} boardCard={true} onClick={onOpen} key={index} />
+                    <CardCp card={item} boardCard={true}  onClick={onOpen} key={index} />
                     <ModalComponent
                       style={{ size: "2xl" }}
                       isOpen={isOpen}
                       onOpen={onOpen}
                       onClose={onClose}
                     >
-                      <EditCardComponent onClose={onClose} card={item} />
+                      <EditCardComponent onClose={onClose} card={item} state={{cards,setCards}} />
                     </ModalComponent>
                   </Box>
                 );

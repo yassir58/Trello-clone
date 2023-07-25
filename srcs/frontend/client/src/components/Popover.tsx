@@ -250,8 +250,11 @@ export const EditCardCover: React.FC<EditCoverProps> = ({ image }) => {
 
 interface EditCardProps {
   card: Card;
-
   onClose: () => void;
+  state:{
+    cards:Card[],
+    setCards:React.Dispatch<React.SetStateAction<Card[]>>
+  }
 }
 
 interface CloseButtonProps {
@@ -278,14 +281,20 @@ export const CloseButton: React.FC<CloseButtonProps> = ({ onClose }) => {
 export const EditCardComponent: React.FC<EditCardProps> = ({
   card,
   onClose,
+  state
 }) => {
+
+  const removeCard = (id:number)=>{
+    const tmp:Card[] = state.cards.slice ().filter(card=>card.id != id)
+    state.setCards (tmp)
+  }
   return (
     <div>
       <Stack spacing={4}>
-        {card.cover && (
+        {card && (
           <>
             <CloseButton onClose={onClose} />
-            <EditCardCover image={card.cover} />
+            {card.cover && <EditCardCover image={card.cover} />}
             <HStack
               justify="space-between"
               mx="auto"
@@ -320,7 +329,10 @@ export const EditCardComponent: React.FC<EditCardProps> = ({
                 <MembersPopOver />
                 <LabelPopOver />
                 <CoverPopOver />
-                <Button variant="outlineRed">
+                <Button variant="outlineRed" onClick={()=>{
+                  removeCard(card.id)
+                  onClose ()
+                  }}>
                   <HStack spacing={3}>
                     <FaTrash />
                     <Text fontSize={"sm"}> Delete Card </Text>

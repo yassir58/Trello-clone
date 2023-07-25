@@ -96,10 +96,11 @@ export const Board: React.FC<BoardProps> = () => {
   const handleToggle = () => setAddList(!addList);
   const handleAddList = (title:string) => {
     const tmp:List[] = lists.slice();
-    tmp.push({id:tmp.length+1,title:title, cards:[], creationDate:"2021-05-01T00:00:00.000Z", editDate:"2021-05-01T00:00:00.000Z", boardId:1});
+    tmp.push({id:new Date().getTime (),title:title, cards:[], creationDate:"2021-05-01T00:00:00.000Z", editDate:"2021-05-01T00:00:00.000Z", boardId:1});
     setLists(tmp);
     handleToggle();
   }
+  
   return (
     <Stack mt="90px">
       <BoardMenuBar  />
@@ -107,7 +108,7 @@ export const Board: React.FC<BoardProps> = () => {
         
         {lists.map((list:List) => {
           return (
-            <CardList list={list} />
+            <CardList list={list} state={lists} stateSetter={setLists} />
           )
         })}
         <Stack>
