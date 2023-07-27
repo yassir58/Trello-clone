@@ -63,14 +63,33 @@ export const createOne = (validatorFn: any, fields: string[], model: string, con
   });
 };
 
-export const getOneById = (model: string) => {
+const createIncludeObj = (fields: string[] | null) => {
+  const obj: any = {};
+  if (!fields) return obj;
+  fields.forEach((key) => {
+    obj[key] = true;
+  });
+  return obj;
+};
+
+export const getOneById = (model: string, selected: string[] | null) => {
   return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
     const id = req.params.id;
-    const item = await prisma[model].findUnique({
-      where: {
-        id,
-      },
-    });
+    let item;
+    if (selected) {
+      item = await prisma[model].findUnique({
+        where: {
+          id,
+        },
+        include: createIncludeObj(selected),
+      });
+    } else {
+      item = await prisma[model].findUnique({
+        where: {
+          id,
+        },
+      });
+    }
     if (!item) return next(new AppError(`Could not find ${model}: ${id}`, 400));
     res.status(200).json({
       status: "success",

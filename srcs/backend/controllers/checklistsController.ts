@@ -42,18 +42,16 @@ export const getAllChecklists = catchAsync(async (req: Request, res: Response, n
   });
 });
 
-export const getChecklistById = UtilsCtrl.getOneById("checkList");
+export const getChecklistById = UtilsCtrl.getOneById("checkList", ["tasks"]);
 
 export const updateChecklistById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { error, value } = checklistValidor(req.body);
-  if (error) return next(new AppError(error.message, 400));
   const checklist = (await UtilsCtrl.checkExistance(req, next, "checkList")) as CheckList;
   const newList = await prisma.checkList.update({
     where: {
       id: checklist.id,
     },
     data: {
-      ...value,
+      name: req.body.name || checklist.name,
     },
   });
   if (!newList) return next(new AppError(`Could not update checklist ${checklist.id}`, 400));

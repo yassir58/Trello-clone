@@ -54,15 +54,15 @@
 
 ## Checklists:
 
-- [ ] Handler for creating a checklist
-- [ ] Handler for getting a checklist using nested cards route
-- [ ] Handler for getting the list of checklists available
+- [x] Handler for creating a checklist
+- [x] Handler for getting a checklist using nested cards route
+- [x] Handler for getting the list of checklists available
 
 ## Tasks:
 
-- [ ] Handler for creating a task
-- [ ] Handler for getting a task using nested checklist and card route
-- [ ] Handler for getting the list of all tasks available
+- [x] Handler for creating a task
+- [x] Handler for getting a task using nested checklist and card route
+- [x] Handler for getting the list of all tasks available
 
 ## Authentication & security
 

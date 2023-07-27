@@ -14,7 +14,7 @@ export const createTask = catchAsync(async (req: Request, res: Response, next: N
   if (error) return next(new AppError(error.message, 400));
   const task = await prisma.task.create({
     data: {
-      content: value.name,
+      content: value.content,
       checkList: {
         connect: {
           id: value.checkListId,
@@ -32,7 +32,7 @@ export const createTask = catchAsync(async (req: Request, res: Response, next: N
 export const getAllTasks = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const tasks = await prisma.task.findMany({
     where: {
-      checkListId: req.params.checklistId ?? undefined,
+      checkListId: req.params.checkListId ?? undefined,
     },
   });
   res.status(200).json({
@@ -42,18 +42,18 @@ export const getAllTasks = catchAsync(async (req: Request, res: Response, next: 
   });
 });
 
-export const getTaskById = UtilsCtrl.getOneById("task");
+export const getTaskById = UtilsCtrl.getOneById("task", null);
 
 export const updateTaskById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { error, value } = taskValidator(req.body);
-  if (error) return next(new AppError(error.message, 400));
+  const { content, resolved } = req.body;
   const task = (await UtilsCtrl.checkExistance(req, next, "task")) as Task;
   const newTask = await prisma.task.update({
     where: {
       id: task.id,
     },
     data: {
-      ...value,
+      content,
+      resolved,
     },
   });
   if (!newTask) return next(new AppError(`Could not update task ${task.id}`, 400));

@@ -38,6 +38,7 @@ export const getCardById = catchAsync(async (req: Request, res: Response, next: 
       comments: true,
       attachments: true,
       labels: true,
+      checklists: true
     },
   });
   res.status(200).json({
