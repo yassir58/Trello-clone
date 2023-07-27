@@ -9,9 +9,10 @@ Router.route("/login").post(authController.login);
 Router.route("/resetPassword/:token").post(authController.resetPassword);
 Router.route("/forgotPassword").post(authController.forgotPassword);
 Router.route("/updatePassword").post(authController.authorizeRoute, authController.updatePassword);
-Router.route("/logout").post(authController.logout);
 
 Router.use(authController.authorizeRoute);
+
+Router.route("/logout").post(authController.logout);
 
 Router.route("/").get(usersController.getAllUsers);
 

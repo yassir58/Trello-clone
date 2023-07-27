@@ -6,7 +6,8 @@ import * as UtilsCtrl from "./factoryController";
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
 import { boardValidator } from "../utils/validator";
-import { validateBoardAction, sendBoardId } from "../models/boardModel";
+import { sendBoardId } from "../models/boardModel";
+import { checkExistance } from "./factoryController";
 
 const prisma = new PrismaClient();
 
@@ -82,7 +83,7 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
 });
 
 export const updateBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const board = (await validateBoardAction(req, next)) as Board;
+  const board = (await checkExistance(req, next, 'board')) as Board;
   const { error, value } = boardValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
   const newBoard = await prisma.board.update({
@@ -100,7 +101,7 @@ export const updateBoardById = catchAsync(async (req: Request, res: Response, ne
 });
 
 export const deleteBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const board = (await validateBoardAction(req, next)) as Board;
+  const board = (await checkExistance(req, next, 'board')) as Board;
 
   await prisma.board.delete({
     where: {

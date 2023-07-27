@@ -62,6 +62,8 @@ export const updateUserById = catchAsync(async (req: Request, res: Response, nex
 export const deleteUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
 
+  //! I need to decide weather to keep this route here 
+
   const myBoards = await prisma.board.findMany({
     where: { author: { id } },
   });

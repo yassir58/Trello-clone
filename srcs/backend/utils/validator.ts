@@ -5,9 +5,10 @@ import userSchema from "../models/userModel";
 import listSchema from "../models/listModel";
 import boardSchema from "../models/boardModel";
 import labelSchema from "../models/labelModel";
+import inviteSchema from "../models/inviteModel";
 import commentSchema from "../models/commentModel";
 import attachementSchema from "../models/attachementModel";
-import inviteSchema from "../models/inviteModel";
+import { checklistSchema, taskSchema } from "../models/checklistModel";
 
 const validator = (schema: ObjectSchema) => (payload: object) => schema.validate(payload, { abortEarly: true });
 
@@ -19,3 +20,5 @@ export const commentValidator = validator(commentSchema);
 export const labelValidator = validator(labelSchema);
 export const cardValidator = validator(cardSchema);
 export const inviteValidator = validator(inviteSchema);
+export const checklistValidor = validator(checklistSchema);
+export const taskValidator = validator(taskSchema);
