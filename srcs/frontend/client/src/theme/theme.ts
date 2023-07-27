@@ -69,6 +69,21 @@ const ButtonStyle: ComponentStyleConfig = {
         border: "1px solid #828282",
       },
     },
+    largeSecondary: {
+      padding: "8px 14px",
+      width:'100%',
+      backgroundColor: "gray.100",
+      border: "1px solid rgba(0,0,0,0.1)",
+      borderRadius: "8px",
+      color: "#828282",
+      fontFamily: "Poppins",
+      fontSize: "sm",
+      fontWeight: "500",
+      _hover: {
+        backgroundColor: "transparent",
+        border: "1px solid #828282",
+      },
+    },
     largePrimary: {
       padding: "12px 24px",
       backgroundColor: "blue.100",
@@ -248,6 +263,26 @@ const HeadingStyle: ComponentStyleConfig = {
   },
 };
 
+const AvatarStyle= defineStyleConfig({
+  baseStyle: {
+    width:'42px',
+    height:'42px',
+    borderRadius:'lg',
+    objectFit:'cover'
+  },
+  sizes: {},
+  variants: {
+    clickable:{
+      cursor:'pointer',
+      _hover:{
+        opacity:0.8
+      },
+      _active:{
+        outline:'2px solid #5497f0'
+      }
+    }
+  }
+})
 const BoxStyle = defineStyleConfig({
   // style object for base or default style
   baseStyle: {},
@@ -338,6 +373,7 @@ const theme = extendTheme({
     Button: ButtonStyle,
     FormLabel: FormLabelStyle,
     Heading: HeadingStyle,
+    AvatarStyle: AvatarStyle,
     BoxStyle: BoxStyle,
     Link: {
       baseStyle: {

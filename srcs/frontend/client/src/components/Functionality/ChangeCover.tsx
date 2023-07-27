@@ -1,6 +1,7 @@
-import { HStack, Stack, chakra, Heading, Input, Button, Avatar } from '@chakra-ui/react'
+import { HStack, Stack, chakra, Heading, Input, Button } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import {FaSistrix} from 'react-icons/fa6'
+import { AvatarWrapper } from '../ui-elements/Wrappers'
 
 interface ChangeCoverProps {
 
@@ -14,12 +15,8 @@ export const ChangeCover:React.FC<ChangeCoverProps> = ({}) => {
         for (let i=0; i<12; i++)
         {
             images.push(
-                <Avatar borderRadius='lg' 
-                sx={{
-                    _hover: {
-                        boxShadow: 'lg'
-                    }
-                }}
+                <AvatarWrapper 
+                variant='clickable'
                 src={`https://source.unsplash.com/random/100x100?sig=${i}`} />
             )
         }

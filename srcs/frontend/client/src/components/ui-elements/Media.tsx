@@ -9,17 +9,10 @@ import {
   Box,
   Button,
 } from "@chakra-ui/react";
-import { Label } from "./Buttons";
-import { Card, Board } from "../../context/ContextScheme";
+import { Board } from "../../context/ContextScheme";
 import { Container } from "./Wrappers";
 import { FaPlus, FaPaperclip, FaComment } from "react-icons/fa6";
-export interface CardProps {
-  card: Card;
-  width?: string;
-  boardCard?: boolean;
-  height?: string;
-  onClick?: () => void;
-}
+
 
 interface CardInfoProps {
   value: string;
@@ -36,30 +29,6 @@ interface ProfileCardProps {
   };
 }
 
-export const CardCp: React.FC<CardProps> = ({
-  card,
-  boardCard = false,
-  onClick,
-}) => {
-  return (
-    <div>
-      <Container variant="Card" onClick={onClick}>
-        
-          {card.cover && <CardCover image={card.cover} />}
-          <Heading variant={'cardTitle'}>{card.title}</Heading>
-          {boardCard && (
-            <HStack spacing={2} px={4} py={2}>
-              {card.labels &&
-                card.labels.map((tag) => {
-                  return <Label color={tag.color}>{tag.value}</Label>;
-                })}
-            </HStack>
-          )}
-          <CardFooter/>
-      </Container>
-    </div>
-  );
-};
 
 export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
   return (

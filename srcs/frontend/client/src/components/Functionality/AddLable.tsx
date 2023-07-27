@@ -10,8 +10,8 @@ import {
   HStack,
 
 } from "@chakra-ui/react";
-import { CardInfo } from "./ui-elements/Media"
-import { Label } from "./ui-elements/Buttons";
+import { CardInfo } from "../ui-elements/Media"
+import { Label } from "../ui-elements/Buttons";
 import {MdLabel} from "react-icons/md";
 
 interface LableObject {

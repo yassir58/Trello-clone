@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack  --progress",
-    "start": "webpack serve --mode development",
+    "start": "webpack serve --mode development --env NODE_ENV=development",
     "test-data": "json-server --watch ./src/data/cards.json --port 3001",
     "launch": "npm-run-all --parallel build test-data start"
   },
