@@ -52,13 +52,19 @@
 - [x] Handler for getting attachment using nested cards route
 - [x] Handler for getting the list of attachments available
 
-## Checklist:
+## Checklists:
 
-- [ ] Handler for creating a checklist using nested cards route
+- [ ] Handler for creating a checklist
 - [ ] Handler for getting a checklist using nested cards route
 - [ ] Handler for getting the list of checklists available
 
-## Authentication
+## Tasks:
+
+- [ ] Handler for creating a task
+- [ ] Handler for getting a task using nested checklist and card route
+- [ ] Handler for getting the list of all tasks available
+
+## Authentication & security
 
 - [x] Sign up route
 - [x] Login route
