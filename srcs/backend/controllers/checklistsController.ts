@@ -29,6 +29,19 @@ export const createChecklist = catchAsync(async (req: Request, res: Response, ne
   });
 });
 
+export const getAllChecklists = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const checklists = await prisma.checkList.findMany({
+    where: {
+      cardId: req.params.cardId ?? undefined,
+    },
+  });
+  res.status(200).json({
+    status: "success",
+    count: checklists.length,
+    checklists,
+  });
+});
+
 export const getChecklistById = UtilsCtrl.getOneById("checkList");
 
 export const updateChecklistById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

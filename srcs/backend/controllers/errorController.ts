@@ -17,12 +17,12 @@ const handleOperationErrors = (err: Error): any => {
   }
   else if (err instanceof JsonWebTokenError)
   {
+    // Handle authentification and errors related to JWT
     if (err.name === "JsonWebTokenError")
       return new AppError("the user is logged in anymore or jwt is in bad format", 400);
   }
-  //? THis should stay here for the logs
+  //? This should stay here for the logs
   console.log(err);
-  // Handle authentification and errors related to JWT
   // Handle generic errors
   return new AppError("Something went very wrong", 400);
 };

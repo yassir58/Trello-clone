@@ -133,6 +133,6 @@ model Task {
   resolved    Boolean    @default(false)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  CheckList   CheckList? @relation(fields: [checkListId], references: [id], onDelete: SetNull)
+  checkList   CheckList? @relation(fields: [checkListId], references: [id], onDelete: SetNull)
   checkListId String?
 }

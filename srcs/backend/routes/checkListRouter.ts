@@ -2,12 +2,19 @@ import express from "express";
 import * as checkListController from "../controllers/checklistsController";
 import * as authController from "../controllers/authController";
 
-const Router = express.Router();
+import tasksRouter from '../routes/tasksRouter';
+
+const Router = express.Router({ mergeParams: true });
 
 Router.use(authController.authorizeRoute);
 
-Router.route("/").post(checkListController.createChecklist);
+Router.use('/tasks', tasksRouter)
 
-Router.route("/:id").get(checkListController.getChecklistById);
+Router.route("/").post(checkListController.createChecklist).get(checkListController.getAllChecklists);
+
+Router.route("/:id")
+  .get(checkListController.getChecklistById)
+  .put(checkListController.updateChecklistById)
+  .delete(checkListController.deleteChecklistById);
 
 export default Router;
