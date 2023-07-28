@@ -2,21 +2,13 @@ import multer from "multer";
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
-import { userValidator } from "../utils/validator";
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
+import sharp from "sharp";
 
 const prisma = new PrismaClient();
 
-const multerStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/img/users");
-  },
-  filename: (req, file, cb) => {
-    const ext = file.mimetype.split("/")[1];
-    cb(null, "user-" + req.currentUser + "-" + Date.now() + "." + ext);
-  },
-});
+const multerStorage = multer.memoryStorage();
 
 const multerFilter = (req: Request, file: Express.Multer.File, cb: any) => {
   if (file.mimetype.startsWith("image")) cb(null, true);
@@ -30,7 +22,17 @@ const upload = multer({
 
 export const uploadUserPhoto = upload.single("profileImage");
 
+export const processUserPhoto = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.file) return next();
 
+  req.file.filename = "user-" + req.currentUser + "-" + Date.now() + ".jpeg";
+  sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+  next();
+};
 
 export const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const search = req.query.search as string;
