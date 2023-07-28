@@ -80,9 +80,9 @@
 
 ## Upload
 
-- [ ] File upload functionality
-- [ ] File validation
-- [ ] Build an image processing middlware for resizing images
+- [x] File upload functionality
+- [x] File validation
+- [x] Build an image processing middlware for resizing images
 
 ## Error Handling
 
