@@ -18,7 +18,7 @@ Router.route("/").get(usersController.getAllUsers);
 
 Router.route("/:id")
   .get(usersController.getUserById)
-  .put(usersController.updateUserById)
+  .put(usersController.uploadUserPhoto, usersController.updateUserById)
   .delete(usersController.deleteUserById);
 
 export default Router;

@@ -82,6 +82,7 @@
 
 - [ ] File upload functionality
 - [ ] File validation
+- [ ] Build an image processing middlware for resizing images
 
 ## Error Handling
 
