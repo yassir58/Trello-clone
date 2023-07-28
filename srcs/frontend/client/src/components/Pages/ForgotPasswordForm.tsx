@@ -4,7 +4,7 @@ import { Input, Button, VStack } from "@chakra-ui/react";
 import FormContainer from "../Forms/FormContainer";
 import FormElement from "../Forms/FormElement";
 
-const ResetForm = () => {
+const ForgotPasswordForm = () => {
   return (
     <>
       <VStack>
@@ -28,4 +28,4 @@ const ResetForm = () => {
   );
 };
 
-export default ResetForm;
+export default ForgotPasswordForm;
