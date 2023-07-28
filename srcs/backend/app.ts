@@ -1,4 +1,5 @@
 import helmet from "helmet";
+import path from "path";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
@@ -24,8 +25,10 @@ const app: Express = express();
 
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
 
-// Parse cookies
+// Serve static assets
+app.use(express.static(path.join(__dirname, "public")));
 
+// Parse cookies
 app.use(cookieParser());
 
 // The rate limiter is configured to serve 5000Req/Hour
@@ -37,7 +40,6 @@ app.use(
 );
 
 // app.use(cookieParser());
-
 app.use(express.json({ limit: "10kb" }));
 
 app.use(helmet());

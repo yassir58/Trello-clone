@@ -71,7 +71,9 @@ export const getAllComments = catchAsync(async (req: Request, res: Response, nex
 export const updateCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { error, value } = commentValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
-  const comment = (await checkExistance(req, next, 'comment')) as Comment;
+  const comment = (await checkExistance(req, next, "comment")) as Comment;
+  if (comment.userId != req.currentUser)
+    return next(new AppError(`Only the author of this comment can perform this action`, 404));
   await prisma.comment.update({
     where: {
       id: comment.id,
@@ -87,8 +89,9 @@ export const updateCommentById = catchAsync(async (req: Request, res: Response, 
 });
 
 export const deleteCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const comment = (await checkExistance(req, next, 'comment')) as Comment;
-
+  const comment = (await checkExistance(req, next, "comment")) as Comment;
+  if (comment.userId != req.currentUser)
+    return next(new AppError(`Only the author of this comment can perform this action`, 404));
   await prisma.comment.delete({
     where: {
       id: comment.id,

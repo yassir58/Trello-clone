@@ -41,6 +41,9 @@ export const getListById = catchAsync(async (req: Request, res: Response, next: 
     where: {
       id,
     },
+    include: {
+      card: true
+    }
   });
   res.status(200).json({
     status: "success",
