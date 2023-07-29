@@ -6,8 +6,13 @@ import { AddLable } from "./Functionality/AddLable";
 import InviteToBoard from "./InviteToBoard";
 import { ChangeCover } from "./Functionality/ChangeCover";
 import { PopOverWrapper } from "./ui-elements/PopOver";
+import { Card } from "../context/ContextScheme";
 
-
+interface PopOverProps {
+  card?: Card ;
+  cards?: Card[] | null | undefined;
+  setCards?: React.Dispatch<React.SetStateAction<Card[]>> ;
+}
 
 
 export const MembersPopOver: React.FC = () => {
@@ -38,7 +43,11 @@ export const LabelPopOver: React.FC = () => {
   );
 };
 
-export const CoverPopOver: React.FC = () => {
+export const CoverPopOver: React.FC<PopOverProps> = ({
+  card,
+  cards,
+  setCards,
+}) => {
   return (
     <PopOverWrapper
       value="Cover"
@@ -47,7 +56,7 @@ export const CoverPopOver: React.FC = () => {
       size="2xs"
       placement="left"
     >
-      <ChangeCover />
+      <ChangeCover card={card} cards={cards} setCards={setCards} />
     </PopOverWrapper>
   );
 };

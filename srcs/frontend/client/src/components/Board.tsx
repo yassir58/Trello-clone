@@ -80,9 +80,9 @@ export const Board: React.FC<BoardProps> = () => {
       <BoardMenuBar  />
       <Container variant='boardStack'>
         
-        {lists.map((list:List) => {
+        {lists.map((list:List, index:number) => {
           return (
-            <CardList list={list} state={lists} stateSetter={setLists} />
+            <CardList list={list} state={lists} stateSetter={setLists} key={index} />
           )
         })}
         <Stack>

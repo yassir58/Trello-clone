@@ -12,6 +12,7 @@ import {
 import { CardCp, CardProps } from "../Card";
 import { EditCard} from "../Functionality/EditCard";
 import { NewBoard } from "../Functionality/NewBoard";
+import { Card } from "../../context/ContextScheme";
 interface ModalComponentProps {
   children: React.ReactNode;
   isOpen?: boolean;
@@ -20,8 +21,10 @@ interface ModalComponentProps {
   size?: string;
 }
 
-interface ModalCardProps extends CardProps {
-    id: number | undefined
+export interface ModalCardProps extends CardProps {
+    id?: number | undefined,
+    cards?: Card[] | null | undefined;
+    setCards?: React.Dispatch<React.SetStateAction<Card[]>> ;
 }
 interface ModalButtonProps {
 
@@ -53,15 +56,17 @@ export const ModalCardWrapper: React.FC<ModalCardProps> = ({
   card,
   width,
   height,
-  id
+  id,
+  cards,
+  setCards
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   console.log(`this is id ${id}}`)
   return (
     <>
       <ModalComponent isOpen={isOpen} onClose={onClose} size='xl'>
-        <EditCard card={card} onClose={onClose} />
-      </ModalComponent>
+        <EditCard card={card} onClose={onClose} state={{cards, setCards}}/>
+       </ModalComponent>
       <CardCp onClick={onOpen} 
         card={card}
         width={width}

@@ -1,13 +1,9 @@
 const path = require("path");
 const webpack = require("webpack");
-const Dotenv = require("dotenv-webpack");
+const Dotenv = require ('dotenv-webpack')
 
-module.exports = (env) => {
-  const isProduction = env.NODE_ENV === 'production';
-  const envFile = isProduction ? '.env.production' : '.env.development';
-  const envPath = path.resolve(__dirname, envFile);
-  const envVars = require('dotenv').config({ path: envPath }).parsed || {};
-
+  
+module.exports = ()=>{
   return {
     mode: "development",
     entry: "./src/index.tsx",
@@ -42,9 +38,11 @@ module.exports = (env) => {
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
-       new webpack.DefinePlugin({
-        'process.env': JSON.stringify(envVars),
-      }),
+       new Dotenv (
+        {
+          path:'./.env'
+        }
+       )
     ],
     devServer: {
       static: {
@@ -55,4 +53,4 @@ module.exports = (env) => {
     },
     watch: true,
   };
-};
+}

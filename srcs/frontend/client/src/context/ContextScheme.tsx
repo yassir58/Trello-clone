@@ -1,6 +1,5 @@
-import React, { createContext, useState , useEffect} from "react";
-import { fetchRandomCovers } from "../components/DataFetching";
-import { useQuery } from "react-query";
+import React, { createContext} from "react";
+
 interface Props {
   children: React.ReactNode;
 }
@@ -89,8 +88,7 @@ export interface GlobalContext {
   Users?: User[] | null;
 }
 export interface GlobalState {
-  coverPhotos?: string[];
-  setCoverPhotos?: React.Dispatch<React.SetStateAction<string[]>>;
+
 }
 export const AppContext = createContext<GlobalState>({});
 
@@ -104,25 +102,11 @@ export const GlobalContext: React.FC<Props> = ({ children }) => {
   //   Users: null,
   // });
 
-  const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
-
-  const { isLoading, isError, data, error } = useQuery ('coverQuery', async () => {
-    const data = await fetchRandomCovers (12);
-    return data
-  })
-
-  if (isLoading)
-    console.log ('Loading photos ....')
-  else if (isError)
-    console.log (`Failed to load photo because : ${error}`)
-  else if (data)
-    console.log (`Data loaded succesfully : ${data}`)
-  useEffect (()=>{
-   
-  },[])
+ 
+  
   return (
     <div>
-      <AppContext.Provider value={{coverPhotos, setCoverPhotos}}>
+      <AppContext.Provider value={{}}>
         {children}
       </AppContext.Provider>
     </div>

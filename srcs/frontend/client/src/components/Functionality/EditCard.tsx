@@ -9,19 +9,20 @@ import { BiSolidUserCircle } from 'react-icons/bi'
 import { MyEditableTextarea } from '../Menu'
 import {MembersPopOver, LabelPopOver, CoverPopOver} from '../Popover'
 import { Card } from '../../context/ContextScheme'
-interface EditCardProps {
+import { ModalCardProps } from '../ui-elements/Modal'
+interface EditCardProps extends ModalCardProps {
     card: Card;
     onClose: () => void;
     state?: {
-      cards: Card[];
-      setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+      cards?: Card[] | null | undefined;
+      setCards?: React.Dispatch<React.SetStateAction<Card[]>>;
     };
   }
 
 export const EditCard: React.FC<EditCardProps> = ({
     card,
     onClose,
-    // state
+    state
   }) => {
     // const removeCard = (id:number)=>{
     //   const tmp:Card[] = state.cards.slice ().filter(card=>card.id != id)
@@ -67,7 +68,7 @@ export const EditCard: React.FC<EditCardProps> = ({
                   <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
                   <MembersPopOver />
                   <LabelPopOver />
-                  <CoverPopOver />
+                  <CoverPopOver card={card} cards={state?.cards} setCards={state?.setCards}/>
                   <Button
                     variant="outlineRed"
                     onClick={() => {

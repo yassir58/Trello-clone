@@ -20,7 +20,7 @@ interface CardListProps {
 
 export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) => {
   
-    const [cards, setCards] = useState<Card[]> ([])
+    const [cards, setCards] = useState<Card[]>(list.cards);
     const [createCard, setCreateCard] = useState(false);
     const createCardToggler = () => {
       setCreateCard(!createCard);
@@ -31,7 +31,7 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
       stateSetter (tmp)
     }
     const createCardHandler = (title:string) => {
-      const tmp:Card[] = cards?.slice();
+      const tmp:Card[] = cards?.slice() || [];
       const card:Card = {
         id: new Date().getTime(),
         title: title,
@@ -41,7 +41,7 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
         BoardId: 1,
       }
       tmp.push(card);
-      setCards(tmp);
+      setCards&& setCards(tmp);
       createCardToggler();
     }
     return (
@@ -71,12 +71,15 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
   
           <Container variant='listStack'>
             {cards &&
-              cards.map((item, index) => {
+              cards.map((item:Card, index:number) => {
                 return (
                   <Box>
                     <ModalCardWrapper
                       card={item}
                       id={index}
+                      key={index}
+                      cards={cards}
+                      setCards={setCards}
                     />
                   </Box>
                 );
