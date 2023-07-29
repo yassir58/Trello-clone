@@ -42,7 +42,7 @@ const checkPassword = async (candidatePassword: string, userPassword: string) =>
   return await bcrypt.compare(candidatePassword, userPassword);
 };
 
-const formatSecureUserResponse = (user: any) => {
+export const formatSecureUserResponse = (user: any) => {
   return { fullname: user.fullname, profileImage: user.profileImage, email: user.email };
 };
 

@@ -4,11 +4,11 @@ const uuidExpr: RegExp = new RegExp(/^[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a
 
 export const checklistSchema = Joi.object({
   name: Joi.string().min(5).max(80).required(),
-  cardId: Joi.string().regex(uuidExpr).required()
+  cardId: Joi.string().regex(uuidExpr).required(),
 });
 
 export const taskSchema = Joi.object({
-  name: Joi.string().min(5).max(80).required(),
+  content: Joi.string().min(5).max(80).required(),
+  checkListId: Joi.string().regex(uuidExpr).required(),
   resolved: Joi.boolean().optional(),
-  
 });

@@ -16,6 +16,7 @@ export const createCard = catchAsync(async (req: Request, res: Response, next: N
     data: {
       title: value.title,
       description: value.description,
+      coverImage: value.coverImage,
       list: {
         connect: { id: value.listId },
       },
@@ -38,6 +39,7 @@ export const getCardById = catchAsync(async (req: Request, res: Response, next: 
       comments: true,
       attachments: true,
       labels: true,
+      checklists: true
     },
   });
   res.status(200).json({
@@ -50,6 +52,12 @@ export const getAllCards = catchAsync(async (req: Request, res: Response, next: 
   const cards = await prisma.card.findMany({
     where: {
       listId: req.params.listId ?? undefined,
+    },
+    include: {
+      comments: true,
+      attachments: true,
+      labels: true,
+      checklists: true
     },
   });
   res.status(200).json({

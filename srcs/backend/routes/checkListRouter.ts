@@ -8,7 +8,7 @@ const Router = express.Router({ mergeParams: true });
 
 Router.use(authController.authorizeRoute);
 
-Router.use('/tasks', tasksRouter)
+Router.use('/:checkListId/tasks', tasksRouter)
 
 Router.route("/").post(checkListController.createChecklist).get(checkListController.getAllChecklists);
 

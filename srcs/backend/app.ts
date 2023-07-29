@@ -1,4 +1,5 @@
 import helmet from "helmet";
+import path from "path";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
@@ -7,6 +8,7 @@ import express, { Express, Request, Response, NextFunction } from "express";
 // Routers
 import usersRouter from "./routes/usersRouter";
 import listsRouter from "./routes/listsRouter";
+import tasksRouter from "./routes/tasksRouter";
 import cardsRouter from "./routes/cardsRouter";
 import boardsRouter from "./routes/boardsRouter";
 import labelsRouter from "./routes/labelsRouter";
@@ -23,8 +25,10 @@ const app: Express = express();
 
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
 
-// Parse cookies
+// Serve static assets
+app.use(express.static(path.join(__dirname, "public")));
 
+// Parse cookies
 app.use(cookieParser());
 
 // The rate limiter is configured to serve 5000Req/Hour
@@ -36,12 +40,12 @@ app.use(
 );
 
 // app.use(cookieParser());
-
 app.use(express.json({ limit: "10kb" }));
 
 app.use(helmet());
 
 app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/tasks", tasksRouter);
 app.use("/api/v1/lists", listsRouter);
 app.use("/api/v1/cards", cardsRouter);
 app.use("/api/v1/boards", boardsRouter);
