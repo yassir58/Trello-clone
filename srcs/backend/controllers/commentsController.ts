@@ -2,9 +2,9 @@ import { PrismaClient, Comment } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
 import { commentValidator } from "../utils/validator";
-import { validateCommentAction } from "../models/commentModel";
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
+import { checkExistance } from "./factoryController";
 
 const prisma = new PrismaClient();
 
@@ -71,7 +71,9 @@ export const getAllComments = catchAsync(async (req: Request, res: Response, nex
 export const updateCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { error, value } = commentValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
-  const comment = (await validateCommentAction(req, next)) as Comment;
+  const comment = (await checkExistance(req, next, "comment")) as Comment;
+  if (comment.userId != req.currentUser)
+    return next(new AppError(`Only the author of this comment can perform this action`, 404));
   await prisma.comment.update({
     where: {
       id: comment.id,
@@ -87,8 +89,9 @@ export const updateCommentById = catchAsync(async (req: Request, res: Response, 
 });
 
 export const deleteCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const comment = (await validateCommentAction(req, next)) as Comment;
-
+  const comment = (await checkExistance(req, next, "comment")) as Comment;
+  if (comment.userId != req.currentUser)
+    return next(new AppError(`Only the author of this comment can perform this action`, 404));
   await prisma.comment.delete({
     where: {
       id: comment.id,

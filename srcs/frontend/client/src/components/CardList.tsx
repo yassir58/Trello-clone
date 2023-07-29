@@ -1,15 +1,14 @@
 import React, { useState } from "react";
-import { Box, Button, chakra,  Heading, useDisclosure , Stack} from "@chakra-ui/react";
+import { Box, Button, chakra,  Heading, Stack} from "@chakra-ui/react";
 
-import { CardCp } from "./ui-elements/Media";
 import { BiPlus } from "react-icons/bi";
 import { FaEllipsis } from "react-icons/fa6";
 import {  List, Card } from "../context/ContextScheme";
-import { EditCardComponent, ModalComponent, PopOver } from "./Popover";
 import { Container } from "./ui-elements/Wrappers";
-import {ListOptions} from "./ThreeDot";
-import AddCard from "./AddCard";
-
+import {ListOptions} from "./ListOptions";
+import AddCard from "./Functionality/AddCard";
+import { PopOverWrapper } from "./ui-elements/PopOver";
+import { ModalCardWrapper } from "./ui-elements/Modal";
 interface CardListProps {
     // Board:Board,
     list:List,
@@ -21,7 +20,7 @@ interface CardListProps {
 
 export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) => {
   
-    const [cards, setCards] = useState<Card[]> ([])
+    const [cards, setCards] = useState<Card[]>(list.cards);
     const [createCard, setCreateCard] = useState(false);
     const createCardToggler = () => {
       setCreateCard(!createCard);
@@ -32,7 +31,7 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
       stateSetter (tmp)
     }
     const createCardHandler = (title:string) => {
-      const tmp:Card[] = cards?.slice();
+      const tmp:Card[] = cards?.slice() || [];
       const card:Card = {
         id: new Date().getTime(),
         title: title,
@@ -42,10 +41,9 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
         BoardId: 1,
       }
       tmp.push(card);
-      setCards(tmp);
+      setCards&& setCards(tmp);
       createCardToggler();
     }
-    const { isOpen, onClose, onOpen } = useDisclosure();
     return (
       <div>
         <Stack>
@@ -53,12 +51,13 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
             <Heading variant='listTitle'>
               {list.title}
             </Heading>
-            <PopOver
-              button={<Button variant={'ghost'}><FaEllipsis/></Button>}
+            <PopOverWrapper
+              triggerVariant={"ghost"}
+              icon={<FaEllipsis />}
               size="3xs"
             >
               <ListOptions removeList={()=>handleRemoveList(list.id, state, stateSetter)}/>
-            </PopOver>
+            </PopOverWrapper>
           </Container>
   
           {createCard ? (
@@ -72,18 +71,16 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
   
           <Container variant='listStack'>
             {cards &&
-              cards.map((item, index) => {
+              cards.map((item:Card, index:number) => {
                 return (
                   <Box>
-                    <CardCp card={item} boardCard={true}  onClick={onOpen} key={index} />
-                    <ModalComponent
-                      style={{ size: "2xl" }}
-                      isOpen={isOpen}
-                      onOpen={onOpen}
-                      onClose={onClose}
-                    >
-                      <EditCardComponent onClose={onClose} card={item} state={{cards,setCards}} />
-                    </ModalComponent>
+                    <ModalCardWrapper
+                      card={item}
+                      id={index}
+                      key={index}
+                      cards={cards}
+                      setCards={setCards}
+                    />
                   </Box>
                 );
               })}

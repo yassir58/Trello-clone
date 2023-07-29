@@ -4,6 +4,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { AllBoards } from './components/AllBoards';
 import LoginForm from './components/Pages/LoginForm';
 import RegisterForm from './components/Pages/RegisterForm';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { GlobalContext } from './context/ContextScheme';
 
 interface IAppProps {}
 
@@ -27,9 +29,15 @@ const router = createBrowserRouter([
 
 ]);
 
+const queryClient = new QueryClient();
+
 const App: React.FunctionComponent<IAppProps> = () => {
   return (
+   <QueryClientProvider client={queryClient}>
+    <GlobalContext>
     <RouterProvider router={router}/>
+    </GlobalContext>
+   </QueryClientProvider>
   );
 };
 

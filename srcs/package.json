@@ -1,7 +1,12 @@
 {
   "devDependencies": {
+    "dotenv": "^16.3.1",
+    "dotenv-webpack": "^8.0.1",
     "node-sass": "^9.0.0",
     "sass-loader": "^13.3.2",
     "style-loader": "^3.3.3"
+  },
+  "dependencies": {
+    "react-query": "^3.39.3"
   }
 }

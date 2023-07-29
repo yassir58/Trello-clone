@@ -3,24 +3,22 @@ import {
   chakra,
   HStack,
   Stack,
-  Text,
   Button,
-  useDisclosure,
 } from "@chakra-ui/react";
 
 
-import { PopOver, DrawerCp} from "./Popover";
+import {DrawerCp} from "./ui-elements/Drawer";
 import Visibility from "./Visibility";
-import { Menu } from "./Menu";
 import { BsGlobeEuropeAfrica } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
 import { FaEllipsis } from "react-icons/fa6";
-import {EditBoard} from "./EditBoard";
-import { ChangeCover } from "./ChangeCover";
-import { AddList } from "./AddCard";
+import {EditBoard} from "./Functionality/EditBoard";
+import { ChangeCover } from "./Functionality/ChangeCover";
+import { AddList } from "./Functionality/AddCard";
 import {   List } from "../context/ContextScheme";
 import { CardList } from "./CardList";
 import {Container} from "./ui-elements/Wrappers";
+import { PopOverWrapper } from "./ui-elements/PopOver";
 interface BoardProps {
   // BoardId:number
 }
@@ -30,59 +28,35 @@ interface BoardMenuBarProps {
 }
 
 export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({}) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <Stack>
       <Container variant='mdSpaceBetween'>
         <HStack spacing={3}>
-          <PopOver
-            button={
-              <Button variant={"secondary"}>
-                <HStack>
-                  <BsGlobeEuropeAfrica />
-                  <Text fontSize={"xs"} fontWeight={"normal"}>Public</Text>
-                </HStack>
-              </Button>
-            }
+          <PopOverWrapper
+            triggerVariant="secondary"
+            value={'Public'}
+            icon={<BsGlobeEuropeAfrica/>}
             size="2xs"
           >
             <Visibility />
-          </PopOver>
-          {/* {BoardState.members.map((member) => {
-            return (
-              <Avatar size="sm" rounded="md" borderRadius="md" src={member.profilePicture} />
-            );
-          })} */}
-
-          <PopOver
-            size="2xs"
-            button={
-              <Button variant={"primary"}>
-                <BiPlus />
-              </Button>
-            }
+          </PopOverWrapper>
+          
+          <PopOverWrapper
+            triggerVariant="primary"
+            value={"Add"}
+            icon={<BiPlus />}
+            size='2xs'
           >
-            {/* <AddLable /> */}
             <ChangeCover />
-          </PopOver>
+          </PopOverWrapper>
           <EditBoard />
         </HStack>
         <DrawerCp
-          isOpen={isOpen}
-          onClose={onClose}
-          onOpen={onOpen}
           header="Menu"
-          buttonValue={
-            <HStack spacing={2}>
-              <Text fontSize={"xs"} fontWeight={"normal"}>
-                Menu
-              </Text>
-              <FaEllipsis />
-            </HStack>
-          }
-        >
-          <Menu />
-        </DrawerCp>
+          value="Menu"
+          icon={<FaEllipsis />}
+          variant="secondary"
+        />
       </Container>
     </Stack>
   );
@@ -106,9 +80,9 @@ export const Board: React.FC<BoardProps> = () => {
       <BoardMenuBar  />
       <Container variant='boardStack'>
         
-        {lists.map((list:List) => {
+        {lists.map((list:List, index:number) => {
           return (
-            <CardList list={list} state={lists} stateSetter={setLists} />
+            <CardList list={list} state={lists} stateSetter={setLists} key={index} />
           )
         })}
         <Stack>

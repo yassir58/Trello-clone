@@ -1,4 +1,4 @@
-import React, { createContext, useState , useEffect} from "react";
+import React, { createContext} from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -88,31 +88,25 @@ export interface GlobalContext {
   Users?: User[] | null;
 }
 export interface GlobalState {
-  globalState?: GlobalContext;
-  setGlobalState?: any;
+
 }
 export const AppContext = createContext<GlobalState>({});
 
 export const GlobalContext: React.FC<Props> = ({ children }) => {
-  const [publicBoards, setPublicBoards] = useState<Board[]>([]);
-  const [userBoards, setUserBoards] = useState<Board[]>([]);
-  const [LogedInUser, setLogedInUser] = useState<User['state'] | null>(null);
-  const [globalState, setGlobalState] = useState<GlobalContext>({
-    LogedInUser: null,
-    PublicBoards: null,
-    Users: null,
-  });
+  // const [publicBoards, setPublicBoards] = useState<Board[]>([]);
+  // const [userBoards, setUserBoards] = useState<Board[]>([]);
+  // const [LogedInUser, setLogedInUser] = useState<User['state'] | null>(null);
+  // const [globalState, setGlobalState] = useState<GlobalContext>({
+  //   LogedInUser: null,
+  //   PublicBoards: null,
+  //   Users: null,
+  // });
 
-
-  useEffect (()=>{
-    const tmpUser:User['state'] = {id:1, userName:"test", Boards:{state:userBoards, setState:setUserBoards}, Comments:[], profilePicture:"", email:""}
-    setLogedInUser (tmpUser)
-    const tmp:GlobalContext = {LogedInUser:{state:LogedInUser, setState:setLogedInUser}, PublicBoards:{state:publicBoards, setState:setPublicBoards}, Users:[]}
-    setGlobalState (tmp)
-  },[])
+ 
+  
   return (
     <div>
-      <AppContext.Provider value={{ globalState, setGlobalState }}>
+      <AppContext.Provider value={{}}>
         {children}
       </AppContext.Provider>
     </div>

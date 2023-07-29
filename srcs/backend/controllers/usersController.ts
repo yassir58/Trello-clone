@@ -1,11 +1,38 @@
+import multer from "multer";
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
-import { userValidator } from "../utils/validator";
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
+import sharp from "sharp";
 
 const prisma = new PrismaClient();
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req: Request, file: Express.Multer.File, cb: any) => {
+  if (file.mimetype.startsWith("image")) cb(null, true);
+  else cb(new AppError("Invalid file please upload a valid picture", 400), false);
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter,
+});
+
+export const uploadUserPhoto = upload.single("profileImage");
+
+export const processUserPhoto = (req: Request, res: Response, next: NextFunction) => {
+  if (!req.file) return next();
+
+  req.file.filename = "user-" + req.currentUser + "-" + Date.now() + ".jpeg";
+  sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat("jpeg")
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+  next();
+};
 
 export const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const search = req.query.search as string;
@@ -40,27 +67,31 @@ export const getUserById = catchAsync(async (req: Request, res: Response, next: 
   });
 });
 
-//! The validation in this controller might be a problem.
 export const updateUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  //! Should use check existing function here to validate the existance of the user and only apply this action
   const id = req.params.id;
-  const { error, value } = userValidator(req.body);
-  if (error) return next(new AppError(error.message, 400));
-  const board = await prisma.user.update({
+  const { fullname, email } = req.body;
+  const user = await prisma.user.update({
     where: {
       id,
     },
+    select: { id: true, fullname: true, email: true, profileImage: true },
     data: {
-      ...value,
+      fullname,
+      email,
+      profileImage: req.file?.filename ?? null,
     },
   });
   res.status(200).json({
     status: "success",
-    board,
+    user,
   });
 });
 
 export const deleteUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
+
+  //! I need to decide weather to keep this route here
 
   const myBoards = await prisma.board.findMany({
     where: { author: { id } },

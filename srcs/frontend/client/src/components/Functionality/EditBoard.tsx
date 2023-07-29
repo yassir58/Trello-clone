@@ -1,35 +1,29 @@
 import React from "react";
 import {
   Button,
-  useDisclosure,
   Stack,
   HStack,
   Text,
   Heading,
 } from "@chakra-ui/react";
 import { FaPen } from "react-icons/fa";
-import { EditCardCover, ModalComponent, CloseButton, MembersPopOver , CoverPopOver} from "./Popover";
-import { CardInfo, ProfileCard } from "./ui-elements/Media";
+import { MembersPopOver , CoverPopOver} from "../Popover";
+import { CardInfo, ProfileCard } from "../ui-elements/Media";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { MdDescription } from "react-icons/md";
-import { MyEditableTextarea } from "./Menu";
+import { MyEditableTextarea } from "../Menu";
 import { FaTrash } from "react-icons/fa6";
+import {ModalButtonWrapper} from '../ui-elements/Modal'
+import {CloseButton} from './CloseButton'
+import { EditCardCover } from "../ui-elements/EditCardCover";
 
 export const EditBoard: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Button variant={"ghost"} onClick={onOpen}>
-        <FaPen />
-      </Button>
-      <ModalComponent
-        style={{ size: "2xl" }}
-        isOpen={isOpen}
-        onClose={onClose}
-        onOpen={onOpen}
-      >
-        <EditBoardComponent onClose={onClose} />
-      </ModalComponent>
+     <ModalButtonWrapper 
+      variant='ghost'
+      icon={<FaPen />}
+      />
     </>
   );
 };

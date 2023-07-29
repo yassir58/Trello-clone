@@ -61,10 +61,12 @@ model Card {
 
   list        List?        @relation("cards", fields: [listId], references: [id], onDelete: SetNull)
   listId      String?
-  description String?
+  description String
+  coverImage String?
   comments    Comment[]    @relation("comments")
   attachments Attachment[] @relation("attachements")
   labels      Label[]
+  checklists  CheckList[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -114,4 +116,24 @@ model Label {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model CheckList {
+  id        String   @id @default(uuid())
+  name      String
+  tasks     Task[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  card      Card?    @relation(fields: [cardId], references: [id])
+  cardId    String?
+}
+
+model Task {
+  id          String     @id @default(uuid())
+  content     String
+  resolved    Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  checkList   CheckList? @relation(fields: [checkListId], references: [id], onDelete: SetNull)
+  checkListId String?
 }

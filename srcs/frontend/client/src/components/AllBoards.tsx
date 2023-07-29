@@ -7,12 +7,15 @@ import {
   Box,
   useDisclosure,
 } from "@chakra-ui/react";
-import { SmallLogo, ProfileHeader, SearchForm } from "./header/header";
-import { ModalComponent, NewBoard } from "./Popover";
+import {SearchForm} from './header/SearchForm'
+import {ProfileHeader} from './header/ProfileHeader'
+import { SmallLogo } from "./header/SmallLogo";
+// import { NewBoard } from "./Popover";
 import { BiPlus } from "react-icons/bi";
 import { Board, Boards } from "../context/ContextScheme";
 import { BoardCard } from "./ui-elements/Media";
 import { Container } from "./ui-elements/Wrappers";
+import { ModalButtonWrapper } from "./ui-elements/Modal";
 interface AllBoardsProps {
 
 }
@@ -63,40 +66,25 @@ interface AllBoardsHeaderProps {
 }
 
 export const AllBoardsHeader: React.FC<AllBoardsHeaderProps> = ({
-  isOpen,
-  onOpen,
-  onClose,
-  stateObject,
+
 }) => {
-  const actionHandler = (title: string) => {
-    const newBoard: Board = {
-        id: Math.floor(Math.random() * 1000),
-        title: title,
-        private: false,
-        creationDate: new Date().toISOString(),
-        editDate: new Date().toISOString(),
-    };
-    stateObject?.setState([...stateObject.state, newBoard]);
-  };
+  // const actionHandler = (title: string) => {
+  //   const newBoard: Board = {
+  //       id: Math.floor(Math.random() * 1000),
+  //       title: title,
+  //       private: false,
+  //       creationDate: new Date().toISOString(),
+  //       editDate: new Date().toISOString(),
+  //   };
+  //   stateObject?.setState([...stateObject.state, newBoard]);
+  // };
   return (
     <Container variant='smallSpaceBetween'>
       <Heading variant='HeaderTitle'>All Boards</Heading>
-      <ModalComponent
-        isOpen={isOpen}
-        onClose={onClose}
-        onOpen={onOpen}
-        style={{ size: "sm", buttonSize: "sm", colorScheme: "blue" }}
-        buttonValue={
-          <HStack spacing={2}>
-            <BiPlus />
-            <Text size="sm" fontWeight="normal">
-              Add
-            </Text>
-          </HStack>
-        }
-      >
-        <NewBoard action={actionHandler} onClose={onClose} />
-      </ModalComponent>
+      <ModalButtonWrapper 
+        variant='primary'
+        icon={<BiPlus />}
+        value='Create Board'/>
     </Container>
   );
 };

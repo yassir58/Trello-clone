@@ -16,6 +16,7 @@ class EncryptText {
   encrypt() {
     let cipher;
 
+    if (!this.text) return null;
     if (this.algorithm && this.key && this.iv) {
       cipher = createCipheriv(this.algorithm, this.key, this.iv);
       let encrypted = cipher.update(this.text, "utf8", "hex");
@@ -27,10 +28,11 @@ class EncryptText {
   decrypt() {
     let decipher;
 
+    if (!this.text) return null;
     if (this.algorithm && this.key && this.iv) {
       decipher = createDecipheriv(this.algorithm, this.key, this.iv);
-      let decrypted = decipher.update(this.text, "utf8", "hex");
-      decrypted += decipher.final("hex");
+      let decrypted = decipher.update(this.text, "hex", "utf8");
+      decrypted += decipher.final("utf8");
       return decrypted;
     }
   }

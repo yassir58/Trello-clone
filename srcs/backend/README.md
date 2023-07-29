@@ -52,13 +52,19 @@
 - [x] Handler for getting attachment using nested cards route
 - [x] Handler for getting the list of attachments available
 
-## Checklist:
+## Checklists:
 
-- [ ] Handler for creating a checklist using nested cards route
-- [ ] Handler for getting a checklist using nested cards route
-- [ ] Handler for getting the list of checklists available
+- [x] Handler for creating a checklist
+- [x] Handler for getting a checklist using nested cards route
+- [x] Handler for getting the list of checklists available
 
-## Authentication
+## Tasks:
+
+- [x] Handler for creating a task
+- [x] Handler for getting a task using nested checklist and card route
+- [x] Handler for getting the list of all tasks available
+
+## Authentication & security
 
 - [x] Sign up route
 - [x] Login route
@@ -74,8 +80,9 @@
 
 ## Upload
 
-- [ ] File upload functionality
-- [ ] File validation
+- [x] File upload functionality
+- [x] File validation
+- [x] Build an image processing middlware for resizing images
 
 ## Error Handling
 
