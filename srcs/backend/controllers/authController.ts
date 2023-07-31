@@ -49,11 +49,11 @@ export const formatSecureUserResponse = (user: any) => {
 const sendAuthToken = async (res: Response, next: NextFunction, userId: string) => {
   const token = await generateToken(userId);
   const cookieOptions = {
-    httpOnly: true,
     expires: new Date(Date.now() + parseInt(process.env.JWT_EXPIRES_IN || "90") * 24 * 3600000),
   };
   if (!token) return next(new AppError("Internal Error: auth module error", 500));
   res.cookie("jwt", token, cookieOptions);
+  return token;
 };
 
 export const updatePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -78,6 +78,18 @@ export const updatePassword = catchAsync(async (req: Request, res: Response, nex
     data: {
       password: hashedPassword,
     },
+  });
+});
+
+export const isLoggedIn = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.currentUser)
+    return res.status(401).json({
+      status: "failure",
+      user: null,
+    });
+  res.status(200).json({
+    status: "success",
+    user: req.currentUser,
   });
 });
 
@@ -220,9 +232,10 @@ export const signup = catchAsync(async (req: Request, res: Response, next: NextF
       password,
     },
   });
-  await sendAuthToken(res, next, user.id);
+  const token = await sendAuthToken(res, next, user.id);
   res.status(200).json({
     status: "success",
+    token,
     user: formatSecureUserResponse(user),
   });
 });
@@ -238,9 +251,10 @@ export const login = catchAsync(async (req: Request, res: Response, next: NextFu
 
   if (!user || !(await checkPassword(password, user.password)))
     return next(new AppError("Incorrect email or password", 401));
-  await sendAuthToken(res, next, user.id);
+  const token = await sendAuthToken(res, next, user.id);
   res.status(200).json({
     status: "success",
+    token,
     user: formatSecureUserResponse(user),
   });
 });
@@ -248,8 +262,7 @@ export const login = catchAsync(async (req: Request, res: Response, next: NextFu
 export const logout = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const cookieOptions = {
     httpOnly: true,
-    secure: true,
-    expires: new Date(Date.now() + 10 * 1000),
+    expires: new Date(Date.now() + 4 * 1000),
   };
 
   res.cookie("jwt", "disconnected", cookieOptions);

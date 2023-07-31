@@ -18,7 +18,7 @@ export const createBoard = catchAsync(async (req: Request, res: Response, next: 
     data: {
       title: value.title,
       coverImage: value.coverImage,
-      description: value.description,
+      visibilty: value.visibilty,
       author: {
         connect: { id: req.currentUser },
       },

@@ -14,8 +14,8 @@ model Board {
   id          String  @id @default(uuid())
   title       String  @unique
   coverImage  String
-  description String
-  visibilty   Boolean @default(true)
+  description String  @default("")
+  visibilty   Boolean 
   author      User    @relation("authoredBoards", fields: [authorId], references: [id])
   authorId    String
   users       User[]  @relation("Members")
