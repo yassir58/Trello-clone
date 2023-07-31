@@ -10,7 +10,7 @@ import { FaPen } from "react-icons/fa";
 import { MembersPopOver , CoverPopOver} from "../Popover";
 import { CardInfo, ProfileCard } from "../ui-elements/Media";
 import { BiSolidUserCircle } from "react-icons/bi";
-import { MdDescription } from "react-icons/md";
+import { MdDescription } from "react-icons/Md";
 import { MyEditableTextarea } from "../Menu";
 import { FaTrash } from "react-icons/fa6";
 import {ModalButtonWrapper} from '../ui-elements/Modal'

@@ -1,0 +1,30 @@
+"use strict";
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+self["webpackHotUpdateclient"]("main",{
+
+/***/ "./src/components/Functionality/EditCard.tsx":
+/*!***************************************************!*\
+  !*** ./src/components/Functionality/EditCard.tsx ***!
+  \***************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+eval("\nvar __importDefault = (this && this.__importDefault) || function (mod) {\n    return (mod && mod.__esModule) ? mod : { \"default\": mod };\n};\nObject.defineProperty(exports, \"__esModule\", ({ value: true }));\nexports.EditCard = void 0;\nconst react_1 = __importDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\nconst react_2 = __webpack_require__(/*! @chakra-ui/react */ \"./node_modules/@chakra-ui/react/dist/index.js\");\nconst CloseButton_1 = __webpack_require__(/*! ./CloseButton */ \"./src/components/Functionality/CloseButton.tsx\");\nconst Media_1 = __webpack_require__(/*! ../ui-elements/Media */ \"./src/components/ui-elements/Media.tsx\");\nconst EditCardCover_1 = __webpack_require__(/*! ../ui-elements/EditCardCover */ \"./src/components/ui-elements/EditCardCover.tsx\");\nconst fa6_1 = __webpack_require__(/*! react-icons/fa6 */ \"./node_modules/react-icons/fa6/index.esm.js\");\nconst Md_1 = __webpack_require__(/*! react-icons/Md */ \"./node_modules/react-icons/Md/index.esm.js\");\nconst bi_1 = __webpack_require__(/*! react-icons/bi */ \"./node_modules/react-icons/bi/index.esm.js\");\nconst Menu_1 = __webpack_require__(/*! ../Menu */ \"./src/components/Menu.tsx\");\nconst Popover_1 = __webpack_require__(/*! ../Popover */ \"./src/components/Popover.tsx\");\nconst EditCard = ({ card, onClose, state }) => {\n    // const removeCard = (id:number)=>{\n    //   const tmp:Card[] = state.cards.slice ().filter(card=>card.id != id)\n    //   state.setCards (tmp)\n    // }\n    return (react_1.default.createElement(\"div\", null,\n        react_1.default.createElement(react_2.Stack, { spacing: 4 }, card && (react_1.default.createElement(react_1.default.Fragment, null,\n            react_1.default.createElement(CloseButton_1.CloseButton, { onClose: onClose }),\n            card.cover && react_1.default.createElement(EditCardCover_1.EditCardCover, { image: card.cover }),\n            react_1.default.createElement(react_2.HStack, { justify: \"space-between\", mx: \"auto\", px: 3, py: 2, width: \"100%\", alignItems: \"flex-start\" },\n                react_1.default.createElement(react_2.Stack, { w: \"70%\" },\n                    react_1.default.createElement(react_2.Heading, { fontSize: \"lg\" }, card.title ? card.title : \"Add card title\"),\n                    react_1.default.createElement(react_2.Text, { fontSize: \"xs\", fontWeight: \"normal\", color: \"#828282\" },\n                        \"In list\",\n                        react_1.default.createElement(react_2.chakra.small, { px: 1, color: \"black\", fontWeight: \"bold\" }, \"In Progress\")),\n                    react_1.default.createElement(react_2.HStack, { spacing: 4, pt: 5, pb: 3 },\n                        react_1.default.createElement(Media_1.CardInfo, { icon: react_1.default.createElement(Md_1.MdDescription, null), value: \"Description\" }),\n                        react_1.default.createElement(react_2.Button, { variant: \"outlineSecondary\" },\n                            react_1.default.createElement(react_2.HStack, { spacing: 3 },\n                                react_1.default.createElement(fa6_1.FaPen, null),\n                                react_1.default.createElement(react_2.chakra.small, null, \"Edit\")))),\n                    react_1.default.createElement(Menu_1.MyEditableTextarea, null)),\n                react_1.default.createElement(react_2.Stack, { w: \"25%\", spacing: 3, py: 4 },\n                    react_1.default.createElement(Media_1.CardInfo, { icon: react_1.default.createElement(bi_1.BiSolidUserCircle, null), value: \"Actions\" }),\n                    react_1.default.createElement(Popover_1.MembersPopOver, null),\n                    react_1.default.createElement(Popover_1.LabelPopOver, null),\n                    react_1.default.createElement(Popover_1.CoverPopOver, { card: card, cards: state === null || state === void 0 ? void 0 : state.cards, setCards: state === null || state === void 0 ? void 0 : state.setCards }),\n                    react_1.default.createElement(react_2.Button, { variant: \"outlineRed\", onClick: () => {\n                            // removeCard(card.id)\n                            onClose();\n                        } },\n                        react_1.default.createElement(react_2.HStack, { spacing: 3 },\n                            react_1.default.createElement(fa6_1.FaTrash, null),\n                            react_1.default.createElement(react_2.Text, { fontSize: \"sm\" }, \" Delete Card \"))))))))));\n};\nexports.EditCard = EditCard;\n\n\n//# sourceURL=webpack://client/./src/components/Functionality/EditCard.tsx?");
+
+/***/ })
+
+},
+/******/ function(__webpack_require__) { // webpackRuntimeModules
+/******/ /* webpack/runtime/getFullHash */
+/******/ (() => {
+/******/ 	__webpack_require__.h = () => ("b4a247ce968067d70c3b")
+/******/ })();
+/******/ 
+/******/ }
+);

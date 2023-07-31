@@ -1,7 +1,7 @@
 import React from "react";
 import {  FaImage} from "react-icons/fa6";
 import { FaUserGroup } from "react-icons/fa6";
-import { MdLabel } from "react-icons/md";
+import { MdLabel } from "react-icons/Md";
 import { AddLable } from "./Functionality/AddLable";
 import InviteToBoard from "./InviteToBoard";
 import { ChangeCover } from "./Functionality/ChangeCover";

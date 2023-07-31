@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { CardInfo } from "../ui-elements/Media"
 import { Label } from "../ui-elements/Buttons";
-import {MdLabel} from "react-icons/md";
+import {MdLabel} from "react-icons/Md";
 
 interface LableObject {
     value: string;

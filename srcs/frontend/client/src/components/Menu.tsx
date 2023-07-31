@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { CardInfo, ProfileCard } from "./ui-elements/Media";
 import { BiSolidUserCircle } from "react-icons/bi";
-import { MdDescription } from "react-icons/md";
+import { MdDescription } from "react-icons/Md";
 import {
   // Editable,
   EditableTextarea,

@@ -1,58 +1,42 @@
 import React from "react";
-import {
-  Text,
-  Card,
-  CardHeader,
-  CardBody,
-  Heading,
-  HStack,
-  // Wrap,
-  Stack,
-} from "@chakra-ui/react";
+import { Text, Stack } from "@chakra-ui/react";
 
-import { MdPublic } from "react-icons/md";
-import { MdLock } from "react-icons/md";
+import { MdPublic } from "react-icons/Md";
+import { MdLock } from "react-icons/Md";
+import DescriptiveBtnStack from "./DescriptiveBtnStack";
 
 const Visibility = () => {
   return (
-    <Card borderRadius="xl" boxShadow='none' border='none' width={234} h={'auto'}>
-      <CardHeader>
-        <Heading width={49} height={18} fontSize="12" as="b">
+    <Stack
+      spacing={"16px"}
+      p={"12px"}
+      borderRadius={"8px"}
+      border={"solid"}
+      borderWidth={"1px"}
+      borderColor={"lightgray"}
+      boxShadow={"sm"}
+    >
+      <Stack spacing={"2px"}>
+        <Text as={"b"} fontSize={"12px"} color={"#4f4f4f"}>
           Visibility
-        </Heading>
-        <Text fontSize="12" color="gray">
-          choose who can see the board.
         </Text>
-      </CardHeader>
-      <CardBody paddingTop={0}>
-        <Stack spacing={4}>
-          
-            <Stack spacing={2} p="8px" borderRadius={'lg'} sx={{
-              _hover: {
-                bg:'gray.100'
-              }
-            }}>
-              <HStack spacing={2} >
-                <MdPublic />
-                <Text fontSize='sm' fontWeight={'normal'} color='#828282'>Public</Text>
-              </HStack>
-              <Text  fontSize='xs' fontWeight={'normal'} color='gray'>Anyone on the internet can see this board</Text>
-            </Stack>
-
-            <Stack spacing={2} p="10px" borderRadius={'lg'} sx={{
-              _hover: {
-                bg:'gray.100'
-              }
-            }}>
-              <HStack spacing={2} >
-                <MdLock/>
-                <Text fontSize='sm' fontWeight={'normal'} color='#828282'>Private</Text>
-              </HStack>
-              <Text  fontSize='xs' fontWeight={'normal'} color='gray'>Only members can see this board</Text>
-            </Stack>
-        </Stack>
-      </CardBody>
-    </Card>
+        <Text fontSize={"12px"} color={"#828282"}>
+          Choose who can see this board
+        </Text>
+      </Stack>
+      <DescriptiveBtnStack
+        buttons={["Public", "Private"]}
+        descBtn={[
+          "anyone on the internet can see this.",
+          "Only board members can see this.",
+        ]}
+        style="unstyled"
+        w="210px"
+        h="58px"
+        icons={[<MdPublic color={"#4f4f4f"} />, <MdLock color={"#4f4f4f"} />]}
+        spaceBetween="12px"
+      ></DescriptiveBtnStack>
+    </Stack>
   );
 };
 
