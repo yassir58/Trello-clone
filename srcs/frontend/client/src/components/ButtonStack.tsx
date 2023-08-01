@@ -7,7 +7,7 @@ interface Props {
   onClick: (() => void)[];
   style: string;
   width: string;
-  height: string;
+  height?: string;
   spaceBetween: string;
   Icons?: ReactNode[];
 }
@@ -21,7 +21,7 @@ const ButtonStack = (props: Props) => {
 		    onClick={props.onClick[index]}
             variant={props.style}
             w={props.width}
-            h={props.height}
+            h={props.height === undefined ? "auto" : props.height}
             textAlign="center"
           >
             <Flex alignItems="center" justifyContent="center">

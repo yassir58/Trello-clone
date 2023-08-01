@@ -12,20 +12,29 @@ interface Props {
   icons?: ReactNode[];
 }
 
-const DescriptiveBtnStack = (props: Props) => {
+const DescriptiveBtnStack:React.FC<Props> = ({
+  buttons,
+  descBtn,
+  spaceBetween,
+  style,
+  w,
+  h,
+  icons,
+  
+}) => {
   return (
-    <Stack spacing={props.spaceBetween}>
-      {props.buttons.map((button, index) => (
-        <Button variant={props.style} w={props.w} h={props.h} px={"12px"}>
+    <Stack spacing={spaceBetween}>
+      {buttons.map((button, index) => (
+        <Button variant={style} w={w} h={h} px={"12px"}>
           <Stack align={"start"}>
             <Wrap>
-              {!(props.icons === undefined) && props.icons[index]}
+              {!(icons === undefined) && icons[index]}
               <Text color={"#4f4f4f"} fontSize={"12px"} as="b">
                 {button}
               </Text>
             </Wrap>
             <Text color={"#828282"} fontSize={"10px"}>
-              {props.descBtn[index]}
+              {descBtn[index]}
             </Text>
           </Stack>
         </Button>

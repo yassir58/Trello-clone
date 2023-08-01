@@ -1,28 +1,26 @@
 import React from "react";
 import {
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
   Text,
-  Input,
   Button,
   Stack,
 } from "@chakra-ui/react";
 import { BiSolidUser } from "react-icons/bi";
 import ButtonStack from "./ButtonStack";
+import {SearchInput} from "./ui-elements/SearchInput";
 
-const InviteToBoard = () => {
+interface InviteToBoard {
+}
+const InviteToBoard:React.FC<InviteToBoard> = () => {
+  const [search, setSearch] = React.useState("");
   return (
-    <Card>
-      <CardHeader mx={"8px"} p="10px" my={"0px"}>
+    <Stack  justify={'center'} alignItems={'center'}>
+      <Stack  py="10px"  spacing={1}>
         <Text fontSize={"12px"}>Invite to Board</Text>
         <Text fontSize={"12px"} color="gray">
           Search for people you want to invite
         </Text>
-      </CardHeader>
-      <CardBody m={"9px"} px={0} py={0}>
-        <Input w={"228px"} h={"34px"} variant="outline" placeholder="user" />
+      </Stack>
+        <SearchInput state={search} stateSetter={setSearch} />
         <Stack
           borderColor={"lightgray"}
           borderWidth={"1px"}
@@ -33,15 +31,13 @@ const InviteToBoard = () => {
           <ButtonStack
             onClick={[() => {}]}
             buttons={["User", "User", "User"]}
-            style="unstyled"
-            width="100%"
-            height="32px"
+            style="ghost"
+            width="228px"
+            height="45px"
             spaceBetween="15px"
             Icons={[<BiSolidUser />, <BiSolidUser />, <BiSolidUser />]}
           />
         </Stack>
-      </CardBody>
-      <CardFooter my={"10px"} py={0}>
         <Button
           mx="auto"
           w={"74px"}
@@ -51,8 +47,7 @@ const InviteToBoard = () => {
         >
           Invite
         </Button>
-      </CardFooter>
-    </Card>
+    </Stack>
   );
 };
 

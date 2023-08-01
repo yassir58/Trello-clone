@@ -1,13 +1,18 @@
 import React from "react";
 import { Text, Stack } from "@chakra-ui/react";
 
-import { MdPublic, MdLock  } from "react-icons/md";
+import { MdPublic } from "react-icons/md";
+import { MdLock} from "react-icons/md";
 import DescriptiveBtnStack from "./DescriptiveBtnStack";
 
 const Visibility = () => {
   return (
-    <Stack>
-      <Stack spacing={"2px"} justifyContent={'center'} alignItems={'center'}>
+    <Stack
+      spacing={"16px"}
+      p={"12px"}
+     
+    >
+      <Stack spacing={"2px"}>
         <Text as={"b"} fontSize={"12px"} color={"#4f4f4f"}>
           Visibility
         </Text>
@@ -21,7 +26,7 @@ const Visibility = () => {
           "anyone on the internet can see this.",
           "Only board members can see this.",
         ]}
-        style="unstyled"
+        style="ghost"
         w="210px"
         h="58px"
         icons={[<MdPublic color={"#4f4f4f"} />, <MdLock color={"#4f4f4f"} />]}
