@@ -140,8 +140,7 @@ export const authorizeRoute = catchAsync(async (req: Request, res: Response, nex
     return next(new AppError("No authorization token has been provided please login again.", 401));
   //? I gave priority to authorization header so the user can override the jwt cookie
   if (req.headers.authorization) token = req.headers.authorization.split(" ")[1];
-
-  token = req.cookies.jwt;
+  else token = req.cookies.jwt;
   decodedToken = (await jwt.verify(token, process.env.JWT_SECRET)) as JwtPayload;
   const user = await prisma.user.findUnique({
     where: {
