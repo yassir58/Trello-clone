@@ -68,7 +68,7 @@ export interface Card {
 }
 
 export interface Board {
-    id: number;
+    id?: number;
     title: string;
     cover?: string;
     private: boolean;

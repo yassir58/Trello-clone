@@ -23,7 +23,7 @@ interface ModalComponentProps {
 
 export interface ModalCardProps extends CardProps {
     id?: number | undefined,
-    cards?: Card[] | null | undefined;
+    cards?: Card[];
     setCards?: React.Dispatch<React.SetStateAction<Card[]>> ;
 }
 interface ModalButtonProps {

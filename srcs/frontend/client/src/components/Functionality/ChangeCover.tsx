@@ -7,7 +7,7 @@ import { useQuery } from 'react-query'
 import { API_KEY,  endpoint} from '../../data/DataFetching'
 interface ChangeCoverProps {
     card?:Card,
-    cards?:Card[] | null | undefined,
+    cards?:Card[],
     setCards?:React.Dispatch<React.SetStateAction<Card[]>>
 }
 

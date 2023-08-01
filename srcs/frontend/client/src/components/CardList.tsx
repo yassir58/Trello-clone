@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, chakra,  Heading, Stack} from "@chakra-ui/react";
+import { Box, Button, chakra, Stack} from "@chakra-ui/react";
 
 import { BiPlus } from "react-icons/bi";
 import { FaEllipsis } from "react-icons/fa6";
@@ -9,6 +9,9 @@ import {ListOptions} from "./ListOptions";
 import AddCard from "./Functionality/AddCard";
 import { PopOverWrapper } from "./ui-elements/PopOver";
 import { ModalCardWrapper } from "./ui-elements/Modal";
+import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
+import { EditListTitle } from "./Functionality/EditListTitle";
+import { handleFocus } from "./Functionality/utils";
 interface CardListProps {
     // Board:Board,
     list:List,
@@ -22,6 +25,7 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
   
     const [cards, setCards] = useState<Card[]>(list.cards);
     const [createCard, setCreateCard] = useState(false);
+    const inputRef = React.useRef<HTMLInputElement>(null);
     const createCardToggler = () => {
       setCreateCard(!createCard);
     };
@@ -39,6 +43,7 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
         creationDate: "2021-05-01T00:00:00.000Z",
         editDate: "2021-05-01T00:00:00.000Z",
         BoardId: 1,
+        labels: [],
       }
       tmp.push(card);
       setCards&& setCards(tmp);
@@ -48,9 +53,12 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
       <div>
         <Stack>
           <Container variant="mdSpaceBetween">
-            <Heading variant='listTitle'>
-              {list.title}
-            </Heading>
+          <Editable defaultValue={list.title ? list.title : "Add card title"}>
+                  <EditablePreview fontSize='sm' />
+                  <EditableInput onChange={(e)=>{
+                    EditListTitle (state, stateSetter, list.id, e.target.value)
+                  }}/>
+                </Editable>
             <PopOverWrapper
               triggerVariant={"ghost"}
               icon={<FaEllipsis />}
@@ -61,9 +69,14 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
           </Container>
   
           {createCard ? (
-            <AddCard cancelHandler={createCardToggler} action={createCardHandler} />
+            <AddCard cancelHandler={createCardToggler} action={createCardHandler} ref={inputRef}/>
           ) : (
-            <Button onClick={createCardToggler} variant='largePrimary'>
+            <Button onClick={()=>{
+              createCardToggler ()
+              handleFocus(inputRef)
+            }
+              
+            } variant='largePrimary'>
               <chakra.small>Add another Card</chakra.small>
               <BiPlus />
             </Button>

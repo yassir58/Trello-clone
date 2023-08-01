@@ -4,7 +4,8 @@ import { FaXmark } from 'react-icons/fa6'
 
 
 interface CloseButtonProps {
-    onClose: () => void;
+    onClose?: () => void;
+    ref?: React.LegacyRef<HTMLButtonElement>;
   }
   
   export const CloseButton: React.FC<CloseButtonProps> = ({ onClose }) => {
@@ -23,3 +24,23 @@ interface CloseButtonProps {
       </Button>
     );
   };
+
+
+  export const SmallCloseButton: React.FC<CloseButtonProps> = ({ onClose, ref }) => {
+    return (
+      <Button
+        position="absolute"
+        top="-10px"
+        right="-10px"
+        variant={"secondary"}
+        zIndex="2"
+        onClick={onClose}
+        p = {1}
+        borderRadius='full'
+        ref={ref}
+      >
+        <FaXmark />
+      </Button>
+    );
+  };
+  

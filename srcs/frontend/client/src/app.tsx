@@ -6,6 +6,7 @@ import LoginForm from './components/Pages/LoginForm';
 import RegisterForm from './components/Pages/RegisterForm';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { GlobalContext } from './context/ContextScheme';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 interface IAppProps {}
 
@@ -37,6 +38,7 @@ const App: React.FunctionComponent<IAppProps> = () => {
     <GlobalContext>
     <RouterProvider router={router}/>
     </GlobalContext>
+    <ReactQueryDevtools />
    </QueryClientProvider>
   );
 };

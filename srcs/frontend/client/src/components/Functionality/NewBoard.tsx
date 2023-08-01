@@ -4,20 +4,34 @@ import { CloseButton } from "./CloseButton";
 import { EditCardCover } from "../ui-elements/EditCardCover";
 import { FaUnlockKeyhole, FaImage } from "react-icons/fa6";
 import { BiPlus } from "react-icons/bi";
+import { useMutation } from "react-query";
+import { createBoard } from "./createBoard";
+import { Board } from "../../context/ContextScheme";
 interface newBoardProps {
   action?: any;
   onClose: () => void;
 }
 
-export const NewBoard: React.FC<newBoardProps> = ({ action, onClose }) => {
+export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
   const [title, setTitle] = useState<string>("");
 
+  const newBoardMutation = useMutation({
+    mutationFn: createBoard,
+  });
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const handleOnSubmit = () => {
-    action(title);
+    
+    const newBoard:Board = {
+      private: false,
+      title: title,
+      cover: `https://source.unsplash.com/random?sig=${Math.random() + 1}`,
+    }
+    // action(title);
+    // console.log  ('creating new board')
+    newBoardMutation.mutate(newBoard);
   };
 
   return (

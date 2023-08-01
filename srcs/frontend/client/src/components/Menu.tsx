@@ -67,7 +67,7 @@ export const Menu: React.FC = () => {
           p="15px"
           my="10px"
         >
-          <MyEditableTextarea />
+          <MyEditableTextarea defaultValue={"Enter description ..."} />
         </Box>
         <HStack spacing={3}>
           <Button  variant='green'>
@@ -94,10 +94,14 @@ export const Menu: React.FC = () => {
 };
 
 interface MyEditableProps {
-  // value: string;
+  defaultValue?:string
+  action?:(value:string)=>void
 }
-export const MyEditableTextarea: React.FC<MyEditableProps> = () => {
-  const [value, setValue] = useState("");
+export const MyEditableTextarea: React.FC<MyEditableProps> = ({
+  defaultValue = "",
+  action
+}) => {
+  const [value, setValue] = useState(defaultValue);
 
   const handleChange = (event: any) => {
     setValue(event.target.value);
@@ -125,7 +129,10 @@ export const MyEditableTextarea: React.FC<MyEditableProps> = () => {
             border: "none",
           },
         }}
-        onChange={handleChange}
+        onChange={(e)=>{
+          handleChange (e)
+          action && action(e.target.value)
+        }}
         resize="none"
         overflow="hidden"
         height="auto"

@@ -10,7 +10,7 @@ import { Card } from "../context/ContextScheme";
 
 interface PopOverProps {
   card?: Card ;
-  cards?: Card[] | null | undefined;
+  cards?: Card[];
   setCards?: React.Dispatch<React.SetStateAction<Card[]>> ;
 }
 
@@ -29,7 +29,11 @@ export const MembersPopOver: React.FC = () => {
   );
 };
 
-export const LabelPopOver: React.FC = () => {
+export const LabelPopOver: React.FC<PopOverProps> = ({
+  card,
+  cards,
+  setCards,             
+}) => {
   return (
     <PopOverWrapper
       value="Labels"
@@ -38,7 +42,7 @@ export const LabelPopOver: React.FC = () => {
       size="xs"
       placement="left"
     >
-      <AddLable />
+      <AddLable card={card} cards={cards} setCards={setCards} />
     </PopOverWrapper>
   );
 };

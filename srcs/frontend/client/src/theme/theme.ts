@@ -32,6 +32,23 @@ const FormLabelStyle: ComponentStyleConfig = {
   },
 };
 
+const EditableStyle: ComponentStyleConfig = {
+  baseStyle: {},
+  sizes: {},
+  variants: {
+    regular: {
+      border: "none",
+      outline: "none",
+      _hover: {
+        border: "none",
+        outline: "none",
+      },
+      _focus: {
+        outline:'1px solid #5497f0',
+      },
+    },
+  },
+};
 const ButtonStyle: ComponentStyleConfig = {
   // style object for base or default style
   // styles for different sizes ("sm", "md", "lg")
@@ -71,7 +88,7 @@ const ButtonStyle: ComponentStyleConfig = {
     },
     largeSecondary: {
       padding: "8px 14px",
-      width:'100%',
+      width: "100%",
       backgroundColor: "gray.100",
       border: "1px solid rgba(0,0,0,0.1)",
       borderRadius: "8px",
@@ -263,26 +280,26 @@ const HeadingStyle: ComponentStyleConfig = {
   },
 };
 
-const AvatarStyle= defineStyleConfig({
+const AvatarStyle = defineStyleConfig({
   baseStyle: {
-    width:'42px',
-    height:'42px',
-    borderRadius:'lg',
-    objectFit:'cover'
+    width: "42px",
+    height: "42px",
+    borderRadius: "lg",
+    objectFit: "cover",
   },
   sizes: {},
   variants: {
-    clickable:{
-      cursor:'pointer',
-      _hover:{
-        opacity:0.8
+    clickable: {
+      cursor: "pointer",
+      _hover: {
+        opacity: 0.8,
       },
-      _active:{
-        outline:'2px solid #5497f0'
-      }
-    }
-  }
-})
+      _active: {
+        outline: "2px solid #5497f0",
+      },
+    },
+  },
+});
 const BoxStyle = defineStyleConfig({
   // style object for base or default style
   baseStyle: {},
@@ -347,7 +364,7 @@ const BoxStyle = defineStyleConfig({
       height: "70vh",
       borderRadius: "lg",
       bg: "gray.100",
-      mx:'auto',
+      mx: "auto",
       display: "flex",
       justifyContent: "center",
       alignItems: "center",
@@ -371,6 +388,7 @@ const theme = extendTheme({
   components: {
     Input: InputStyle,
     Button: ButtonStyle,
+    Editable: EditableStyle,
     FormLabel: FormLabelStyle,
     Heading: HeadingStyle,
     AvatarStyle: AvatarStyle,
