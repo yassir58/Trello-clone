@@ -4,52 +4,51 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  Heading,
   Text,
   Input,
-  InputGroup,
-  InputRightElement,
   Button,
   Stack,
 } from "@chakra-ui/react";
-import {BiSearch} from "react-icons/bi";
+import { BiSolidUser } from "react-icons/bi";
+import ButtonStack from "./ButtonStack";
 
 const InviteToBoard = () => {
   return (
-    <Card borderRadius="xl" shadow="md" marginTop={10} px={2}>
-      <CardHeader mx={-3}>
-        <Heading size="sm">invite to Board</Heading>
-        <Text size="md" color="gray">
+    <Card>
+      <CardHeader mx={"8px"} p="10px" my={"0px"}>
+        <Text fontSize={"12px"}>Invite to Board</Text>
+        <Text fontSize={"12px"} color="gray">
           Search for people you want to invite
         </Text>
       </CardHeader>
-      <CardBody mx={-3} marginTop={-4}>
-        <InputGroup>
-          <InputRightElement pointerEvents="none">
-            <BiSearch />
-          </InputRightElement>
-          <Input
-            shadow="md"
-            bg="white"
-            variant="filled"
-            type="search"
-            placeholder="user"
+      <CardBody m={"9px"} px={0} py={0}>
+        <Input w={"228px"} h={"34px"} variant="outline" placeholder="user" />
+        <Stack
+          borderColor={"lightgray"}
+          borderWidth={"1px"}
+          borderRadius={"8px"}
+          shadow={"md"}
+          p={"12px"}
+        >
+          <ButtonStack
+            onClick={[() => {}]}
+            buttons={["User", "User", "User"]}
+            style="unstyled"
+            width="100%"
+            height="32px"
+            spaceBetween="15px"
+            Icons={[<BiSolidUser />, <BiSolidUser />, <BiSolidUser />]}
           />
-        </InputGroup>
-        <Stack marginTop={7} borderRadius="xl" shadow="md">
-          <Button variant='ghost'>
-            SomeRandomUser
-          </Button>
-          <Button variant='ghost'>
-            SomeRandomUser
-          </Button>
-          <Button variant='ghost'>
-            SomeRandomUser
-          </Button>
         </Stack>
       </CardBody>
-      <CardFooter mx={-3}>
-        <Button mx="auto" px={8} colorScheme="blue" borderRadius="lg">
+      <CardFooter my={"10px"} py={0}>
+        <Button
+          mx="auto"
+          w={"74px"}
+          h={"30px"}
+          variant={"primary"}
+          fontSize={"10px"}
+        >
           Invite
         </Button>
       </CardFooter>

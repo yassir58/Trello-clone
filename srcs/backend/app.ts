@@ -1,6 +1,7 @@
 import helmet from "helmet";
 import path from "path";
 import morgan from "morgan";
+import cors, { CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
 import { rateLimit } from "express-rate-limit";
 import express, { Express, Request, Response, NextFunction } from "express";
@@ -24,6 +25,14 @@ import handleErrors from "./controllers/errorController";
 const app: Express = express();
 
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
+
+const corsOptions: CorsOptions = {
+  origin: ["http://localhost:5173", "http://localhost:3030"],
+  optionsSuccessStatus: 200,
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // Serve static assets
 app.use(express.static(path.join(__dirname, "public")));

@@ -11,6 +11,7 @@ Router.route("/forgotPassword").post(authController.forgotPassword);
 
 Router.use(authController.authorizeRoute);
 
+Router.route("/loggedIn").get(authController.isLoggedIn);
 Router.route("/updatePassword").post(authController.updatePassword);
 Router.route("/logout").post(authController.logout);
 
