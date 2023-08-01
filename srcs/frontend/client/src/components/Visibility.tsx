@@ -6,16 +6,8 @@ import DescriptiveBtnStack from "./DescriptiveBtnStack";
 
 const Visibility = () => {
   return (
-    <Stack
-      spacing={"16px"}
-      p={"12px"}
-      borderRadius={"8px"}
-      border={"solid"}
-      borderWidth={"1px"}
-      borderColor={"lightgray"}
-      boxShadow={"sm"}
-    >
-      <Stack spacing={"2px"}>
+    <Stack>
+      <Stack spacing={"2px"} justifyContent={'center'} alignItems={'center'}>
         <Text as={"b"} fontSize={"12px"} color={"#4f4f4f"}>
           Visibility
         </Text>

@@ -4,15 +4,16 @@ export const createBoard = async (board: Board) => {
 
     const newBoard = {
         title: board.title,
-        cover: board.cover,
-        description: '',
+        coverImage: board.cover,
+        visibility: false,
     }
-    const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0MzUzODA3LTA5YWMtNDFhYS04YjYxLTFhZmY0MjAxMTUzYyIsImlhdCI6MTY5MDg0MzkzNSwiZXhwIjoxNjk4NjE5OTM1fQ.T-PW3IfesG5cY9O8XfTqqPU7YMyIezDQsPqy10mR-Ig; Path=/; Expires=Sun, 29 Oct 2023 22:52:15 GMT; HttpOnly; Secure';
-    const response = await fetch(BACKEND_ENDPOINT, {
+    const jwtToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE0MzUzODA3LTA5YWMtNDFhYS04YjYxLTFhZmY0MjAxMTUzYyIsImlhdCI6MTY5MDg1MjE1MiwiZXhwIjoxNjk4NjI4MTUyfQ.1ljW6KspwUbJ0g5Hnxf-Vlb6JN-WtDMKoZPuYxBw1l8'
+    const response = await fetch(`${BACKEND_ENDPOINT}/boards`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${jwtToken}`,
+
         },
         body: JSON.stringify(newBoard)
     })
