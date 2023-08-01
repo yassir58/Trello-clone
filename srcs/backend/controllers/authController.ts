@@ -9,6 +9,7 @@ import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
 import { userValidator } from "../utils/validator";
 import EncryptText from "../utils/Encyption";
+import Email from "../utils/Email";
 
 const prisma = new PrismaClient();
 
@@ -112,22 +113,11 @@ export const forgotPassword = catchAsync(async (req: Request, res: Response, nex
     },
   });
   const resetLink = `${req.protocol}://${req.hostname}/resetPassword/${token}`;
-  const message = `You can reset your password using the following link:\n${resetLink}`;
-
-  try {
-    sendMail({
-      to: user.email,
-      from: "@support Thullo",
-      subject: "Password reset token (only valid for 10 mins)",
-      text: message,
-    });
-    res.status(200).json({
-      status: "success",
-      message: "Please check your inbox.",
-    });
-  } catch (e) {
-    return next(new AppError("Could not send reset token, please retry another time", 400));
-  }
+  new Email(user, resetLink).sendPasswordReset();
+  res.status(200).json({
+    status: "success",
+    message: "Please check your inbox.",
+  });
 });
 
 export const authorizeRoute = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

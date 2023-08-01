@@ -18,7 +18,7 @@ export const createBoard = catchAsync(async (req: Request, res: Response, next: 
     data: {
       title: value.title,
       coverImage: value.coverImage,
-      visibilty: value.visibilty,
+      visibility: value.visibility,
       author: {
         connect: { id: req.currentUser },
       },
@@ -35,7 +35,7 @@ export const getAllBoards = catchAsync(async (req: Request, res: Response, next:
   const search = req.query.search as string;
   const boards = await prisma.board.findMany({
     where: {
-      visibilty: true,
+      visibility: true,
       title: {
         contains: search ?? undefined,
         mode: "insensitive",

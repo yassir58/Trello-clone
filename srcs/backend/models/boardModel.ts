@@ -7,7 +7,7 @@ const boardSchema = Joi.object({
   title: Joi.string().min(5).max(100).required(),
   coverImage: Joi.string().optional(),
   description: Joi.string().optional(),
-  visibilty: Joi.boolean().optional(),
+  visibility: Joi.boolean().optional(),
 });
 
 export const sendBoardId = async (boardId: string, res: Response) => {
