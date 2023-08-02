@@ -32,21 +32,10 @@ export const createBoard = catchAsync(async (req: Request, res: Response, next: 
 });
 
 export const getAllBoards = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  let boards;
   const search = req.query.search as string;
-  const userId = req.params.userId;
-  if (userId) {
-    const myBoards = await prisma.board.findMany({
-      where: { author: { id: userId } },
-    });
-    const contriBoards = await prisma.board.findMany({
-      where: { users: { some: { id: userId } } },
-    });
-    boards = { ...myBoards, ...contriBoards };
-  } else {
-    boards = await prisma.board.findMany({
+    const boards = await prisma.board.findMany({
       where: {
-        visibility: true,
+        authorId: req.currentUser,
         title: {
           contains: search ?? undefined,
           mode: "insensitive",
@@ -62,7 +51,6 @@ export const getAllBoards = catchAsync(async (req: Request, res: Response, next:
         lists: true,
       },
     });
-  }
 
   res.status(200).json({
     status: "success",

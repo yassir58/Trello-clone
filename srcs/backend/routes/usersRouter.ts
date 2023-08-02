@@ -1,7 +1,6 @@
 import express from "express";
 import * as usersController from "../controllers/usersController";
 import * as authController from "../controllers/authController";
-import boardsRouter from './boardsRouter';
 
 const Router = express.Router();
 
@@ -11,8 +10,6 @@ Router.route("/resetPassword/:token").post(authController.resetPassword);
 Router.route("/forgotPassword").post(authController.forgotPassword);
 
 Router.use(authController.authorizeRoute);
-// Nested Routes
-Router.use("/:userId/boards", boardsRouter);
 
 Router.route("/me").get(authController.isLoggedIn);
 Router.route("/updatePassword").post(authController.updatePassword);
