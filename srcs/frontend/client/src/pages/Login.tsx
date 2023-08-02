@@ -48,7 +48,7 @@ const LoginForm = () => {
           </FormElement>
           <FormElement label="Password:" error={errors.password}>
             <PasswordInput variant="outline" placeholder="Minimum of 6 characters." register={register("password")} />
-            <Link to="/forgotpassword" className="link link-left">
+            <Link to="/forgotpassword" className="link link--right">
               Forgot password ?
             </Link>
           </FormElement>

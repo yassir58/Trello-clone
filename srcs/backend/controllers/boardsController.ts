@@ -32,25 +32,38 @@ export const createBoard = catchAsync(async (req: Request, res: Response, next: 
 });
 
 export const getAllBoards = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  let boards;
   const search = req.query.search as string;
-  const boards = await prisma.board.findMany({
-    where: {
-      visibility: true,
-      title: {
-        contains: search ?? undefined,
-        mode: "insensitive",
+  const userId = req.params.userId;
+  if (userId) {
+    const myBoards = await prisma.board.findMany({
+      where: { author: { id: userId } },
+    });
+    const contriBoards = await prisma.board.findMany({
+      where: { users: { some: { id: userId } } },
+    });
+    boards = { ...myBoards, ...contriBoards };
+  } else {
+    boards = await prisma.board.findMany({
+      where: {
+        visibility: true,
+        title: {
+          contains: search ?? undefined,
+          mode: "insensitive",
+        },
       },
-    },
-    include: {
-      author: {
-        select: { id: true, fullname: true, email: true, profileImage: true },
+      include: {
+        author: {
+          select: { id: true, fullname: true, email: true, profileImage: true },
+        },
+        users: {
+          select: { id: true, fullname: true, email: true, profileImage: true },
+        },
+        lists: true,
       },
-      users: {
-        select: { id: true, fullname: true, email: true, profileImage: true },
-      },
-      lists: true,
-    },
-  });
+    });
+  }
+
   res.status(200).json({
     status: "success",
     boards,
@@ -83,7 +96,7 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
 });
 
 export const updateBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const board = (await checkExistance(req, next, 'board')) as Board;
+  const board = (await checkExistance(req, next, "board")) as Board;
   const { error, value } = boardValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
   const newBoard = await prisma.board.update({
@@ -101,7 +114,7 @@ export const updateBoardById = catchAsync(async (req: Request, res: Response, ne
 });
 
 export const deleteBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const board = (await checkExistance(req, next, 'board')) as Board;
+  const board = (await checkExistance(req, next, "board")) as Board;
 
   await prisma.board.delete({
     where: {
