@@ -1,19 +1,21 @@
-import React, { ReactNode } from "react";
+import React from 'react'
 import { FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
+import { ReactNode } from "react";
+import { FieldError } from "react-hook-form";
 
 interface formProps {
   label: string;
-  errorMessage: string;
+  error: FieldError | undefined;
   children: ReactNode;
 }
 
-const FormElement = ({ children, label, errorMessage }: formProps) => {
+const FormElement = ({ children, label, error }: formProps) => {
   return (
     <>
-      <FormControl isInvalid={false}>
+      <FormControl isInvalid={error ? true : false}>
         <FormLabel variant="primary">{label}</FormLabel>
         {children}
-        <FormErrorMessage>{errorMessage}</FormErrorMessage>
+        <FormErrorMessage paddingBottom={1}>{error?.message}</FormErrorMessage>
       </FormControl>
     </>
   );

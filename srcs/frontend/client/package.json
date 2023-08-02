@@ -17,7 +17,9 @@
     "@chakra-ui/react": "^2.7.1",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.1.1",
     "autoprefixer": "^10.4.14",
+    "axios": "^1.4.0",
     "babel-plugin-macros": "^3.1.0",
     "dotenv": "^16.3.1",
     "framer-motion": "^10.12.18",
@@ -29,8 +31,10 @@
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.45.2",
     "react-router-dom": "^6.11.2",
-    "typescript": "^5.0.4"
+    "typescript": "^5.0.4",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@babel/core": "^7.21.8",
@@ -41,6 +45,7 @@
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "babel-loader": "^9.1.2",
+    "connect-history-api-fallback": "^2.0.0",
     "cson-loader": "^0.1.0",
     "css-loader": "^6.7.3",
     "dotenv-webpack": "^8.0.1",

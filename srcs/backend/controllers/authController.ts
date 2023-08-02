@@ -112,7 +112,7 @@ export const forgotPassword = catchAsync(async (req: Request, res: Response, nex
       passwordResetExpires: new Date(new Date().getTime() + 10 * 60 * 1000).toISOString(),
     },
   });
-  const resetLink = `${req.protocol}://${req.hostname}/resetPassword/${token}`;
+  const resetLink = `${req.protocol}://${req.hostname}:5173/resetpassword/${token}`;
   new Email(user, resetLink).sendPasswordReset();
   res.status(200).json({
     status: "success",
@@ -206,7 +206,7 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
   });
   res.status(200).json({
     status: "success",
-    message: "Password reset was successfull.",
+    message: "Password reset was successful.",
   });
 });
 

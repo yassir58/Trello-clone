@@ -9,8 +9,17 @@ html {
 }
 body {
   height: 100%;
-  
 }
+
+.link {
+  color: #2f80ed;
+  margin: 5px 0;
+  display: block;
+  &--right {
+    float: right;
+  }
+}
+
 $shadow-md-color: rgba(0, 0, 0, 0.2); // Customize the shadow color if needed
 
 @mixin box-shadow-bottom {

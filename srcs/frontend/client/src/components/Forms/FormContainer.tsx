@@ -1,4 +1,4 @@
-import React , { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import {
   Card,
   CardBody,
@@ -12,14 +12,19 @@ import Logo from "./Logo";
 interface FormContainerProps {
   children: ReactNode;
   title: string;
+  submitForm: () => void;
 }
 
-const FormContainer = ({ children, title }: FormContainerProps) => {
+const FormContainer = ({ children, title, submitForm }: FormContainerProps) => {
   return (
     <>
-      <Flex justifyContent="center" marginTop={30}>
-        <form>
-          <Card boxShadow="0px 2px 30px rgba(220,220,220, 0.5)" width="350px" borderRadius={12}>
+      <Flex justifyContent="center">
+        <form onSubmit={submitForm}>
+          <Card
+            boxShadow="0px 2px 30px rgba(220,220,220, 0.5)"
+            width="350px"
+            borderRadius={12}
+          >
             <CardHeader paddingBottom={0}>
               <VStack as="header">
                 <Logo />
