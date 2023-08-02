@@ -83,14 +83,15 @@ export const updatePassword = catchAsync(async (req: Request, res: Response, nex
 });
 
 export const isLoggedIn = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.currentUser)
-    return res.status(401).json({
-      status: "failure",
-      user: null,
-    });
+  const user = await prisma.user.findUnique({
+    where: {
+      id: req.currentUser,
+    },
+    select: { id: true, fullname: true, email: true, profileImage: true },
+  });
   res.status(200).json({
     status: "success",
-    user: req.currentUser,
+    user,
   });
 });
 

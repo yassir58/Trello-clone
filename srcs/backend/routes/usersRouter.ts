@@ -11,7 +11,7 @@ Router.route("/forgotPassword").post(authController.forgotPassword);
 
 Router.use(authController.authorizeRoute);
 
-Router.route("/loggedIn").get(authController.isLoggedIn);
+Router.route("/me").get(authController.isLoggedIn);
 Router.route("/updatePassword").post(authController.updatePassword);
 Router.route("/logout").post(authController.logout);
 
@@ -19,7 +19,7 @@ Router.route("/").get(usersController.getAllUsers);
 
 Router.route("/:id")
   .get(usersController.getUserById)
-  .put(usersController.uploadUserPhoto, usersController.processUserPhoto , usersController.updateUserById)
+  .put(usersController.uploadUserPhoto, usersController.processUserPhoto, usersController.updateUserById)
   .delete(usersController.deleteUserById);
 
 export default Router;

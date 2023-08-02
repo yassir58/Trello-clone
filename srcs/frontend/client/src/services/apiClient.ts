@@ -13,6 +13,10 @@ class apiClient<T> {
   postData = (data: T) => {
     return axiosInstance.post(this.endPoint, data, { withCredentials: true });
   };
+
+  getData = () => {
+    return axiosInstance.get<T>(this.endPoint, { withCredentials: true});
+  }
 }
 
 export default apiClient;

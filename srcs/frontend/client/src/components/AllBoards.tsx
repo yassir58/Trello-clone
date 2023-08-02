@@ -8,7 +8,6 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import {SearchForm} from './header/SearchForm'
-import {ProfileHeader} from './header/ProfileHeader'
 import { SmallLogo } from "./header/SmallLogo";
 // import { NewBoard } from "./Popover";
 import { BiPlus } from "react-icons/bi";
@@ -16,6 +15,9 @@ import { Board, Boards } from "../context/ContextScheme";
 import { BoardCard } from "./ui-elements/Media";
 import { Container } from "./ui-elements/Wrappers";
 import { ModalButtonWrapper } from "./ui-elements/Modal";
+import ProfileMenu from "./Menu/ProfileMenu";
+import useAuth from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
 interface AllBoardsProps {
 
 }
@@ -27,8 +29,9 @@ export interface BoardProps {
 export const AllBoards: React.FC<AllBoardsProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [userBoards, setUserBoards] = useState<Board[]>([])
-
-
+  const { auth } = useAuth();
+  
+  if (!auth.loggedIn) return <Navigate to="/login" />;
   return (
     <Stack mt="120px">
       <Box className='header'>
@@ -38,7 +41,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
         <SmallLogo />
         <HStack spacing={3}>
           <SearchForm />
-          <ProfileHeader />
+          <ProfileMenu />
         </HStack>
       </Container>
 

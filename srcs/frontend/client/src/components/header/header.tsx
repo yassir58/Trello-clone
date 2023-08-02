@@ -4,13 +4,14 @@ import "../../styles/app.scss";
 import { Container } from "../ui-elements/Wrappers";
 import {SmallLogo} from './SmallLogo'
 import { SearchForm } from "./SearchForm";
-import {ProfileHeader} from './ProfileHeader'
 import { Nav } from "./Nav";
+import ProfileMenu from "../Menu/ProfileMenu";
 interface HeaderProps {}
 
 
 
 const Header: React.FC<HeaderProps> = () => {
+
   return (
     <Box className="header">
       <Container variant="mdSpaceBetween">
@@ -20,7 +21,7 @@ const Header: React.FC<HeaderProps> = () => {
         </HStack>
         <HStack spacing={5}>
           <SearchForm />
-          <ProfileHeader />
+          <ProfileMenu/>
         </HStack>
       </Container>
     </Box>

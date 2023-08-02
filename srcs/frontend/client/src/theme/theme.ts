@@ -9,6 +9,30 @@ const config: ThemeConfig = {
   initialColorMode: "light",
 };
 
+const MenuStyle: ComponentStyleConfig = {
+  variants: {
+    primary: {
+      list: {
+        padding: "2",
+        borderRadius: "12px",
+        border: "1px solid #E0E0E0",
+        backgroundColor: "#fff",
+        boxShadow: "0px 2px 8px rgba(220,220,220, 0.8)",
+      },
+      item: {
+        color: "#4F4F4F",
+        borderRadius: "12px",
+        _hover: {
+          bg: "#F2F2F2",
+        },
+        _focus: {
+          bg: "#F3F3F3",
+        },
+      },
+    },
+  },
+};
+
 const FormLabelStyle: ComponentStyleConfig = {
   // style object for base or default style
   baseStyle: {
@@ -44,11 +68,12 @@ const EditableStyle: ComponentStyleConfig = {
         outline: "none",
       },
       _focus: {
-        outline:'1px solid #5497f0',
+        outline: "1px solid #5497f0",
       },
     },
   },
 };
+
 const ButtonStyle: ComponentStyleConfig = {
   // style object for base or default style
   // styles for different sizes ("sm", "md", "lg")
@@ -203,6 +228,13 @@ const ButtonStyle: ComponentStyleConfig = {
         color: "#fff",
       },
     },
+    menuButton: {
+      padding: "3px 8px",
+      color: "#333",
+      borderRadius: "8px",
+      fontFamily: "Poppins",
+      fontWeight: "400",
+    },
   },
   // default values for 'size', 'variant' and 'colorScheme'
   defaultProps: {
@@ -280,11 +312,13 @@ const HeadingStyle: ComponentStyleConfig = {
   },
 };
 
+
 const AvatarStyle = defineStyleConfig({
   baseStyle: {
     width: "42px",
     height: "42px",
     borderRadius: "lg",
+    fontSize: "12px",
     objectFit: "cover",
   },
   sizes: {},
@@ -398,6 +432,7 @@ const theme = extendTheme({
         fontFamily: "Poppins",
       },
     },
+    Menu: MenuStyle,
   },
 });
 
