@@ -1,13 +1,6 @@
-import React, {useState} from "react";
-import {
-  HStack,
-  Heading,
-  Stack,
-  Text,
-  Box,
-  useDisclosure,
-} from "@chakra-ui/react";
-import {SearchForm} from './header/SearchForm'
+import React, { useEffect, useState } from "react";
+import { HStack, Heading, Stack, Text, Box, useDisclosure } from "@chakra-ui/react";
+import { SearchForm } from "./header/SearchForm";
 import { SmallLogo } from "./header/SmallLogo";
 // import { NewBoard } from "./Popover";
 import { BiPlus } from "react-icons/bi";
@@ -18,9 +11,8 @@ import { ModalButtonWrapper } from "./ui-elements/Modal";
 import ProfileMenu from "./Menu/ProfileMenu";
 import useAuth from "../hooks/useAuth";
 import { Navigate } from "react-router-dom";
-interface AllBoardsProps {
-
-}
+import Loading from "../pages/Loading";
+interface AllBoardsProps {}
 export interface BoardProps {
   id: number;
   title: string;
@@ -28,23 +20,27 @@ export interface BoardProps {
 }
 export const AllBoards: React.FC<AllBoardsProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [userBoards, setUserBoards] = useState<Board[]>([])
+  const [userBoards, setUserBoards] = useState<Board[]>([]);
+  const [loading, setLoading] = useState(true);
   const { auth } = useAuth();
-  
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
+
+  if (loading) return <Loading />;
   if (!auth.loggedIn) return <Navigate to="/login" />;
   return (
     <Stack mt="120px">
-      <Box className='header'>
-      <Container
-        variant='mdSpaceBetween'
-      >
-        <SmallLogo />
-        <HStack spacing={3}>
-          <SearchForm />
-          <ProfileMenu />
-        </HStack>
-      </Container>
-
+      <Box className="header">
+        <Container variant="mdSpaceBetween">
+          <SmallLogo />
+          <HStack spacing={3}>
+            <SearchForm />
+            <ProfileMenu />
+          </HStack>
+        </Container>
       </Box>
       <Stack>
         <AllBoardsHeader
@@ -52,7 +48,6 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
           onClose={onClose}
           onOpen={onOpen}
           stateObject={{ state: userBoards, setState: setUserBoards }}
-
         />
         <UserBoards Boards={userBoards || []} />
       </Stack>
@@ -68,9 +63,7 @@ interface AllBoardsHeaderProps {
   globalStateSetter?: any;
 }
 
-export const AllBoardsHeader: React.FC<AllBoardsHeaderProps> = ({
-
-}) => {
+export const AllBoardsHeader: React.FC<AllBoardsHeaderProps> = ({}) => {
   // const actionHandler = (title: string) => {
   //   const newBoard: Board = {
   //       id: Math.floor(Math.random() * 1000),
@@ -82,12 +75,9 @@ export const AllBoardsHeader: React.FC<AllBoardsHeaderProps> = ({
   //   stateObject?.setState([...stateObject.state, newBoard]);
   // };
   return (
-    <Container variant='smallSpaceBetween'>
-      <Heading variant='HeaderTitle'>All Boards</Heading>
-      <ModalButtonWrapper 
-        variant='primary'
-        icon={<BiPlus />}
-        value='Create Board'/>
+    <Container variant="smallSpaceBetween">
+      <Heading variant="HeaderTitle">All Boards</Heading>
+      <ModalButtonWrapper variant="primary" icon={<BiPlus />} value="Create Board" />
     </Container>
   );
 };
@@ -96,25 +86,25 @@ interface UserBoardsProps {
   Boards: Board[];
 }
 
-export const UserBoards: React.FC<UserBoardsProps> = ({Boards}) => {
- console.log (Boards)
- return <div>
-    <Stack  mt="120px" mx='auto'>
-   
-    <HStack w='90%' mx='auto' justify='flex-start' spacing={4} flexWrap='wrap'>
-      {
-        Boards.length ?
-        Boards?.map((board:Board) => {
-  
-          return (
-            <BoardCard Board={board} />
-          )
-        }) : 
-        <Container variant='placeHolder'>
-          <Text color={'#828282'}  mx='auto' my='auto' fontWeight='bold' fontSize='lg'>You don't have any boards yet</Text>
-        </Container>
-      }
-    </HStack>
-    </Stack>
-  </div>;
+export const UserBoards: React.FC<UserBoardsProps> = ({ Boards }) => {
+  console.log(Boards);
+  return (
+    <div>
+      <Stack mt="120px" mx="auto">
+        <HStack w="90%" mx="auto" justify="flex-start" spacing={4} flexWrap="wrap">
+          {Boards.length ? (
+            Boards?.map((board: Board) => {
+              return <BoardCard Board={board} />;
+            })
+          ) : (
+            <Container variant="placeHolder">
+              <Text color={"#828282"} mx="auto" my="auto" fontWeight="bold" fontSize="lg">
+                You don't have any boards yet
+              </Text>
+            </Container>
+          )}
+        </HStack>
+      </Stack>
+    </div>
+  );
 };
