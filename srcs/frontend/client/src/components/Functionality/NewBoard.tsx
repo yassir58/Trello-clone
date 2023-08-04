@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Stack, HStack, Button, Input, Text } from "@chakra-ui/react";
 import { CloseButton } from "./CloseButton";
 import { EditCardCover } from "../ui-elements/EditCardCover";
-import { FaUnlockKeyhole, FaImage } from "react-icons/fa6";
+import { FaUnlockKeyhole } from "react-icons/fa6";
 import { BiPlus } from "react-icons/bi";
 import { useMutation } from "react-query";
 import { createBoard } from "./createBoard";
-import { Board } from "../../context/ContextScheme";
+import { Board , AppContext} from "../../context/ContextScheme";
+import {BoardCover} from '../Popover'
 interface newBoardProps {
   action?: any;
   onClose: () => void;
@@ -14,44 +15,51 @@ interface newBoardProps {
 
 export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
   const [title, setTitle] = useState<string>("");
+  const { publicBoards, setPublicBoards } = useContext(AppContext);
+  const [coverImage, setCoverImage] = useState<string>("");
 
+  // Mutation hook call
   const newBoardMutation = useMutation({
     mutationFn: createBoard,
+    onSuccess: (data) => {
+      const tmpBoards = publicBoards?.slice();
+      tmpBoards?.push(data.board);
+      setPublicBoards && setPublicBoards(tmpBoards || []);
+    },
+    onError: (error) => console.log("error from mutation :", error),
   });
+
+
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const handleOnSubmit = () => {
-    
-    const newBoard:Board = {
-      private: false,
+    const newBoard: Board = {
+      visibility: false,
       title: title,
-      cover: `https://source.unsplash.com/random?sig=${Math.random() + 1}`,
-    }
-    // action(title);
-    // console.log  ('creating new board')
+      coverImage: coverImage,
+    };
     newBoardMutation.mutate(newBoard);
   };
+
+  if (newBoardMutation.isIdle) console.log("Mutation is Idle");
 
   return (
     <Stack spacing={4} justify="center">
       <CloseButton onClose={onClose} />
       <EditCardCover
-        image={`https://source.unsplash.com/random?sig=${Math.random() + 1}`}
+        image={coverImage}
       />
 
-      <Input variant='outline' placeholder="Add board title" w="96%" onChange={handleOnchange} />
+      <Input
+        variant="outline"
+        placeholder="Add board title"
+        w="96%"
+        onChange={handleOnchange}
+      />
       <HStack spacing={4} justifyContent="center">
-        <Button variant="secondary">
-          <HStack spacing={3}>
-            <FaImage />
-
-            <Text fontSize="md" fontWeight="normal">
-              Cover
-            </Text>
-          </HStack>
-        </Button>
+        <BoardCover boardCoverSetter={setCoverImage} />
 
         <Button variant="secondary">
           <HStack spacing={3}>

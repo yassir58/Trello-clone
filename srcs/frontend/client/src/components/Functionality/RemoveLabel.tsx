@@ -4,7 +4,7 @@ import { Card } from "../../context/ContextScheme";
 export const RemoveLabel = (
   cards: Card[] | undefined,
   setCards: React.Dispatch<React.SetStateAction<Card[]>> |  undefined,
-  cardId: number,
+  cardId: string,
   labelId: number
 ) => {
   let temp = cards?.slice();

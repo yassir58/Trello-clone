@@ -12,8 +12,7 @@ import {
 import { Board } from "../../context/ContextScheme";
 import { Container } from "./Wrappers";
 import { FaPlus, FaPaperclip, FaComment } from "react-icons/fa6";
-
-
+import { Link } from "react-router-dom";
 interface CardInfoProps {
   value: string;
   icon: any;
@@ -28,7 +27,6 @@ interface ProfileCardProps {
     joined: string;
   };
 }
-
 
 export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
   return (
@@ -95,13 +93,13 @@ interface BoardCardProps {
 }
 export const BoardCard: React.FC<BoardCardProps> = ({ Board }) => {
   return (
-    <Container variant="Card">
-      <Stack spacing={2} justify="center" align="center">
-        {Board.cover && <CardCover image={Board.cover} />}
-        <Heading size="md" fontWeight="normal">
-          {Board.title}
-        </Heading>
-      </Stack>
-    </Container>
+    <Link to={`/boards/${Board.id}`}>
+      <Container variant="Card">
+        <Stack spacing={2}>
+          {Board.coverImage && <CardCover image={Board.coverImage} />}
+          <Heading variant="cardTitle">{Board.title}</Heading>
+        </Stack>
+      </Container>
+    </Link>
   );
 };

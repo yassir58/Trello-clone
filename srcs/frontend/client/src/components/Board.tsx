@@ -19,8 +19,13 @@ import {   List } from "../context/ContextScheme";
 import { CardList } from "./CardList";
 import {Container} from "./ui-elements/Wrappers";
 import { PopOverWrapper } from "./ui-elements/PopOver";
+import { useMutation } from "react-query";
+import {createList} from "./Functionality/createList" ;
+import { useQuery, useQueryClient } from "react-query";
+import {BACKEND_ENDPOINT, JWT} from "../data/DataFetching" 
+import Cookies from 'universal-cookie';
 interface BoardProps {
-  // BoardId:number
+  BoardId:string
 }
 
 interface BoardMenuBarProps {
@@ -28,6 +33,9 @@ interface BoardMenuBarProps {
 }
 
 export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({}) => {
+
+  
+  
   return (
     <Stack>
       <Container variant='mdSpaceBetween'>
@@ -62,19 +70,57 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({}) => {
   );
 };
 
-export const Board: React.FC<BoardProps> = () => {
+export const Board: React.FC<BoardProps> = ({
+  BoardId
+}) => {
 
   const [lists, setLists] = useState<List[]>([])
   const [addList, setAddList] = useState<boolean>(false);
-
+  const queryClient = useQueryClient();
   const handleToggle = () => setAddList(!addList);
+
+  const cookies = new Cookies();
+  cookies.set('boardId', BoardId, { path: `/boards/${BoardId}` });
+  console.log(cookies.get('boardId')); // Pacman
+  
+  
+  const listsMutation = useMutation ({
+    mutationFn:createList,
+    onSuccess:(data)=>{
+      console.log (data)
+      queryClient.invalidateQueries(['lists', BoardId])
+      handleToggle();
+    }
+  })
+
+  const {isLoading} = useQuery (['lists', BoardId], async () => {
+    const response = await fetch(`${BACKEND_ENDPOINT}/lists`, {
+      method: 'GET',
+      headers: {
+          'credentials': 'include',
+          'Authorization': `Bearer ${JWT}`,
+          'Cookie':`boardId=${BoardId}`
+      }})
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+  }, {
+    staleTime: 30 * 60 * 1000, // 30 minutes in milliseconds
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+      console.log('data from query :', data)
+      setLists(data.lists)
+    },
+    onError: (error) => {console.log('error from query :', error)},
+  })
+
   const handleAddList = (title:string) => {
-    const tmp:List[] = lists.slice();
-    tmp.push({id:new Date().getTime (),title:title, cards:[], creationDate:"2021-05-01T00:00:00.000Z", editDate:"2021-05-01T00:00:00.000Z", boardId:1});
-    setLists(tmp);
-    handleToggle();
+    listsMutation.mutate ({name:title, boardId:BoardId})
   }
   
+  if (isLoading) return (<div>Loading...</div>)
   return (
     <Stack mt="90px">
       <BoardMenuBar  />

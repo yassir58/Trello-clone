@@ -3,14 +3,16 @@ import {
   Stack,
   chakra,
   Heading,
+
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
+import React, { useState, useContext, useEffect} from "react";
 import { AvatarWrapper } from "../ui-elements/Wrappers";
-import { Card } from "../../context/ContextScheme";
-import { useQuery } from "react-query";
-import { API_KEY, endpoint } from "../../data/DataFetching";
+import { Card, AppContext} from "../../context/ContextScheme";
+
 import { SearchInput } from "../ui-elements/SearchInput";
-interface ChangeCoverProps {
+export interface ChangeCoverProps {
+  boardCover?:  boolean;
+  boardCoverSetter?: React.Dispatch<React.SetStateAction<string>>;
   card?: Card;
   cards?: Card[];
   setCards?: React.Dispatch<React.SetStateAction<Card[]>>;
@@ -20,7 +22,7 @@ const setCoverPhoto = (
   photo: string,
   state: Card[],
   stateSetter: React.Dispatch<React.SetStateAction<Card[]>>,
-  cardId: number
+  cardId: string
 ) => {
   const tmp: Card[] = state.slice();
   const index = tmp.findIndex((card) => card.id == cardId);
@@ -29,33 +31,21 @@ const setCoverPhoto = (
   stateSetter(tmp);
 };
 
+
 export const ChangeCover: React.FC<ChangeCoverProps> = ({
+  boardCover = false ,
+  boardCoverSetter,
   card,
   cards,
   setCards,
 }) => {
-  const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
-  const count = 12;
+  
   const [keyword, setKeyWord] = useState<string>("");
-  const { isLoading, isError, error } = useQuery("coverQuery", async () => {
-    fetch(`${endpoint}photos/random/?client_id=${API_KEY}&count=${count}`)
-      .then((data) => data.json())
-      .then((photos) => {
-        const tmp = coverPhotos.slice();
-        photos.forEach((element: any) => {
-          tmp.push(element.urls.small);
-        });
-        setCoverPhotos(tmp);
-      });
-  });
-  if (isLoading) console.log("Loading photos ....");
-  else if (isError) console.log(`Failed to load photo because : ${error}`);
-  else {
-    console.log(`Data loaded succesfully :`);
-    console.table(coverPhotos);
-  }
+  const {coverPhotos} = useContext (AppContext)
+
   useEffect(() => {
-    console.log("card : ", card);
+    if (boardCover)
+      boardCoverSetter && boardCoverSetter (coverPhotos![0])
   }, []);
   return (
     <div>
@@ -72,11 +62,13 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
               src={photo}
               variant="clickable"
               onClick={() => {
+                boardCover ?
+                boardCoverSetter && boardCoverSetter(photo) :
                 setCoverPhoto(
                   photo,
                   cards || [],
                   setCards || (() => {}),
-                  card?.id || 0
+                  card?.id || ''
                 );
               }}
             />

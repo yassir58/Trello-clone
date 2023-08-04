@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useContext} from "react";
 import {
   HStack,
   Heading,
@@ -16,6 +16,9 @@ import { Board, Boards } from "../context/ContextScheme";
 import { BoardCard } from "./ui-elements/Media";
 import { Container } from "./ui-elements/Wrappers";
 import { ModalButtonWrapper } from "./ui-elements/Modal";
+import { AppContext } from "../context/ContextScheme";
+import { useQuery } from "react-query";
+import { BACKEND_ENDPOINT, JWT } from "../data/DataFetching";
 interface AllBoardsProps {
 
 }
@@ -26,9 +29,31 @@ export interface BoardProps {
 }
 export const AllBoards: React.FC<AllBoardsProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [userBoards, setUserBoards] = useState<Board[]>([])
+  const {publicBoards, setPublicBoards} = useContext (AppContext)
 
+  const {isLoading} = useQuery(['boards'], async () => {
+    const response = await fetch(`${BACKEND_ENDPOINT}/boards`, {
+      method: 'GET',
+      headers: {
+          'Authorization': `Bearer ${JWT}`,
+      }})
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+  }, {
+    staleTime: 30 * 60 * 1000, // 30 minutes in milliseconds
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    onSuccess: (data) => {
+     
+      console.log (`data from query : ${JSON.stringify(data.boards)}` )
+      setPublicBoards && setPublicBoards(data.boards)
+    },
+    onError: (error) => {console.log('error from query :', error)},
+  })
 
+  if (isLoading) return <div>Loading...</div>
   return (
     <Stack mt="120px">
       <Box className='header'>
@@ -48,10 +73,10 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
           isOpen={isOpen}
           onClose={onClose}
           onOpen={onOpen}
-          stateObject={{ state: userBoards, setState: setUserBoards }}
+          stateObject={{ state: publicBoards!, setState: setPublicBoards! }}
 
         />
-        <UserBoards Boards={userBoards || []} />
+        <UserBoards Boards={publicBoards || []} />
       </Stack>
     </Stack>
   );
@@ -94,7 +119,6 @@ interface UserBoardsProps {
 }
 
 export const UserBoards: React.FC<UserBoardsProps> = ({Boards}) => {
- console.log (Boards)
  return <div>
     <Stack  mt="120px" mx='auto'>
    

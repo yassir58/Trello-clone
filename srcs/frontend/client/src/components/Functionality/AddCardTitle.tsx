@@ -2,7 +2,7 @@ import { Card } from "../../context/ContextScheme";
 export const AddCardTitle = (
   cards: Card[] | undefined,
   setCards: React.Dispatch<React.SetStateAction<Card[]>> | undefined,
-  cardId: number,
+  cardId: string ,
   title: string
 ) => {
   let temp = cards?.slice();

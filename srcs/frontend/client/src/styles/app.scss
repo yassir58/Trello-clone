@@ -41,14 +41,14 @@ $shadow-md-color: rgba(0, 0, 0, 0.2); // Customize the shadow color if needed
   width: 100%;
   background-color: white;
   @include box-shadow-bottom;
-  @media screen and (max-width: 1200px) {
-    // Styles for all children of parent element at or below 768px width
+  // @media screen and (max-width: 1200px) {
+  //   // Styles for all children of parent element at or below 768px width
 
-    > * {
-      display: none;
-      visibility: hidden;
-    }
-  }
+  //   > * {
+  //     display: none;
+  //     visibility: hidden;
+  //   }
+  // }
 }
 
 .BoardSection {

@@ -1,5 +1,6 @@
-import React, { createContext} from "react";
-
+import React, { createContext, useState } from "react";
+import { useQuery } from "react-query";
+import { API_KEY, endpoint } from "../data/DataFetching";
 interface Props {
   children: React.ReactNode;
 }
@@ -9,24 +10,24 @@ export interface Boards {
   setState: React.Dispatch<React.SetStateAction<Board[]>>;
 }
 export interface User {
- state: {
-  id: number;
-  userName: string;
-  Boards: Boards;
-  Comments: Comment[];
-  profilePicture?: string;
-  email: string;
-} | null;
+  state: {
+    id: string;
+    userName: string;
+    Boards: Boards;
+    Comments: Comment[];
+    profilePicture?: string;
+    email: string;
+  } | null;
   setState?: any;
 }
 
 interface Comment {
-  id: number;
+  id: string;
   text: string;
   createdAt: string;
   editedAt: string;
-  cardId: number;
-  userId: number;
+  cardId: string;
+  userId: string;
 }
 interface Attachment {
   id: String;
@@ -34,17 +35,16 @@ interface Attachment {
   path: String;
   createdAt: string;
   updatedAt: string;
-  cardId: number;
+  cardId: string;
 }
 interface Checklist {}
 
 export interface List {
-  id: number;
-  title: string;
-  cards: Card[];
-  creationDate: string;
-  editDate: string;
-  boardId: number;
+  id?: string;
+  name: string;
+  creationDate?: string;
+  updateDate?: string;
+  boardId: string;
 }
 
 export interface Label {
@@ -52,7 +52,7 @@ export interface Label {
   color: string;
 }
 export interface Card {
-  id: number;
+  id: string;
   title: string;
   description?: string;
   cover?: string;
@@ -63,21 +63,18 @@ export interface Card {
   checklists?: Checklist[]; // not the correct type but will do for now
   creationDate: string;
   editDate: string;
-  listId: number;
-  BoardId: number;
+  listId: string;
+  BoardId: string;
 }
 
 export interface Board {
-    id?: number;
-    title: string;
-    cover?: string;
-    private: boolean;
-    members?: User[];
-    lists?: List[];
-    Owner?: User;
-    OwnerId?: number;
-    creationDate?: string;
-    editDate?: string;
+  id?: string;
+  title: string;
+  coverImage?: string;
+  visibility: boolean;
+  authorId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 export interface GlobalContext {
   LogedInUser?: User | null;
@@ -88,25 +85,48 @@ export interface GlobalContext {
   Users?: User[] | null;
 }
 export interface GlobalState {
-
+  publicBoards?: Board[];
+  setPublicBoards?: React.Dispatch<React.SetStateAction<Board[]>>;
+  coverPhotos?: string[];
 }
 export const AppContext = createContext<GlobalState>({});
 
 export const GlobalContext: React.FC<Props> = ({ children }) => {
-  // const [publicBoards, setPublicBoards] = useState<Board[]>([]);
-  // const [userBoards, setUserBoards] = useState<Board[]>([]);
-  // const [LogedInUser, setLogedInUser] = useState<User['state'] | null>(null);
-  // const [globalState, setGlobalState] = useState<GlobalContext>({
-  //   LogedInUser: null,
-  //   PublicBoards: null,
-  //   Users: null,
-  // });
+  const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
+  const count = 12;
+  const [publicBoards, setPublicBoards] = useState<Board[]>([]);
+  const { isLoading } = useQuery(
+    "coverQuery",
+    async () => {
+      const res = await fetch(
+        `${endpoint}photos/random/?client_id=${API_KEY}&count=${count}`
+      );
 
- 
-  
+      const photos = await res.json();
+      return photos;
+    },
+    {
+      staleTime: 25 * 60 * 1000,
+      onSuccess: (data) => {
+        const tmp: string[] = [];
+        data.forEach((element: any) => {
+          tmp.push(element.urls.small);
+        });
+        setCoverPhotos(tmp);
+      },
+      onError: (error) => {
+        console.log("error from query :", error);
+      },
+    }
+  );
+
+  if (isLoading) console.log("cover loading ...");
+
   return (
     <div>
-      <AppContext.Provider value={{}}>
+      <AppContext.Provider
+        value={{ publicBoards, setPublicBoards, coverPhotos }}
+      >
         {children}
       </AppContext.Provider>
     </div>

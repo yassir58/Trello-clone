@@ -4,9 +4,10 @@ import { FaUserGroup } from "react-icons/fa6";
 import { MdLabel } from "react-icons/md";
 import { AddLable } from "./Functionality/AddLable";
 import InviteToBoard from "./InviteToBoard";
-import { ChangeCover } from "./Functionality/ChangeCover";
+import { ChangeCover, ChangeCoverProps } from "./Functionality/ChangeCover";
 import { PopOverWrapper } from "./ui-elements/PopOver";
 import { Card } from "../context/ContextScheme";
+
 
 interface PopOverProps {
   card?: Card ;
@@ -64,3 +65,21 @@ export const CoverPopOver: React.FC<PopOverProps> = ({
     </PopOverWrapper>
   );
 };
+
+export const BoardCover: React.FC<ChangeCoverProps> = ({
+boardCoverSetter
+}) =>{
+
+  
+  return (
+    <PopOverWrapper
+      value="Cover"
+      icon={<FaImage />}
+      triggerVariant="largeSecondary"
+      size="2xs"
+      placement="left"
+    >
+      <ChangeCover boardCover={true} boardCoverSetter={boardCoverSetter} />
+    </PopOverWrapper>
+  )
+}

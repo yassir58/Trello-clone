@@ -6,17 +6,22 @@ import {SmallLogo} from './SmallLogo'
 import { SearchForm } from "./SearchForm";
 import {ProfileHeader} from './ProfileHeader'
 import { Nav } from "./Nav";
-interface HeaderProps {}
+import { Board } from "../../context/ContextScheme";
+export interface HeaderProps {
+  Board:Board
+}
 
 
 
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<HeaderProps> = ({
+  Board
+}) => {
   return (
     <Box className="header">
       <Container variant="mdSpaceBetween">
         <HStack spacing={8}>
           <SmallLogo />
-          <Nav />
+          <Nav Board={Board} />
         </HStack>
         <HStack spacing={5}>
           <SearchForm />

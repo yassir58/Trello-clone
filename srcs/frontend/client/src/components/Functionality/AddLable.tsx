@@ -28,7 +28,7 @@ interface AddLableProps {
 const createNewLabel = (
   cards: Card[],
   setCards: React.Dispatch<React.SetStateAction<Card[]>>,
-  cardId: number,
+  cardId: string,
   value: string,
   color: string
 ) => {
@@ -127,7 +127,7 @@ export const AddLable: React.FC<AddLableProps> = ({
         </HStack>
         <Button size="md" variant="primary" mx="auto" onClick={()=>{
           addLabel ()
-          createNewLabel (cards!, setCards!, card!.id, value, color)
+          createNewLabel (cards!, setCards!, card!.id || '', value, color)
         }}>
           Add
         </Button>
