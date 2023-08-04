@@ -3,9 +3,9 @@ import {HStack, Box } from "@chakra-ui/react";
 import "../../styles/app.scss";
 import { Container } from "../ui-elements/Wrappers";
 import {SmallLogo} from './SmallLogo'
-import { SearchForm } from "./SearchForm";
 import { Nav } from "./Nav";
 import ProfileMenu from "../Menu/ProfileMenu";
+import BoardSearch from "../BoardSearch";
 interface HeaderProps {}
 
 
@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = () => {
           <Nav />
         </HStack>
         <HStack spacing={5}>
-          <SearchForm />
+          <BoardSearch />
           <ProfileMenu/>
         </HStack>
       </Container>

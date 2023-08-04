@@ -1,9 +1,4 @@
-import {
-  extendTheme,
-  ThemeConfig,
-  ComponentStyleConfig,
-  defineStyleConfig,
-} from "@chakra-ui/react";
+import { extendTheme, ThemeConfig, ComponentStyleConfig, defineStyleConfig } from "@chakra-ui/react";
 
 const config: ThemeConfig = {
   initialColorMode: "light",
@@ -14,6 +9,26 @@ const MenuStyle: ComponentStyleConfig = {
     primary: {
       list: {
         padding: "2",
+        borderRadius: "12px",
+        border: "1px solid #E0E0E0",
+        backgroundColor: "#fff",
+        boxShadow: "0px 2px 8px rgba(220,220,220, 0.8)",
+      },
+      item: {
+        color: "#4F4F4F",
+        borderRadius: "12px",
+        _hover: {
+          bg: "#F2F2F2",
+        },
+        _focus: {
+          bg: "#F3F3F3",
+        },
+      },
+    },
+    search: {
+      list: {
+        padding: "2",
+        width: "400px",
         borderRadius: "12px",
         border: "1px solid #E0E0E0",
         backgroundColor: "#fff",
@@ -93,7 +108,7 @@ const ButtonStyle: ComponentStyleConfig = {
 
       _active: {
         backgroundColor: "#fff",
-        outline: "2px solid #5497f0",
+        outline: "1px solid #5497f0",
         color: "primary",
       },
     },
@@ -235,6 +250,24 @@ const ButtonStyle: ComponentStyleConfig = {
       fontFamily: "Poppins",
       fontWeight: "400",
     },
+    private: {
+      padding: "8px 14px",
+      backgroundColor: "#F2F2F2",
+      borderRadius: "8px",
+      color: "#828282",
+      fontFamily: "Poppins",
+      fontWeight: "400",
+      fontSize: "15px",
+      letterSpacing: "-0.42px",
+      _hover: {
+        backgroundColor: "#D9D9D9",
+      },
+
+      _active: {
+        backgroundColor: "#D1D1D1",
+        color: "#828282",
+      },
+    },
   },
   // default values for 'size', 'variant' and 'colorScheme'
   defaultProps: {
@@ -312,7 +345,6 @@ const HeadingStyle: ComponentStyleConfig = {
   },
 };
 
-
 const AvatarStyle = defineStyleConfig({
   baseStyle: {
     width: "42px",
@@ -334,11 +366,61 @@ const AvatarStyle = defineStyleConfig({
     },
   },
 });
+
+const HStackStyle = defineStyleConfig({
+  variants: {
+    ListItemButton: {
+      borderBottom: "1px solid #f2f2f2",
+      padding: "5px",
+      marginY: "5px",
+      borderRadius: "8px",
+      justifyContent: "space-between",
+      "&:hover": {
+        backgroundColor: "#F5F5F5",
+        cursor: "pointer"
+      },
+    },
+  },
+});
+
 const BoxStyle = defineStyleConfig({
   // style object for base or default style
   baseStyle: {},
   sizes: {},
   variants: {
+    searchContainer: {
+      padding:"10px",
+      paddingBottom:"0px",
+      width:"400px",
+      borderRadius:"12px",
+      bgColor:"#fff",
+      border:"1px solid #E0E0E0",
+      position:"absolute",
+      boxShadow:"0px 2px 8px rgba(220,220,220, 0.8)"
+    },
+    ListContainer: {
+      padding: "5px",
+      overflow: "auto",
+      maxHeight: "400px",
+      "&::-webkit-scrollbar": {
+        width: "8px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "#E0E0E0",
+        borderRadius: "8px",
+      },
+      "&::-webkit-scrollbar-thumb:hover": {
+        backgroundColor: "#555",
+      },
+      "&::-webkit-scrollbar-track": {
+        backgroundColor: "#f1f1f1",
+      },
+    },
+    searchButton: {
+      "&:hover": {
+        backgroundColor: "red",
+      },
+    },
     smallSpaceBetween: {
       display: "flex",
       margin: "10px auto",
@@ -433,6 +515,7 @@ const theme = extendTheme({
       },
     },
     Menu: MenuStyle,
+    HStack: HStackStyle,
   },
 });
 

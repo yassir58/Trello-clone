@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { HStack, Heading, Stack, Text, Box, useDisclosure } from "@chakra-ui/react";
-import { SearchForm } from "./header/SearchForm";
 import { SmallLogo } from "./header/SmallLogo";
 // import { NewBoard } from "./Popover";
 import { BiPlus } from "react-icons/bi";
@@ -12,6 +11,7 @@ import ProfileMenu from "./Menu/ProfileMenu";
 import useAuth from "../hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import Loading from "../pages/Loading";
+import BoardSearch from "./BoardSearch";
 interface AllBoardsProps {}
 export interface BoardProps {
   id: number;
@@ -37,7 +37,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
         <Container variant="mdSpaceBetween">
           <SmallLogo />
           <HStack spacing={3}>
-            <SearchForm />
+            <BoardSearch />
             <ProfileMenu />
           </HStack>
         </Container>

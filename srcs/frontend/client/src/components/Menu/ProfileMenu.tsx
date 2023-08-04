@@ -20,6 +20,7 @@ const ProfileMenu = () => {
   const handleLogout = () => {
     setAuth({ loggedIn: false, token: null, user: null });
     localStorage.removeItem("jwtToken");
+    //! Still should make request to backend to logout
     navigate("/login");
   };
 
