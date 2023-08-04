@@ -69,7 +69,7 @@ export const getUserById = catchAsync(async (req: Request, res: Response, next: 
 
 export const updateUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   //! Should use check existing function here to validate the existance of the user and only apply this action
-  const id = req.params.id;
+  const id = req.currentUser;
   const { fullname, email } = req.body;
   const user = await prisma.user.update({
     where: {

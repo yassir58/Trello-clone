@@ -60,9 +60,11 @@ const sendAuthToken = async (res: Response, next: NextFunction, userId: string) 
 export const updatePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
 
-  if (!oldPassword || !newPassword || !confirmPassword)
+  if (oldPassword && newPassword && confirmPassword)
     return next(new AppError("Please provide the old and new password.", 400));
 
+  if (newPassword != confirmPassword)
+    return next(new AppError("The new and confirm passwords has to match.", 400));
   const hashedPassword = await hashPassword(newPassword);
   const user = await prisma.user.findUnique({
     where: {
@@ -79,6 +81,10 @@ export const updatePassword = catchAsync(async (req: Request, res: Response, nex
     data: {
       password: hashedPassword,
     },
+  });
+  res.status(200).json({
+    status: "success",
+    message: "User password updated successfully."
   });
 });
 
