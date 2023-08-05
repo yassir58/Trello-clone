@@ -67,7 +67,7 @@ export const getUserById = catchAsync(async (req: Request, res: Response, next: 
   });
 });
 
-export const updateUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const updateCurrentUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   //! Should use check existing function here to validate the existance of the user and only apply this action
   const id = req.currentUser;
   const { fullname, email } = req.body;
@@ -88,19 +88,15 @@ export const updateUserById = catchAsync(async (req: Request, res: Response, nex
   });
 });
 
-export const deleteUserById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-
-  //! I need to decide weather to keep this route here
+export const deleteCurrentUser = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.currentUser;
 
   const myBoards = await prisma.board.findMany({
     where: { author: { id } },
   });
-
   const contriBoards = await prisma.board.findMany({
     where: { users: { some: { id } } },
   });
-
   const userComments = await prisma.comment.findMany({
     where: { user: { id } },
   });
@@ -111,13 +107,11 @@ export const deleteUserById = catchAsync(async (req: Request, res: Response, nex
       data: { users: { disconnect: { id } } },
     })
   );
-
   const deleteAuthor = myBoards.map((board) =>
     prisma.board.delete({
       where: { id: board.id },
     })
   );
-
   const deleteComments = userComments.map((comment) =>
     prisma.comment.delete({
       where: {
@@ -135,7 +129,8 @@ export const deleteUserById = catchAsync(async (req: Request, res: Response, nex
     },
   });
 
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
+    message: "user deleted succesfully.",
   });
 });

@@ -89,6 +89,7 @@ const EditableStyle: ComponentStyleConfig = {
   },
 };
 
+
 const ButtonStyle: ComponentStyleConfig = {
   // style object for base or default style
   // styles for different sizes ("sm", "md", "lg")
@@ -218,14 +219,14 @@ const ButtonStyle: ComponentStyleConfig = {
     outlineRed: {
       padding: "8px 14px",
       backgroundColor: "transparent",
-      color: "red",
+      color: "#dc3545",
       fontFamily: "Poppins",
       fontWeight: "500",
       fontSize: "sm",
       borderRadius: "8px",
-      border: "1px solid red",
+      border: "1px solid #dc3545",
       _hover: {
-        backgroundColor: "red",
+        backgroundColor: "#dc3545",
         color: "#fff",
       },
     },

@@ -1,25 +1,25 @@
-import React, { 
-// useEffect,
-// useState,
+import React, {
+useEffect,
+useState,
 useContext
    } from "react";
 import { HStack, Heading, Stack, Text, Box, useDisclosure } from "@chakra-ui/react";
 import { SmallLogo } from "../components/header/SmallLogo";
 // import { NewBoard } from "./Popover";
 import { BiPlus } from "react-icons/bi";
-import { Board, Boards } from "../context/ContextScheme";
+import { Board, Boards, AppContext } from "../context/ContextScheme";
 import { BoardCard } from "../components/ui-elements/Media";
 import { Container } from "../components/ui-elements/Wrappers";
 import { ModalButtonWrapper } from "../components/ui-elements/Modal";
-import { AppContext } from "../context/ContextScheme";
-import { useQuery } from "react-query";
-import { BACKEND_ENDPOINT, JWT } from "../data/DataFetching";
-interface AllBoardsProps {}
 import ProfileMenu from "../components/Menu/ProfileMenu";
-// import useAuth from "../hooks/useAuth";
-// import { Navigate } from "react-router-dom";
-import Loading from "./Loading";
+import useAuth from "../hooks/useAuth";
+import { Navigate } from "react-router-dom";
+import Loading from "../pages/Loading";
 import BoardSearch from "../components/BoardSearch";
+import ProfileSettings from "../components/ProfileSettings";
+import useModal from "../hooks/useModel";
+import { useQuery } from "react-query";
+import { BACKEND_ENDPOINT, JWT } from "../data/DataFetching"
 interface AllBoardsProps {}
 export interface BoardProps {
   id: number;
@@ -29,6 +29,14 @@ export interface BoardProps {
 export const AllBoards: React.FC<AllBoardsProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { publicBoards, setPublicBoards } = useContext(AppContext);
+  const {profileModal} = useModal();
+  const [loading, setLoading] = useState(true);
+  const { auth } = useAuth();
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   const { isLoading } = useQuery(
     ["boards"],
@@ -59,16 +67,15 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
   );
 
   if (isLoading) return <Loading/>;
-  // const [loading, setLoading] = useState(true);
-  // const { auth } = useAuth();
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 1000);
-  // }, []);
+  if (!auth.loggedIn) return <Navigate to="/login" />;
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+  }, []);
 
-  // if (loading) return <Loading />;
-  // if (!auth.loggedIn) return <Navigate to="/login" />;
+  if (loading) return <Loading />;
+  if (!auth.loggedIn) return <Navigate to="/login" />;
   return (
     <Stack mt="120px">
       <Box className="header">
@@ -88,6 +95,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
           stateObject={{ state: publicBoards!, setState: setPublicBoards! }}
         />
         <UserBoards Boards={publicBoards || []} />
+        <ProfileSettings open={profileModal.isOpen} onClose={profileModal.onClose} />
       </Stack>
     </Stack>
   );

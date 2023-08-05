@@ -10,6 +10,7 @@ import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import AuthProvider from "./providers/AuthProvider";
+import ModelsProvider from "./providers/ModalsProvider";
 
 interface IAppProps {}
 
@@ -46,9 +47,11 @@ const App: React.FunctionComponent<IAppProps> = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <GlobalContext>
-          <RouterProvider router={router} />
-        </GlobalContext>
+        <ModelsProvider>
+          <GlobalContext>
+            <RouterProvider router={router} />
+          </GlobalContext>
+        </ModelsProvider>
       </AuthProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>

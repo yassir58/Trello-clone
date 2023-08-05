@@ -4,7 +4,6 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
-import sendMail from "../utils/Email";
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
 import { userValidator } from "../utils/validator";
@@ -35,7 +34,6 @@ const hashToken = async (token: string) => {
 };
 
 const hashPassword = async (password: string) => {
-  crypto.createCipheriv;
   return await bcrypt.hash(password, 12);
 };
 
@@ -58,11 +56,10 @@ const sendAuthToken = async (res: Response, next: NextFunction, userId: string) 
 };
 
 export const updatePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { oldPassword, newPassword, confirmPassword } = req.body;
+  const { password, newPassword, confirmPassword } = req.body;
 
-  if (oldPassword && newPassword && confirmPassword)
+  if (!(password && newPassword && confirmPassword))
     return next(new AppError("Please provide the old and new password.", 400));
-
   if (newPassword != confirmPassword)
     return next(new AppError("The new and confirm passwords has to match.", 400));
   const hashedPassword = await hashPassword(newPassword);
@@ -71,7 +68,7 @@ export const updatePassword = catchAsync(async (req: Request, res: Response, nex
       id: req.currentUser ?? undefined,
     },
   });
-  if (!user || !(await checkPassword(oldPassword, user.password)))
+  if (!user || !(await checkPassword(password, user.password)))
     return next(new AppError("Incorrect password please enter the correct one.", 401));
 
   await prisma.user.update({
