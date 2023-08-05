@@ -12,6 +12,8 @@ import useAuth from "../hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import Loading from "../pages/Loading";
 import BoardSearch from "./BoardSearch";
+import ProfileSettings from "./ProfileSettings";
+import useModal from "../hooks/useModel";
 interface AllBoardsProps {}
 export interface BoardProps {
   id: number;
@@ -20,8 +22,8 @@ export interface BoardProps {
 }
 export const AllBoards: React.FC<AllBoardsProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const profileModal = useDisclosure();
   const [userBoards, setUserBoards] = useState<Board[]>([]);
+  const {profileModal} = useModal();
   const [loading, setLoading] = useState(true);
   const { auth } = useAuth();
   useEffect(() => {
@@ -39,7 +41,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
           <SmallLogo />
           <HStack spacing={3}>
             <BoardSearch />
-            <ProfileMenu profileModal={profileModal} />
+            <ProfileMenu />
           </HStack>
         </Container>
       </Box>
@@ -51,6 +53,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
           stateObject={{ state: userBoards, setState: setUserBoards }}
         />
         <UserBoards Boards={userBoards || []} />
+        <ProfileSettings open={profileModal.isOpen} onClose={profileModal.onClose} />
       </Stack>
     </Stack>
   );

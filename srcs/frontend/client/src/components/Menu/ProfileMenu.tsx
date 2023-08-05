@@ -9,19 +9,15 @@ import {
   Heading,
   Avatar,
   Button,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
+import useModel from "../../hooks/useModel";
 
-interface ProfileMenuProps {
-  profileModal: ReturnType<typeof useDisclosure>;
-  invitesModal?: ReturnType<typeof useDisclosure>;
-}
-
-const ProfileMenu = ({ profileModal }: ProfileMenuProps) => {
+const ProfileMenu = () => {
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
+  const { profileModal } = useModel();
 
   const handleLogout = () => {
     setAuth({ loggedIn: false, token: null, user: null });
