@@ -6,7 +6,6 @@ import {SmallLogo} from './SmallLogo'
 import { Nav } from "./Nav";
 import { Board } from "../../context/ContextScheme";
 import BoardSearch from "../BoardSearch";
-<<<<<<< HEAD
 import ProfileMenu from "../Menu/ProfileMenu";
 export interface HeaderProps {
   Board:Board
@@ -17,10 +16,6 @@ export interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({
   Board
 }) => {
-=======
-
-const Header = () => {
->>>>>>> 070ec352f486f71ce8666053f3af00c5154fc22b
   return (
     <Box className="header">
       <Container variant="mdSpaceBetween">
