@@ -1,12 +1,15 @@
-import * as React from 'react';
-import { BoardPage } from './components/BoardPage';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { AllBoards } from './components/AllBoards';
-import LoginForm from './components/Pages/LoginForm';
-import RegisterForm from './components/Pages/RegisterForm';
-import { QueryClient, QueryClientProvider } from 'react-query';
-import { GlobalContext } from './context/ContextScheme';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import * as React from "react";
+import { BoardPage } from "./pages/BoardPage";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AllBoards } from "./pages/AllBoards";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { GlobalContext } from "./context/ContextScheme";
+import { ReactQueryDevtools } from "react-query/devtools";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+import AuthProvider from "./providers/AuthProvider";
 
 interface IAppProps {}
 
@@ -20,26 +23,35 @@ const router = createBrowserRouter([
     element: <AllBoards />
   },
   {
-    path: '/login',
-    element: <LoginForm />
+    path: "/login",
+    element: <Login />,
   },
   {
-    path:'/signup',
-    element:<RegisterForm/>
-  }
-
+    path: "/signup",
+    element: <Signup />,
+  },
+  {
+    path: "/forgotpassword",
+    element: <ForgotPassword />,
+  },
+  {
+    path: "/resetpassword/:token",
+    element: <ResetPassword />,
+  },
 ]);
 
 const queryClient = new QueryClient();
 
 const App: React.FunctionComponent<IAppProps> = () => {
   return (
-   <QueryClientProvider client={queryClient}>
-    <GlobalContext>
-    <RouterProvider router={router}/>
-    </GlobalContext>
-    <ReactQueryDevtools />
-   </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <GlobalContext>
+          <RouterProvider router={router} />
+        </GlobalContext>
+      </AuthProvider>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
   );
 };
 

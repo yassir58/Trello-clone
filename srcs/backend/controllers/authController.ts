@@ -60,9 +60,11 @@ const sendAuthToken = async (res: Response, next: NextFunction, userId: string) 
 export const updatePassword = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { oldPassword, newPassword, confirmPassword } = req.body;
 
-  if (!oldPassword || !newPassword || !confirmPassword)
+  if (oldPassword && newPassword && confirmPassword)
     return next(new AppError("Please provide the old and new password.", 400));
 
+  if (newPassword != confirmPassword)
+    return next(new AppError("The new and confirm passwords has to match.", 400));
   const hashedPassword = await hashPassword(newPassword);
   const user = await prisma.user.findUnique({
     where: {
@@ -80,17 +82,22 @@ export const updatePassword = catchAsync(async (req: Request, res: Response, nex
       password: hashedPassword,
     },
   });
+  res.status(200).json({
+    status: "success",
+    message: "User password updated successfully."
+  });
 });
 
 export const isLoggedIn = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  if (!req.currentUser)
-    return res.status(401).json({
-      status: "failure",
-      user: null,
-    });
+  const user = await prisma.user.findUnique({
+    where: {
+      id: req.currentUser,
+    },
+    select: { id: true, fullname: true, email: true, profileImage: true },
+  });
   res.status(200).json({
     status: "success",
-    user: req.currentUser,
+    user,
   });
 });
 
@@ -112,7 +119,7 @@ export const forgotPassword = catchAsync(async (req: Request, res: Response, nex
       passwordResetExpires: new Date(new Date().getTime() + 10 * 60 * 1000).toISOString(),
     },
   });
-  const resetLink = `${req.protocol}://${req.hostname}/resetPassword/${token}`;
+  const resetLink = `${req.protocol}://${req.hostname}:5173/resetpassword/${token}`;
   new Email(user, resetLink).sendPasswordReset();
   res.status(200).json({
     status: "success",
@@ -206,7 +213,7 @@ export const resetPassword = catchAsync(async (req: Request, res: Response, next
   });
   res.status(200).json({
     status: "success",
-    message: "Password reset was successfull.",
+    message: "Password reset was successful.",
   });
 });
 

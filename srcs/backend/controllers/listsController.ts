@@ -28,7 +28,11 @@ export const createList = catchAsync(async (req: Request, res: Response, next: N
 
 export const getAllLists = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   //! Need to configure this controller for nested routes.
-  const lists = await prisma.list.findMany();
+  const lists = await prisma.list.findMany({
+    where: {
+      boardId: req.params.boardId ?? undefined,
+    },
+  });
   res.status(200).json({
     status: "success",
     lists,
@@ -42,8 +46,8 @@ export const getListById = catchAsync(async (req: Request, res: Response, next: 
       id,
     },
     include: {
-      card: true
-    }
+      card: true,
+    },
   });
   res.status(200).json({
     status: "success",
@@ -54,7 +58,7 @@ export const getListById = catchAsync(async (req: Request, res: Response, next: 
 export const updateListById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const { error, value } = listValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
-  const list = await UtilsCtrl.checkExistance(req, next, 'list') as List;
+  const list = (await UtilsCtrl.checkExistance(req, next, "list")) as List;
   const newList = await prisma.list.update({
     where: {
       id: list.id,
@@ -71,7 +75,7 @@ export const updateListById = catchAsync(async (req: Request, res: Response, nex
 });
 
 export const deleteListById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const list = await UtilsCtrl.checkExistance(req, next, 'list') as List;
+  const list = (await UtilsCtrl.checkExistance(req, next, "list")) as List;
   await prisma.list.delete({
     where: {
       id: list.id,

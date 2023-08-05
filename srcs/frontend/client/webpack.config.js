@@ -1,9 +1,9 @@
 const path = require("path");
 const webpack = require("webpack");
-const Dotenv = require ('dotenv-webpack')
+const Dotenv = require("dotenv-webpack");
+const history = require("connect-history-api-fallback");
 
-  
-module.exports = ()=>{
+module.exports = () => {
   return {
     mode: "development",
     entry: "./src/index.tsx",
@@ -38,11 +38,9 @@ module.exports = ()=>{
     },
     plugins: [
       new webpack.HotModuleReplacementPlugin(),
-       new Dotenv (
-        {
-          path:'./.env'
-        }
-       )
+      new Dotenv({
+        path: "./.env",
+      }),
     ],
     devServer: {
       static: {
@@ -50,7 +48,8 @@ module.exports = ()=>{
       },
       compress: true,
       port: 3030,
+      historyApiFallback: true,
     },
     watch: true,
   };
-}
+};

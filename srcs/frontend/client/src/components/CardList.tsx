@@ -10,19 +10,18 @@ import AddCard from "./Functionality/AddCard";
 import { PopOverWrapper } from "./ui-elements/PopOver";
 import { ModalCardWrapper } from "./ui-elements/Modal";
 import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
-import { EditListTitle } from "./Functionality/EditListTitle";
+// import { EditListTitle } from "./Functionality/EditListTitle";
 import { handleFocus } from "./Functionality/utils";
 
 interface CardListProps {
     // Board:Board,
     list:List,
-    state:List[] ,
-    stateSetter: React.Dispatch<React.SetStateAction<List[]>> ;
+    mutation:any
 
 }
 
 
-export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) => {
+export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
   
     const [cards, setCards] = useState<Card[]>([]);
     const [createCard, setCreateCard] = useState(false);
@@ -30,10 +29,8 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
     const createCardToggler = () => {
       setCreateCard(!createCard);
     };
-    const handleRemoveList = (id:string,state:List[], stateSetter:React.Dispatch<React.SetStateAction<List[]>>)=>{
-      console.log (state)
-      const tmp:List[] = state.slice ().filter (list=>list.id != id);
-      stateSetter (tmp)
+    const handleRemoveList = ()=>{
+      mutation.mutate(list)
     }
     const createCardHandler = (title:string) => {
       const tmp:Card[] = cards?.slice() || [];
@@ -56,8 +53,8 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
           <Container variant="mdSpaceBetween">
           <Editable defaultValue={list.name ? list.name : "Add card title"}>
                   <EditablePreview fontSize='sm' />
-                  <EditableInput onChange={(e)=>{
-                    EditListTitle (state, stateSetter, list!.id || '', e.target.value)
+                  <EditableInput onChange={()=>{
+                    // EditListTitle (state, stateSetter, list!.id || '', e.target.value)
                   }}/>
                 </Editable>
             <PopOverWrapper
@@ -65,7 +62,7 @@ export const CardList: React.FC<CardListProps> = ({list, state, stateSetter}) =>
               icon={<FaEllipsis />}
               size="3xs"
             >
-              <ListOptions removeList={()=>handleRemoveList(list!.id || '', state, stateSetter)}/>
+              <ListOptions removeList={()=>handleRemoveList()}/>
             </PopOverWrapper>
           </Container>
   

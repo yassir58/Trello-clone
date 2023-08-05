@@ -2,7 +2,7 @@ import express from "express";
 import cardsRouter from './cardsRouter';
 import * as listsController from "../controllers/listsController";
 
-const Router = express.Router();
+const Router = express.Router({mergeParams: true});
 
 Router.use("/:listId/cards", cardsRouter);
 
