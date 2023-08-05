@@ -12,12 +12,13 @@ Router.route("/forgotPassword").post(authController.forgotPassword);
 Router.use(authController.authorizeRoute);
 
 Router.route("/me").get(authController.isLoggedIn);
-Router.route("/updatePassword").post(authController.updatePassword);
+Router.route("/updatePassword").put(authController.updatePassword);
 Router.route("/logout").post(authController.logout);
 
-Router.route("/").get(usersController.getAllUsers).put(usersController.uploadUserPhoto, usersController.processUserPhoto, usersController.updateUserById);
-Router.route("/:id")
-  .get(usersController.getUserById)
-  .delete(usersController.deleteUserById);
+Router.route("/")
+  .get(usersController.getAllUsers)
+  .put(usersController.uploadUserPhoto, usersController.processUserPhoto, usersController.updateCurrentUser)
+  .delete(usersController.deleteCurrentUser);
+Router.route("/:id").get(usersController.getUserById);
 
 export default Router;

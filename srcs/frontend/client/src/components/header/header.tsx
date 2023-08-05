@@ -1,16 +1,18 @@
 import React from "react";
-import {HStack, Box } from "@chakra-ui/react";
+import {HStack, Box, useDisclosure } from "@chakra-ui/react";
 import "../../styles/app.scss";
 import { Container } from "../ui-elements/Wrappers";
 import {SmallLogo} from './SmallLogo'
 import { Nav } from "./Nav";
 import ProfileMenu from "../Menu/ProfileMenu";
 import BoardSearch from "../BoardSearch";
-interface HeaderProps {}
+interface HeaderProps {
+  profileModal: ReturnType<typeof useDisclosure>;
+}
 
 
 
-const Header: React.FC<HeaderProps> = () => {
+const Header = ({profileModal }: HeaderProps) => {
 
   return (
     <Box className="header">
@@ -21,7 +23,7 @@ const Header: React.FC<HeaderProps> = () => {
         </HStack>
         <HStack spacing={5}>
           <BoardSearch />
-          <ProfileMenu/>
+          <ProfileMenu profileModal={profileModal}/>
         </HStack>
       </Container>
     </Box>

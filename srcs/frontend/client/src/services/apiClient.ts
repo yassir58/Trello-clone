@@ -14,6 +14,19 @@ class apiClient<T> {
     return axiosInstance.post(this.endPoint, data, { withCredentials: true });
   };
 
+  updateData = (data: T, headers: any | undefined) => {
+    return axiosInstance.put(this.endPoint, data, {
+      headers,
+      withCredentials: true
+    });
+  };
+
+  deleteData = () => {
+    return axiosInstance.delete(this.endPoint, {
+      withCredentials: true
+    });
+  }
+
   getData = (params: AxiosRequestConfig | null) => {
     return axiosInstance.get<T>(this.endPoint, { params, withCredentials: true });
   };

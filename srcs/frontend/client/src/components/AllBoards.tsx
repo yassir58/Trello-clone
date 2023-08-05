@@ -20,6 +20,7 @@ export interface BoardProps {
 }
 export const AllBoards: React.FC<AllBoardsProps> = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const profileModal = useDisclosure();
   const [userBoards, setUserBoards] = useState<Board[]>([]);
   const [loading, setLoading] = useState(true);
   const { auth } = useAuth();
@@ -38,7 +39,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
           <SmallLogo />
           <HStack spacing={3}>
             <BoardSearch />
-            <ProfileMenu />
+            <ProfileMenu profileModal={profileModal} />
           </HStack>
         </Container>
       </Box>

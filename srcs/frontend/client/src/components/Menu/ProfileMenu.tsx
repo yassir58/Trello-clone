@@ -9,11 +9,17 @@ import {
   Heading,
   Avatar,
   Button,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 
-const ProfileMenu = () => {
+interface ProfileMenuProps {
+  profileModal: ReturnType<typeof useDisclosure>;
+  invitesModal?: ReturnType<typeof useDisclosure>;
+}
+
+const ProfileMenu = ({ profileModal }: ProfileMenuProps) => {
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
 
@@ -38,7 +44,7 @@ const ProfileMenu = () => {
             borderRadius={9}
             bg="#BDBDBD"
             name={auth.user?.fullname}
-            src={auth.user?.profileImage}
+            src={"http://localhost:5002/img/users/" + auth.user?.profileImage}
           />
           <Heading fontFamily="Poppins" fontSize={14}>
             {auth.user?.fullname}
@@ -46,7 +52,8 @@ const ProfileMenu = () => {
         </HStack>
       </MenuButton>
       <MenuList fontFamily="Poppins">
-        <MenuItem>Profile</MenuItem>
+        <MenuItem onClick={() => profileModal.onOpen()}>Profile</MenuItem>
+        <MenuItem>Invites</MenuItem>
         <MenuItem onClick={() => navigate("/AllBoards")}>Boards</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </MenuList>
