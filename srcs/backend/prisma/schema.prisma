@@ -15,7 +15,7 @@ model Board {
   title       String  @unique
   coverImage  String
   description String  @default("")
-  visibility   Boolean 
+  visibility  Boolean
   author      User    @relation("authoredBoards", fields: [authorId], references: [id])
   authorId    String
   users       User[]  @relation("Members")
@@ -41,7 +41,6 @@ model User {
   updatedAt DateTime  @updatedAt
   myBoards  Board[]   @relation("authoredBoards")
   comments  Comment[]
-  Invites   Invite[]
 }
 
 model List {
@@ -61,8 +60,8 @@ model Card {
 
   list        List?        @relation("cards", fields: [listId], references: [id], onDelete: SetNull)
   listId      String?
-  description String
-  coverImage String?
+  description String?
+  coverImage  String?
   comments    Comment[]    @relation("comments")
   attachments Attachment[] @relation("attachements")
   labels      Label[]
@@ -98,12 +97,13 @@ model Comment {
 model Invite {
   id String @id @default(uuid())
 
-  user    User   @relation(fields: [userId], references: [id])
   board   Board  @relation(fields: [boardId], references: [id])
-  userId  String
   boardId String
+  ownerId String
+  userId  String
 
   createdAt DateTime @default(now())
+  cardId    String?
 }
 
 model Label {

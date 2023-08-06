@@ -8,28 +8,29 @@ import AppError from "../utils/AppError";
 const prisma = new PrismaClient();
 
 export const createInvite = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  //! Validate the duplication of invite
   const { error, value } = inviteValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
-  const label = await prisma.invite.create({
+  const invite = await prisma.invite.create({
     data: {
-      user: {
-        connect: { id: value.userId },
-      },
+      ownerId: req.currentUser,
+      userId: value.userId,
       board: {
         connect: { id: value.boardId },
       },
     },
   });
-  if (!label) next(new AppError("Could not create Label", 400));
+  if (!invite) next(new AppError("Could not create Label", 400));
   res.status(201).json({
     status: "success",
-    label,
+    invite,
   });
 });
 
 export const acceptInvite = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   // Get the invite informations
-  const inviteId = req.params.id;
+  //! I can refactor this code and use the checkExisting function
+  const inviteId = req.body.id;
   if (!inviteId) return next(new AppError("Please provide an invite id", 404));
   const invite = await prisma.invite.findUnique({
     where: {
@@ -37,10 +38,12 @@ export const acceptInvite = catchAsync(async (req: Request, res: Response, next:
     },
   });
   if (!invite) return next(new AppError("Please provide an invite id", 404));
+  if (invite.userId !== req.currentUser)
+    return next(new AppError("You are not authorized to accept this invite", 401));
   // If the invite is valid link the user to the board
   await prisma.board.update({
     where: {
-      id: invite.id,
+      id: invite.boardId,
     },
     data: {
       users: {
@@ -56,7 +59,7 @@ export const acceptInvite = catchAsync(async (req: Request, res: Response, next:
   });
   res.status(200).json({
     status: "success",
-    message: "user added succesfully.",
+    message: "Invite accepted.",
   });
 });
 
@@ -74,11 +77,44 @@ export const getInviteById = catchAsync(async (req: Request, res: Response, next
   });
 });
 
+export const getSentInvites = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const invites = await prisma.invite.findMany({
+    where: {
+      ownerId: req.currentUser,
+    },
+  });
+  res.status(200).json({
+    status: "success",
+    invites,
+    count: invites.length,
+  });
+});
+
 //? Get all the invites related to a user
 export const getAllInvites = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const invites = await prisma.invite.findMany({
     where: {
       userId: req.currentUser,
+    },
+    include: {
+      board: {
+        include: {
+          users: {
+            select: {
+              fullname: true,
+              profileImage: true,
+              email: true,
+            },
+          },
+          author: {
+            select: {
+              fullname: true,
+              profileImage: true,
+              email: true,
+            },
+          },
+        },
+      },
     },
   });
   res.status(200).json({
@@ -95,7 +131,8 @@ export const deleteInviteById = catchAsync(async (req: Request, res: Response, n
       id,
     },
   });
-  res.status(204).json({
+  res.status(200).json({
     status: "success",
+    message: "Invite deleted.",
   });
 });
