@@ -11,8 +11,7 @@ import { Card } from "../context/ContextScheme";
 
 interface PopOverProps {
   card?: Card ;
-  cards?: Card[];
-  setCards?: React.Dispatch<React.SetStateAction<Card[]>> ;
+
 }
 
 
@@ -31,9 +30,7 @@ export const MembersPopOver: React.FC = () => {
 };
 
 export const LabelPopOver: React.FC<PopOverProps> = ({
-  card,
-  cards,
-  setCards,             
+  card,            
 }) => {
   return (
     <PopOverWrapper
@@ -43,15 +40,13 @@ export const LabelPopOver: React.FC<PopOverProps> = ({
       size="xs"
       placement="left"
     >
-      <AddLable card={card} cards={cards} setCards={setCards} />
+      <AddLable card={card}  />
     </PopOverWrapper>
   );
 };
 
 export const CoverPopOver: React.FC<PopOverProps> = ({
   card,
-  cards,
-  setCards,
 }) => {
   return (
     <PopOverWrapper
@@ -61,7 +56,7 @@ export const CoverPopOver: React.FC<PopOverProps> = ({
       size="2xs"
       placement="left"
     >
-      <ChangeCover card={card} cards={cards} setCards={setCards} />
+      <ChangeCover card={card}  />
     </PopOverWrapper>
   );
 };

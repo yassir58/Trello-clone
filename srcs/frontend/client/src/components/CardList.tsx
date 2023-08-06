@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {  useState } from "react";
 import { Box, Button, chakra, Stack} from "@chakra-ui/react";
 
 import { BiPlus } from "react-icons/bi";
@@ -12,6 +12,12 @@ import { ModalCardWrapper } from "./ui-elements/Modal";
 import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 // import { EditListTitle } from "./Functionality/EditListTitle";
 import { handleFocus } from "./Functionality/utils";
+import { useQueryClient } from "react-query";
+import { createNewCard } from "./Functionality/createCard";
+import { deleteCard } from "./Functionality/deleteCard";
+import { useMutation, useQuery } from "react-query";
+import { BACKEND_ENDPOINT, JWT } from "../data/DataFetching";
+
 
 interface CardListProps {
     // Board:Board,
@@ -26,27 +32,54 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
     const [cards, setCards] = useState<Card[]>([]);
     const [createCard, setCreateCard] = useState(false);
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const queryClient = useQueryClient ()
     const createCardToggler = () => {
       setCreateCard(!createCard);
     };
     const handleRemoveList = ()=>{
       mutation.mutate(list)
     }
-    const createCardHandler = (title:string) => {
-      const tmp:Card[] = cards?.slice() || [];
-      const card:Card = {
-        id:'7',
-        title: title,
-        listId: list!.id || '',
-        creationDate: "2021-05-01T00:00:00.000Z",
-        editDate: "2021-05-01T00:00:00.000Z",
-        BoardId: "1",
-        labels: [],
-      }
-      tmp.push(card);
-      setCards&& setCards(tmp);
-      createCardToggler();
-    }
+   
+    const newCardMutation = useMutation ({
+      mutationFn:createNewCard,
+      onSuccess:(data)=>{
+        console.log (`card list : ${data}`)
+        queryClient.invalidateQueries (['cards', list.id])
+      },
+      // onError:(error)=>{console.log (`error while creating card: ${error}`)}
+    })
+
+    const deleteCardMutation = useMutation ({
+      mutationFn:deleteCard,
+      onSuccess:(data)=>{
+        console.log (`card list : ${data}`)
+        queryClient.invalidateQueries (['cards', list.id])
+      },
+      // onError:(error)=>{console.log(`error while deleting card: ${error}`)}
+    })
+
+    const {isLoading} = useQuery (['cards', list.id], async ()=>{
+      const res = await fetch (`${BACKEND_ENDPOINT}/cards/${list.id}`, {
+        method:'GET',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization':`Bearer ${JWT}`
+        }
+      })
+      if (!res.ok) throw new Error ('Error fetching cards')
+      return await res.json ()
+    }, {
+      onSuccess:(data)=>{
+        console.log (`card lists: ${data}`)
+        setCards (data.cards)
+      },
+      onError:(error)=>{console.log (error)}
+    })
+
+    if (isLoading) return <div>loading...</div>
+    // useEffect (()=>{
+    //   queryClient.invalidateQueries (['cards', list.id])
+    // }, [])
     return (
       <div>
         <Stack>
@@ -67,7 +100,7 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
           </Container>
   
           {createCard ? (
-            <AddCard cancelHandler={createCardToggler} action={createCardHandler} ref={inputRef}/>
+            <AddCard cancelHandler={createCardToggler} mutation={newCardMutation} list={list} ref={inputRef}/>
           ) : (
             <Button onClick={()=>{
               createCardToggler ()
@@ -89,8 +122,7 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
                       card={item}
                       id={index}
                       key={index}
-                      cards={cards}
-                      setCards={setCards}
+                      mutation={deleteCardMutation}
                     />
                   </Box>
                 );

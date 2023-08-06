@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { chakra, HStack, Stack, Button } from "@chakra-ui/react";
 
 import { DrawerCp } from "./ui-elements/Drawer";
@@ -78,7 +78,6 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
         headers: {
           credentials: "include",
           Authorization: `Bearer ${JWT}`,
-          Cookie: `boardId=${BoardId}`,
         },
       });
       if (!response.ok) {
@@ -102,6 +101,10 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
   const handleAddList = (title: string) => {
     newListMutation.mutate({ name: title, boardId: BoardId });
   };
+
+  useEffect(() => {
+      queryClient.invalidateQueries(["lists", BoardId]);
+  },[])
 
   if (isLoading) return <div>Loading...</div>;
   return (

@@ -66,15 +66,8 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
     }
   );
 
-  if (isLoading) return <Loading/>;
-  if (!auth.loggedIn) return <Navigate to="/login" />;
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
 
-  if (loading) return <Loading />;
+  if (loading || isLoading) return <Loading />;
   if (!auth.loggedIn) return <Navigate to="/login" />;
   return (
     <Stack mt="120px">

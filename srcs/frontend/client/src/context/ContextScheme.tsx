@@ -52,7 +52,7 @@ export interface Label {
   color: string;
 }
 export interface Card {
-  id: string;
+  id?: string;
   title: string;
   description?: string;
   cover?: string;
@@ -61,10 +61,10 @@ export interface Card {
   comments?: Comment[];
   attachments?: Attachment[]; // not the correct type but will do for now
   checklists?: Checklist[]; // not the correct type but will do for now
-  creationDate: string;
-  editDate: string;
+  creationDate?: string;
+  editDate?: string;
   listId: string;
-  BoardId: string;
+  BoardId?: string;
 }
 
 export interface Board {
