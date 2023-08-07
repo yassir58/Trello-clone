@@ -36,6 +36,27 @@ export const processUserPhoto = (req: Request, res: Response, next: NextFunction
 
 export const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const search = req.query.search as string;
+  if (!req.boardId) return next(new AppError(`Board id is needed to filter out users`, 400));
+  const board = await prisma.board.findUnique({
+    where: {
+      id: req.boardId,
+    },
+    select: {
+      users: {
+        select: {
+          id: true,
+        },
+      },
+      author: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+  const boardUsers = board?.users.map((user) => user.id) || [];
+  const combinedUsers = [...boardUsers, board?.author.id];
+  console.log("All board users: ", combinedUsers);
   const users = await prisma.user.findMany({
     select: { id: true, fullname: true, email: true, profileImage: true },
     where: {
@@ -45,10 +66,11 @@ export const getAllUsers = catchAsync(async (req: Request, res: Response, next: 
       },
     },
   });
+  const result = users.filter((item) => !combinedUsers.includes(item.id));
   res.status(200).json({
     status: "success",
-    users,
-    count: users.length,
+    users: result,
+    count: result.length,
   });
 });
 
