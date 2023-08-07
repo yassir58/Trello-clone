@@ -56,7 +56,6 @@ export const getAllUsers = catchAsync(async (req: Request, res: Response, next: 
   });
   const boardUsers = board?.users.map((user) => user.id) || [];
   const combinedUsers = [...boardUsers, board?.author.id];
-  console.log("All board users: ", combinedUsers);
   const users = await prisma.user.findMany({
     select: { id: true, fullname: true, email: true, profileImage: true },
     where: {
