@@ -10,6 +10,7 @@ import * as UtilsCtrl from "./factoryController";
 const prisma = new PrismaClient();
 
 export const createList = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  // 
   const { error, value } = listValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
   const list = await prisma.list.create({

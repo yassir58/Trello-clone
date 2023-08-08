@@ -1,5 +1,6 @@
 import React, { createContext, useState } from "react";
 import { useQuery } from "react-query";
+import apiClient from "../services/apiClient";
 interface Props {
   children: React.ReactNode;
 }
@@ -86,50 +87,16 @@ export interface GlobalContext {
 export interface GlobalState {
   publicBoards?: Board[];
   setPublicBoards?: React.Dispatch<React.SetStateAction<Board[]>>;
-  coverPhotos?: string[];
 }
 export const AppContext = createContext<GlobalState>({});
 
 export const GlobalContext: React.FC<Props> = ({ children }) => {
-  const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
-  const count = 12;
-  const API_KEY = process.env.REACT_APP_API_KEY 
-  const UNSPLASH_ENDPOINT = process.env.REACT_UNSPLASH_ENDPOINT
-
-  console.log ('API_KEY',API_KEY)
-  console.log ('UNSPLASH_ENDPOINT',UNSPLASH_ENDPOINT)
   const [publicBoards, setPublicBoards] = useState<Board[]>([]);
-  const { isLoading } = useQuery(
-    "coverQuery",
-    async () => {
-      const res = await fetch(
-        `${UNSPLASH_ENDPOINT}photos/random/?client_id=${API_KEY}&count=${count}`
-      );
-
-      const photos = await res.json();
-      return photos;
-    },
-    {
-      staleTime: 25 * 60 * 1000,
-      onSuccess: (data) => {
-        const tmp: string[] = [];
-        data.forEach((element: any) => {
-          tmp.push(element.urls.small);
-        });
-        setCoverPhotos(tmp);
-      },
-      onError: (error) => {
-        console.log("error from query :", error);
-      },
-    }
-  );
-
-  if (isLoading) console.log("cover loading ...");
-
+  
   return (
     <div>
       <AppContext.Provider
-        value={{ publicBoards, setPublicBoards, coverPhotos }}
+        value={{ publicBoards, setPublicBoards}}
       >
         {children}
       </AppContext.Provider>

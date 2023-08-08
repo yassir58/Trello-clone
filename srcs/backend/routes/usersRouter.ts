@@ -1,8 +1,11 @@
 import express from "express";
 import * as usersController from "../controllers/usersController";
 import * as authController from "../controllers/authController";
+import boardsRouter from './boardsRouter';
 
 const Router = express.Router();
+
+Router.use("/:userId/boards", boardsRouter);
 
 Router.route("/signup").post(authController.signup);
 Router.route("/login").post(authController.login);

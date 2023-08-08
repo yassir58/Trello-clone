@@ -12,7 +12,7 @@ import { Navigate } from "react-router-dom";
 import Loading from "../pages/Loading";
 import ProfileSettings from "../components/ProfileSettings";
 import useModel from "../hooks/useModel";
-
+import { PhotosProvider } from "../providers/PhotosProvider";
 interface HomeProps {}
 
 export const BoardPage: React.FC<HomeProps> = ({}) => {
@@ -35,7 +35,9 @@ export const BoardPage: React.FC<HomeProps> = ({}) => {
   return (
     <Stack spacing={3}>
       <Header Board={board! || {}} />
+      <PhotosProvider >
       <Board BoardId={id || ""} />
+      </PhotosProvider>
       <ProfileSettings open={profileModal.isOpen} onClose={profileModal.onClose} />
     </Stack>
   );

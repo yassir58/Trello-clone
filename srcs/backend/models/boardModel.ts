@@ -3,8 +3,15 @@ import { Response} from "express";
 import EncryptText from "../utils/Encyption";
 
 
-const boardSchema = Joi.object({
+export const boardSchema = Joi.object({
   title: Joi.string().min(5).max(100).required(),
+  coverImage: Joi.string().optional(),
+  description: Joi.string().optional(),
+  visibility: Joi.boolean().optional(),
+});
+
+export const boardUpdateSchema = Joi.object({
+  title: Joi.string().min(5).max(100).optional(),
   coverImage: Joi.string().optional(),
   description: Joi.string().optional(),
   visibility: Joi.boolean().optional(),
@@ -23,4 +30,3 @@ export const sendBoardId = async (boardId: string, res: Response) => {
   res.cookie("boardId", encryptedBoardId, cookieOptions);
 };
 
-export default boardSchema;

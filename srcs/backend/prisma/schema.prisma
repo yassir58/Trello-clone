@@ -36,6 +36,7 @@ model User {
   passwordResetToken   String?
   passwordResetExpires DateTime?
   contriBoards         Board[]   @relation("Members")
+  invites              Invite[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -100,6 +101,7 @@ model Invite {
   board   Board  @relation(fields: [boardId], references: [id])
   boardId String
   ownerId String
+  user    User   @relation(fields: [userId], references: [id])
   userId  String
 
   createdAt DateTime @default(now())

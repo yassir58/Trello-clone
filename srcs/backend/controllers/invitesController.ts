@@ -11,16 +11,51 @@ export const createInvite = catchAsync(async (req: Request, res: Response, next:
   //! Validate the duplication of invite
   const { error, value } = inviteValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
+  const checkDuplicate = await prisma.invite.findFirst({
+    where: {
+      userId: value.userId,
+      boardId: value.boardId,
+    },
+  });
+  if (checkDuplicate)
+    return res.status(200).json({
+      status: "success",
+      message: "Pending invite.",
+    });
+  //! Should find a way to refactor this function getting all users related to a board by id.
+  const board = await prisma.board.findUnique({
+    where: {
+      id: value.boardId,
+    },
+    include: {
+      users: {
+        select: {
+          id: true,
+        },
+      },
+      author: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+  const boardUsers = board?.users.map((user) => user.id) || [];
+  const result = [...boardUsers, board?.author.id];
+  if (!result.includes(req.currentUser))
+    return next(new AppError(`You are not authorized to send invites from board: ${value.boardId}`, 400));
   const invite = await prisma.invite.create({
     data: {
       ownerId: req.currentUser,
-      userId: value.userId,
+      user: {
+        connect: { id: value.userId },
+      },
       board: {
         connect: { id: value.boardId },
       },
     },
   });
-  if (!invite) next(new AppError("Could not create Label", 400));
+  if (!invite) next(new AppError("Could not create invite", 400));
   res.status(201).json({
     status: "success",
     invite,
@@ -81,6 +116,12 @@ export const getSentInvites = catchAsync(async (req: Request, res: Response, nex
   const invites = await prisma.invite.findMany({
     where: {
       ownerId: req.currentUser,
+    },
+    include: {
+      board: true,
+      user: {
+        select: { id: true, fullname: true, email: true, profileImage: true },
+      },
     },
   });
   res.status(200).json({
