@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Text, useStyleConfig } from "@chakra-ui/react";
 
 import BoardListItem from "./BoardListItem";
-import { Board } from "../BoardSearch";
+import { Board } from "../../context/ContextScheme";
 
 interface BoardListProps {
   data: Board[] | undefined;
@@ -17,9 +17,9 @@ const BoardList = ({ data: boards }: BoardListProps) => {
           <BoardListItem
             key={index}
             name={item.title}
-            members={item.users.length}
-            image={item.coverImage}
-            id={item.id}
+            members={item.users?.length || 0}
+            image={item.coverImage || ''}
+            id={item.id || ''}
             visibility={item.visibility}
           />
         ))

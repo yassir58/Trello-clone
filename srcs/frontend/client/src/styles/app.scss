@@ -74,3 +74,33 @@ $shadow-md-color: rgba(0, 0, 0, 0.2); // Customize the shadow color if needed
   border-radius: 22px;
   object-fit: cover;
 }
+
+.scrollable-container {
+  box-sizing: border-box !important;
+  overflow-y: scroll !important;
+  border:'1px solid red' !important;
+  padding-bottom: 60px !important;
+  // For browsers that support scrollbar customization
+  &::-webkit-scrollbar {
+    width: 8px; // Adjust this value as needed
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: #888; // Customize scrollbar thumb color
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background-color: #f0f0f0; // Customize scrollbar track color
+    border-radius: 4px;
+  }
+  
+  // For Firefox
+  scrollbar-width: thin;
+  
+  // For IE and Edge
+  -ms-overflow-style: none;
+  
+  // Add styles for the content within the container
+  // ...
+}

@@ -7,7 +7,7 @@ import { BiPlus } from "react-icons/bi";
 import { useMutation } from "react-query";
 import { createBoard } from "./createBoard";
 import { Board , AppContext} from "../../context/ContextScheme";
-import {BoardCover} from '../Popover'
+import {CoverPopOver} from "../Popover" 
 interface newBoardProps {
   action?: any;
   onClose: () => void;
@@ -39,6 +39,7 @@ export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
       visibility: false,
       title: title,
       coverImage: coverImage,
+
     };
     newBoardMutation.mutate(newBoard);
   };
@@ -59,8 +60,7 @@ export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
         onChange={handleOnchange}
       />
       <HStack spacing={4} justifyContent="center">
-        <BoardCover boardCoverSetter={setCoverImage} />
-
+      <CoverPopOver action={(photo:string)=>setCoverImage (photo)}/>
         <Button variant="secondary">
           <HStack spacing={3}>
             <FaUnlockKeyhole />

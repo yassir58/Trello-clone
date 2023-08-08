@@ -10,15 +10,13 @@ export interface Boards {
   setState: React.Dispatch<React.SetStateAction<Board[]>>;
 }
 export interface User {
-  state: {
-    id: string;
-    userName: string;
-    Boards: Boards;
-    Comments: Comment[];
-    profilePicture?: string;
-    email: string;
-  } | null;
-  setState?: any;
+  id: string;
+  userName?: string;
+  Boards?: Boards;
+  Comments?: Comment[];
+  profilePicture?: string;
+  email?: string;
+ 
 }
 
 interface Comment {
@@ -70,11 +68,13 @@ export interface Card {
 export interface Board {
   id?: string;
   title: string;
-  coverImage?: string;
+  coverImage?: string | null;
   visibility: boolean;
   authorId?: string;
   createdAt?: string;
   updatedAt?: string;
+  users?:User[];
+  description?: string;
 }
 export interface GlobalContext {
   LogedInUser?: User | null;

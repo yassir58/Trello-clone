@@ -93,7 +93,7 @@ export const Menu: React.FC = () => {
   );
 };
 
-interface MyEditableProps {
+interface MyEditableProps  {
   defaultValue?:string
   action?:(value:string)=>void
 }

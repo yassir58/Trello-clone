@@ -1,45 +1,39 @@
 import React from "react";
-import {
-  Button,
-  Stack,
-  HStack,
-  Text,
-  Heading,
-} from "@chakra-ui/react";
+import { Button, Stack, HStack, Text, Heading } from "@chakra-ui/react";
 import { FaPen } from "react-icons/fa";
-import { MembersPopOver , CoverPopOver} from "../Popover";
+import { MembersPopOver, CoverPopOver } from "../Popover";
 import { CardInfo, ProfileCard } from "../ui-elements/Media";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { MdDescription } from "react-icons/md";
 import { MyEditableTextarea } from "../Menu";
 import { FaTrash } from "react-icons/fa6";
-import {ModalButtonWrapper} from '../ui-elements/Modal'
-import {CloseButton} from './CloseButton'
+import { EditBoardWrapper, ModalBoardProps } from "../ui-elements/Modal";
+import { CloseButton } from "./CloseButton";
 import { EditCardCover } from "../ui-elements/EditCardCover";
 
-export const EditBoard: React.FC = () => {
+interface EditBoardProps extends ModalBoardProps {}
+export const EditBoard: React.FC<EditBoardProps> = ({Board, updateMutation, deleteMutation}) => {
   return (
     <>
-     <ModalButtonWrapper 
-      variant='ghost'
-      icon={<FaPen />}
-      />
+      <EditBoardWrapper variant="ghost" icon={<FaPen />} Board={Board} updateMutation={updateMutation} deleteMutation={deleteMutation} />
     </>
   );
 };
 
-interface EditBoardCpProps {
+interface EditBoardCpProps extends ModalBoardProps {
   onClose: () => void;
 }
 
-export const EditBoardComponent: React.FC<EditBoardCpProps> = ({ onClose }) => {
+export const EditBoardComponent: React.FC<EditBoardCpProps> = ({ onClose, Board, updateMutation, deleteMutation}) => {
   return (
     <Stack>
-      <EditCardCover image="https://source.unsplash.com/random?sig=98" />
-      <HStack justifyContent={"space-between"} width="100%" alignItems={'flex-start'}>
+      <EditCardCover image={Board?.coverImage || ''} />
+      <HStack justifyContent={"space-between"} width="100%" alignItems={"flex-start"}>
         <CloseButton onClose={onClose} />
         <Stack width="70%">
-          <Heading fontSize={'md'} py={3}>Board title</Heading>
+          <Heading fontSize={"md"} py={3}>
+            {Board?.title|| ''}
+          </Heading>
           <Stack spacing={3} my="12px">
             <CardInfo value="Made by" icon={<BiSolidUserCircle />} />
             <ProfileCard
@@ -58,13 +52,21 @@ export const EditBoardComponent: React.FC<EditBoardCpProps> = ({ onClose }) => {
               </HStack>
             </Button>
           </HStack>
-          <MyEditableTextarea />
+          <MyEditableTextarea defaultValue={Board?.description || ''} action={(value:string)=>{
+            const newBoard = {...Board, description: value}
+            updateMutation.mutate(newBoard)
+          }} />
         </Stack>
         <Stack width="25%" py={5}>
           <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
           <MembersPopOver />
-          <CoverPopOver />
-          <Button variant="outlineRed">
+          <CoverPopOver action={(photo:string)=>{
+              const newBoard = {...Board, coverImage: photo}
+              updateMutation.mutate (newBoard)
+          }} />
+          <Button variant="outlineRed" onClick={()=>{
+            deleteMutation.mutate ();
+          }}>
             <HStack spacing={3}>
               <FaTrash />
               <Text fontSize={"sm"}> Delete Board </Text>

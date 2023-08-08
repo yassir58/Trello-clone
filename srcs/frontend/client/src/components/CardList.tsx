@@ -13,10 +13,9 @@ import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 // import { EditListTitle } from "./Functionality/EditListTitle";
 import { handleFocus } from "./Functionality/utils";
 import { useQueryClient } from "react-query";
-import { createNewCard } from "./Functionality/createCard";
 import { deleteCard } from "./Functionality/deleteCard";
 import { useMutation, useQuery } from "react-query";
-import { BACKEND_ENDPOINT, JWT } from "../data/DataFetching";
+import apiClient from "../services/apiClient";
 
 
 interface CardListProps {
@@ -26,12 +25,20 @@ interface CardListProps {
 
 }
 
+interface cardsRespose {
+  status:string ;
+  count :number;
+  cards:Card[]
+}
+
 
 export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
   
     const [cards, setCards] = useState<Card[]>([]);
     const [createCard, setCreateCard] = useState(false);
     const inputRef = React.useRef<HTMLInputElement>(null);
+    const newCardClient = new apiClient ("/cards")
+    const allCardsClient = new apiClient<cardsRespose> ("/cards")
     const queryClient = useQueryClient ()
     const createCardToggler = () => {
       setCreateCard(!createCard);
@@ -41,7 +48,7 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
     }
    
     const newCardMutation = useMutation ({
-      mutationFn:createNewCard,
+      mutationFn: (card:Card)=> newCardClient.postData(card).then (res=>res.data),
       onSuccess:(data)=>{
         console.log (`card list : ${data}`)
         queryClient.invalidateQueries (['cards', list.id])
@@ -58,17 +65,9 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
       // onError:(error)=>{console.log(`error while deleting card: ${error}`)}
     })
 
-    const {isLoading} = useQuery (['cards', list.id], async ()=>{
-      const res = await fetch (`${BACKEND_ENDPOINT}/cards/${list.id}`, {
-        method:'GET',
-        headers:{
-          'Content-Type':'application/json',
-          'Authorization':`Bearer ${JWT}`
-        }
-      })
-      if (!res.ok) throw new Error ('Error fetching cards')
-      return await res.json ()
-    }, {
+    const {isLoading} =useQuery ({
+      queryKey:['cards', list.id],
+      queryFn: ()=> allCardsClient.getData (null).then (res=>res.data),
       onSuccess:(data)=>{
         console.log (`card lists: ${data}`)
         setCards (data.cards)
@@ -113,7 +112,7 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
             </Button>
           )}
   
-          <Container variant='listStack'>
+          <Container variant='listStack' className='scrollable-container'>
             {cards &&
               cards.map((item:Card, index:number) => {
                 return (

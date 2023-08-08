@@ -11,6 +11,8 @@ import {
 } from "@chakra-ui/react";
 import { CardCp, CardProps } from "../Card";
 import { EditCard} from "../Functionality/EditCard";
+import { EditBoardComponent } from "../Functionality/EditBoard";
+import { Board } from "../../context/ContextScheme";
 import { NewBoard } from "../Functionality/NewBoard";
 interface ModalComponentProps {
   children: React.ReactNode;
@@ -24,11 +26,14 @@ export interface ModalCardProps extends CardProps {
     id?: number | undefined,
     mutation:any
 }
-interface ModalButtonProps {
+export interface ModalBoardProps {
 
     variant?:string
     value?:string
     icon?:React.ReactNode
+    Board?:Board
+    updateMutation?:any
+    deleteMutation?:any
 }
 export const ModalComponent: React.FC<ModalComponentProps> = ({
   children,
@@ -61,7 +66,7 @@ mutation
   console.log(`this is id ${id}}`)
   return (
     <>
-      <ModalComponent isOpen={isOpen} onClose={onClose} size='xl'>
+      <ModalComponent isOpen={isOpen} onClose={onClose} size='3xl'>
         <EditCard card={card} onClose={onClose} mutation={mutation}/>
        </ModalComponent>
       <CardCp onClick={onOpen} 
@@ -73,16 +78,19 @@ mutation
   );
 };
 
-export const ModalButtonWrapper: React.FC<ModalButtonProps> = ({
+export const EditBoardWrapper:React.FC<ModalBoardProps> = ({
     variant,
     value,
-    icon
+    icon,
+    Board,
+    updateMutation,
+    deleteMutation
 })=>{
     const { isOpen, onOpen, onClose } = useDisclosure();
 return (
     <>
-        <ModalComponent isOpen={isOpen} onClose={onClose} size='xs'>
-            <NewBoard onClose={onClose} />
+        <ModalComponent isOpen={isOpen} onClose={onClose} size='3xl'>
+            <EditBoardComponent onClose={onClose} Board={Board} updateMutation={updateMutation} deleteMutation={deleteMutation} />
         </ModalComponent>
         <Button variant={variant} onClick={onOpen}>
             <HStack spacing={1}>
@@ -91,6 +99,27 @@ return (
             </HStack>
         </Button>
     </>
+)
+}
+
+export const NewBoardWrapper:React.FC<ModalBoardProps> = ({
+  variant,
+  value,
+  icon,
+})=>{
+  const { isOpen, onOpen, onClose } = useDisclosure();
+return (
+  <>
+      <ModalComponent isOpen={isOpen} onClose={onClose} size='sm'>
+          <NewBoard onClose={onClose} />
+      </ModalComponent>
+      <Button variant={variant} onClick={onOpen}>
+          <HStack spacing={1}>
+              {icon}
+              <Text fontSize='sm'>{value}</Text>
+          </HStack>
+      </Button>
+  </>
 )
 }
 

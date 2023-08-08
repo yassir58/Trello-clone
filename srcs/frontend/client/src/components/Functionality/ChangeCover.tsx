@@ -5,48 +5,25 @@ import {
   Heading,
 
 } from "@chakra-ui/react";
-import React, { useState, useContext, useEffect} from "react";
+import React, { useState, useContext} from "react";
 import { AvatarWrapper } from "../ui-elements/Wrappers";
-import { Card, AppContext} from "../../context/ContextScheme";
+import { AppContext} from "../../context/ContextScheme";
 
 import { SearchInput } from "../ui-elements/SearchInput";
 export interface ChangeCoverProps {
-  boardCover?:  boolean;
-  boardCoverSetter?: React.Dispatch<React.SetStateAction<string>>;
-  card?: Card;
-  cards?: Card[];
-  setCards?: React.Dispatch<React.SetStateAction<Card[]>>;
+  action: (photo: string) => void;
 }
 
-const setCoverPhoto = (
-  photo: string,
-  state: Card[],
-  stateSetter: React.Dispatch<React.SetStateAction<Card[]>>,
-  cardId: string
-) => {
-  const tmp: Card[] = state.slice();
-  const index = tmp.findIndex((card) => card.id == cardId);
-  tmp[index].cover = photo;
-  console.log(tmp);
-  stateSetter(tmp);
-};
+
 
 
 export const ChangeCover: React.FC<ChangeCoverProps> = ({
-  boardCover = false ,
-  boardCoverSetter,
-  card,
-  cards,
-  setCards,
+  action
 }) => {
   
   const [keyword, setKeyWord] = useState<string>("");
   const {coverPhotos} = useContext (AppContext)
 
-  useEffect(() => {
-    if (boardCover)
-      boardCoverSetter && boardCoverSetter (coverPhotos![0])
-  }, []);
   return (
     <div>
       <Stack spacing={2}>
@@ -61,15 +38,8 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
               key={index}
               src={photo}
               variant="clickable"
-              onClick={() => {
-                boardCover ?
-                boardCoverSetter && boardCoverSetter(photo) :
-                setCoverPhoto(
-                  photo,
-                  cards || [],
-                  setCards || (() => {}),
-                  card?.id || ''
-                );
+              onClick={()=>{
+                action (photo)
               }}
             />
           ))}
