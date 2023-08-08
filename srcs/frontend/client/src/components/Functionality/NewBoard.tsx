@@ -5,23 +5,27 @@ import { EditCardCover } from "../ui-elements/EditCardCover";
 import { FaUnlockKeyhole } from "react-icons/fa6";
 import { BiPlus } from "react-icons/bi";
 import { useMutation } from "react-query";
-import { createBoard } from "./createBoard";
 import { Board , AppContext} from "../../context/ContextScheme";
 import {CoverPopOver} from "../Popover" 
+import apiClient from "../../services/apiClient";
 interface newBoardProps {
   action?: any;
   onClose: () => void;
+}
+interface BoardResponse {
+  status:string,
+  board:Board
 }
 
 export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
   const [title, setTitle] = useState<string>("");
   const { publicBoards, setPublicBoards } = useContext(AppContext);
   const [coverImage, setCoverImage] = useState<string>("");
-
+  const createBoardClient = new apiClient<Board>("/boards");
   // Mutation hook call
   const newBoardMutation = useMutation({
-    mutationFn: createBoard,
-    onSuccess: (data) => {
+    mutationFn: (newBoard: Board) => createBoardClient.postData(newBoard).then (res=>res.data),
+    onSuccess: (data:BoardResponse) => {
       const tmpBoards = publicBoards?.slice();
       tmpBoards?.push(data.board);
       setPublicBoards && setPublicBoards(tmpBoards || []);

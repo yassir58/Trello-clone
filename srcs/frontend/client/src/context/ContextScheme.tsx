@@ -1,6 +1,5 @@
 import React, { createContext, useState } from "react";
 import { useQuery } from "react-query";
-import { API_KEY, endpoint } from "../data/DataFetching";
 interface Props {
   children: React.ReactNode;
 }
@@ -94,12 +93,17 @@ export const AppContext = createContext<GlobalState>({});
 export const GlobalContext: React.FC<Props> = ({ children }) => {
   const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
   const count = 12;
+  const API_KEY = process.env.REACT_APP_API_KEY 
+  const UNSPLASH_ENDPOINT = process.env.REACT_UNSPLASH_ENDPOINT
+
+  console.log ('API_KEY',API_KEY)
+  console.log ('UNSPLASH_ENDPOINT',UNSPLASH_ENDPOINT)
   const [publicBoards, setPublicBoards] = useState<Board[]>([]);
   const { isLoading } = useQuery(
     "coverQuery",
     async () => {
       const res = await fetch(
-        `${endpoint}photos/random/?client_id=${API_KEY}&count=${count}`
+        `${UNSPLASH_ENDPOINT}photos/random/?client_id=${API_KEY}&count=${count}`
       );
 
       const photos = await res.json();

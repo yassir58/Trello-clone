@@ -13,7 +13,6 @@ import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 // import { EditListTitle } from "./Functionality/EditListTitle";
 import { handleFocus } from "./Functionality/utils";
 import { useQueryClient } from "react-query";
-import { deleteCard } from "./Functionality/deleteCard";
 import { useMutation, useQuery } from "react-query";
 import apiClient from "../services/apiClient";
 
@@ -57,7 +56,7 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
     })
 
     const deleteCardMutation = useMutation ({
-      mutationFn:deleteCard,
+      mutationFn:()=> newCardClient.deleteData ().then (res=>res.data),
       onSuccess:(data)=>{
         console.log (`card list : ${data}`)
         queryClient.invalidateQueries (['cards', list.id])
