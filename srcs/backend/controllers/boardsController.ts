@@ -5,7 +5,7 @@ import * as UtilsCtrl from "./factoryController";
 
 import AppError from "../utils/AppError";
 import catchAsync from "../utils/catchAsync";
-import { boardValidator } from "../utils/validator";
+import { boardUpdateValidator, boardValidator } from "../utils/validator";
 import { sendBoardId } from "../models/boardModel";
 import { checkExistance } from "./factoryController";
 
@@ -121,12 +121,11 @@ export const removeUserFromBoard = catchAsync(async (req: Request, res: Response
 });
 
 export const updateBoardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const board = (await checkExistance(req, next, "board")) as Board;
-  const { error, value } = boardValidator(req.body);
+  const { error, value } = boardUpdateValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
   const newBoard = await prisma.board.update({
     where: {
-      id: board.id,
+      id: req.boardId || req.params.id,
     },
     data: {
       ...value,

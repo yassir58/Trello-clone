@@ -3,7 +3,7 @@ import { ObjectSchema } from "joi";
 import cardSchema from "../models/cardModel";
 import userSchema from "../models/userModel";
 import listSchema from "../models/listModel";
-import boardSchema from "../models/boardModel";
+import { boardUpdateSchema, boardSchema } from "../models/boardModel";
 import labelSchema from "../models/labelModel";
 import inviteSchema from "../models/inviteModel";
 import commentSchema from "../models/commentModel";
@@ -15,6 +15,7 @@ const validator = (schema: ObjectSchema) => (payload: object) => schema.validate
 export const userValidator = validator(userSchema);
 export const listValidator = validator(listSchema);
 export const boardValidator = validator(boardSchema);
+export const boardUpdateValidator = validator(boardUpdateSchema);
 export const attachementValidator = validator(attachementSchema);
 export const commentValidator = validator(commentSchema);
 export const labelValidator = validator(labelSchema);

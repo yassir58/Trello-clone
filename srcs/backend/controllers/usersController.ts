@@ -64,6 +64,7 @@ export const getAllUsers = catchAsync(async (req: Request, res: Response, next: 
         mode: "insensitive",
       },
     },
+    take: 10
   });
   const result = users.filter((item) => !combinedUsers.includes(item.id));
   res.status(200).json({
