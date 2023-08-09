@@ -50,7 +50,7 @@ const ProfileMenu = () => {
       <MenuList fontFamily="Poppins">
         <MenuItem onClick={() => profileModal.onOpen()}>Profile</MenuItem>
         <MenuItem>Invites</MenuItem>
-        <MenuItem onClick={() => navigate("/AllBoards")}>Boards</MenuItem>
+        <MenuItem onClick={() => navigate("/")}>Boards</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </MenuList>
     </Menu>

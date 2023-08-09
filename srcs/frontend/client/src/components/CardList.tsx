@@ -30,16 +30,20 @@ interface cardsRespose {
   cards:Card[]
 }
 
+interface cardUpdate {
+  id:string;
+  card:Card
+}
 
 export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
   
     const [cards, setCards] = useState<Card[]>([]);
     const [createCard, setCreateCard] = useState(false);
     const inputRef = React.useRef<HTMLInputElement>(null);
-    const newCardClient = new apiClient ("/cards")
-    const allCardsClient = new apiClient<cardsRespose> ("/cards")
+    const newCardClient = new apiClient (`/lists/${list.id}/cards`)
+    const allCardsClient = new apiClient<cardsRespose> (`/lists/${list.id}/cards`)
     const queryClient = useQueryClient ()
-    const ByIdCardClient = (card:Card)=> new apiClient (`/cards/${card.id}`)
+    const ByIdCardClient = (id:string)=> new apiClient (`/cards/${id}`)
 
     const createCardToggler = () => {
       setCreateCard(!createCard);
@@ -58,7 +62,7 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
     })
 
     const deleteCardMutation = useMutation ({
-      mutationFn:(card:Card)=> ByIdCardClient(card).deleteData ().then (res=>res.data),
+      mutationFn:(card:Card)=> ByIdCardClient(card.id || '').deleteData ().then (res=>res.data),
       onSuccess:(data)=>{
         console.log (`card list : ${data}`)
         queryClient.invalidateQueries (['cards', list.id])
@@ -67,7 +71,7 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
     })
 
     const updateCardMutation =  useMutation ({
-      mutationFn:(card:Card) => ByIdCardClient (card).updateData (card, {}).then(res=>res.data),
+      mutationFn:(obj:cardUpdate) => ByIdCardClient (obj.id).updateData (obj.card, {}).then(res=>res.data),
       onSuccess:(data)=>{
         console.log (`card list : ${data}`)
         queryClient.invalidateQueries (['cards', list.id])

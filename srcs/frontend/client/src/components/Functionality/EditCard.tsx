@@ -32,7 +32,7 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                   
                   (value:string)=>{
                     const newCard:Card = {title:value, listId:card.listId, description:card.description, coverImage:card.coverImage}
-                    updateMutation.mutate (newCard)
+                    updateMutation.mutate ({id:card.id, card:newCard})
                   }
                 }/>
                 <Text fontSize="xs" fontWeight="normal" color="#828282">
@@ -46,8 +46,8 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                   defaultValue={card.description}
                   action={(value: string) => {
                     console.log(value);
-                    const newCard = {description:value, listId:card.listId, title:card.title, coverImage:card.coverImage}
-                    updateMutation.mutate (newCard)
+                    const newCard = {description:value, listId:card.listId, title:card.title , coverImage:card.coverImage}
+                    updateMutation.mutate ({id:card.id ,newCard})
                   }}
                 />
                 <HStack spacing={2} px={4} py={2}>
@@ -72,7 +72,7 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                 <LabelPopOver card={card} />
                 <CoverPopOver card={card} action={(value:string)=>{
                   const newCard = {coveImage:value, listId:card.listId}
-                  updateMutation.mutate (newCard)
+                  updateMutation.mutate ({id:card.id, card:newCard})
                 }}/>
                 <Button
                   variant="outlineRed"
