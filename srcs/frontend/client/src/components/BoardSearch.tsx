@@ -41,7 +41,7 @@ const BoardSearch = () => {
     if (data)
       return data.filter(
         (item) =>
-          item.title.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) && item.visibility == visibility
+          item.title?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) && item.visibility == visibility
       );
     return [];
   };

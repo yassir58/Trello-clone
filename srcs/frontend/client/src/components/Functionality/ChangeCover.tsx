@@ -7,9 +7,9 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useContext} from "react";
 import { AvatarWrapper } from "../ui-elements/Wrappers";
-import { AppContext} from "../../context/ContextScheme";
-
+import { PhotosContext } from "../../providers/PhotosProvider";
 import { SearchInput } from "../ui-elements/SearchInput";
+import Loading from "../../pages/Loading";
 export interface ChangeCoverProps {
   action: (photo: string) => void;
 }
@@ -22,7 +22,7 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
 }) => {
   
   const [keyword, setKeyWord] = useState<string>("");
-  const {coverPhotos} = useContext (AppContext)
+  const {isLoading, photos} = useContext (PhotosContext)
 
   return (
     <div>
@@ -32,8 +32,10 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
           Search Unsplash for photos
         </chakra.small>
         <SearchInput state={keyword} stateSetter={setKeyWord} />
-        <HStack w="98%" spacing={2} justify="center" flexWrap="wrap">
-          {coverPhotos?.map((photo, index) => (
+        {
+          isLoading ? <Loading /> : (
+            <HStack w="98%" spacing={2} justify="center" flexWrap="wrap">
+          {photos?.map((photo, index) => (
             <AvatarWrapper
               key={index}
               src={photo}
@@ -44,6 +46,8 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
             />
           ))}
         </HStack>
+          )
+        }
       </Stack>
     </div>
   );

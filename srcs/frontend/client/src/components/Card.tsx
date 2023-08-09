@@ -21,7 +21,7 @@ export const CardCp: React.FC<CardProps> = ({
       <div>
         <Container variant="Card" onClick={onClick}>
           
-            {card.cover && <CardCover image={card.cover} />}
+            {card.coverImage && <CardCover image={card.coverImage} />}
             <Heading variant={'cardTitle'}>{card.title}</Heading>
             {
               <HStack spacing={2} flexWrap={'wrap'} px={4} py={2}>

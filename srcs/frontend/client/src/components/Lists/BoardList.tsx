@@ -16,11 +16,11 @@ const BoardList = ({ data: boards }: BoardListProps) => {
         boards.map((item, index) => (
           <BoardListItem
             key={index}
-            name={item.title}
+            name={item.title || ''}
             members={item.users?.length || 0}
             image={item.coverImage || ''}
             id={item.id || ''}
-            visibility={item.visibility}
+            visibility={item.visibility!}
           />
         ))
       ) : (

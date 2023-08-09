@@ -39,6 +39,8 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
     const newCardClient = new apiClient ("/cards")
     const allCardsClient = new apiClient<cardsRespose> ("/cards")
     const queryClient = useQueryClient ()
+    const ByIdCardClient = (card:Card)=> new apiClient (`/cards/${card.id}`)
+
     const createCardToggler = () => {
       setCreateCard(!createCard);
     };
@@ -52,18 +54,28 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
         console.log (`card list : ${data}`)
         queryClient.invalidateQueries (['cards', list.id])
       },
-      // onError:(error)=>{console.log (`error while creating card: ${error}`)}
+      onError:(error)=>{console.log (`error while creating card: ${error}`)}
     })
 
     const deleteCardMutation = useMutation ({
-      mutationFn:()=> newCardClient.deleteData ().then (res=>res.data),
+      mutationFn:(card:Card)=> ByIdCardClient(card).deleteData ().then (res=>res.data),
       onSuccess:(data)=>{
         console.log (`card list : ${data}`)
         queryClient.invalidateQueries (['cards', list.id])
       },
-      // onError:(error)=>{console.log(`error while deleting card: ${error}`)}
+      onError:(error)=>{console.log(`error while deleting card: ${error}`)}
     })
 
+    const updateCardMutation =  useMutation ({
+      mutationFn:(card:Card) => ByIdCardClient (card).updateData (card, {}).then(res=>res.data),
+      onSuccess:(data)=>{
+        console.log (`card list : ${data}`)
+        queryClient.invalidateQueries (['cards', list.id])
+      },
+      onError:(error)=>{
+        console.log (`error while updaing card : ${error}`)
+      }
+    })
     const {isLoading} =useQuery ({
       queryKey:['cards', list.id],
       queryFn: ()=> allCardsClient.getData (null).then (res=>res.data),
@@ -120,7 +132,8 @@ export const CardList: React.FC<CardListProps> = ({list, mutation}) => {
                       card={item}
                       id={index}
                       key={index}
-                      mutation={deleteCardMutation}
+                      deleteMutation={deleteCardMutation}
+                      updateMutation={updateCardMutation}
                     />
                   </Box>
                 );

@@ -1,6 +1,5 @@
 import React, { createContext, useState } from "react";
-import { useQuery } from "react-query";
-import apiClient from "../services/apiClient";
+
 interface Props {
   children: React.ReactNode;
 }
@@ -53,7 +52,7 @@ export interface Card {
   id?: string;
   title: string;
   description?: string;
-  cover?: string;
+  coverImage?: string;
   members?: User[];
   labels?: Label[];
   comments?: Comment[];
@@ -67,9 +66,9 @@ export interface Card {
 
 export interface Board {
   id?: string;
-  title: string;
+  title?: string;
   coverImage?: string | null;
-  visibility: boolean;
+  visibility?: boolean;
   authorId?: string;
   createdAt?: string;
   updatedAt?: string;
