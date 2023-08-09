@@ -1,10 +1,19 @@
 import React from "react";
-import { Spinner, Center } from "@chakra-ui/react";
+import { Center, Box, Text, HStack } from "@chakra-ui/react";
+import Logo from "../components/Forms/Logo";
 
 const Loading = () => {
   return (
     <Center h="100vh">
-      <Spinner thickness='12px' speed='1s' color="#2F80ED" height="150px" width="150px"/>
+      <HStack justifyContent="space-between">
+        <Box marginBottom={70}>
+          <Logo />
+        </Box>
+        <Box className="logo-container">
+          <Text className="logo-main outline">Thullo</Text>
+          <Text className="logo-main fill">Thullo</Text>
+        </Box>
+      </HStack>
     </Center>
   );
 };

@@ -130,4 +130,3 @@ export const UserBoards: React.FC<UserBoardsProps> = ({ Boards }) => {
     </div>
   );
 };
-

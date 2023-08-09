@@ -6,10 +6,13 @@ const Router = express.Router({ mergeParams: true });
 
 Router.use(authorizeRoute);
 
-Router.use(preventUnauthorized);
+Router.use(preventUnauthorized("user"));
 
 Router.route("/").get(commentsController.getAllComments).post(commentsController.createComment);
 
-Router.route("/:id").get(commentsController.getCommentById).delete(commentsController.deleteCommentById);
+Router.route("/:id")
+  .get(commentsController.getCommentById)
+  .put(commentsController.updateCommentById)
+  .delete(commentsController.deleteCommentById);
 
 export default Router;

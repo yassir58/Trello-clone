@@ -36,6 +36,7 @@ export const processUserPhoto = (req: Request, res: Response, next: NextFunction
 
 export const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const search = req.query.search as string;
+  console.log(search);
   if (!req.boardId) return next(new AppError(`Board id is needed to filter out users`, 400));
   const board = await prisma.board.findUnique({
     where: {
@@ -64,7 +65,7 @@ export const getAllUsers = catchAsync(async (req: Request, res: Response, next: 
         mode: "insensitive",
       },
     },
-    take: 10
+    take: 3
   });
   const result = users.filter((item) => !combinedUsers.includes(item.id));
   res.status(200).json({

@@ -174,7 +174,7 @@ export const preventUnauthorized = (level: string | undefined) => {
         return next(new AppError("Sorry this action can only be performed by the board admin", 401));
     } else {
       const users = board.users.map((item) => item.id);
-      if (!users.includes(req.currentUser))
+      if (!users.includes(req.currentUser) && board.authorId != req.currentUser)
         return next(new AppError("User is authorized to perform this action on this baord", 401));
     }
     next();
