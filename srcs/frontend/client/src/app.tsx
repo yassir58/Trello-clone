@@ -41,9 +41,11 @@ const router = createBrowserRouter([
   },
 ]);
 
+
 const queryClient = new QueryClient();
 
 const App: React.FunctionComponent<IAppProps> = () => {
+  console.log(router);
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
