@@ -7,10 +7,12 @@ import {  FaTrash } from "react-icons/fa6";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { MyEditableTextarea, EditableTitle } from "../Menu";
 import { MembersPopOver, LabelPopOver, CoverPopOver } from "../Popover";
-import { Card } from "../../context/ContextScheme";
+import { Card, Label as LabelType } from "../../context/ContextScheme";
 import { ModalCardProps } from "../ui-elements/Modal";
+import { useMutation } from "react-query";
+import apiClient from "../../services/apiClient";
 import { Label } from "../ui-elements/Label";
-
+import { QueryClient } from "react-query";
 interface EditCardProps extends ModalCardProps {
   card: Card;
   onClose: () => void;
@@ -19,6 +21,24 @@ interface EditCardProps extends ModalCardProps {
 }
 
 export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutation, updateMutation }) => {
+ 
+  const queryClient = new QueryClient ()
+  const labelsClient = (id:string)=> new apiClient (`/cards/${id}/labels`)
+
+  // const  labelsQuery = useQuery ({
+  //   queryKey:['labels', card.id],
+  //   queryFn:()=> labelsClient(card.id).getData().then (res=>res.data),
+  //   onSuccess:(data)=>{
+  //     console.log (`labels : ${data}`)
+  //   }
+  // })
+  const labelsMutation = useMutation ({
+    mutationFn:(label:LabelType)=> labelsClient(card?.id || '').postData(label).then (res=>res.data),
+    onSuccess:(data)=>{
+      console.log (`label added : ${data}`)
+      queryClient.invalidateQueries (['labels', card.id])
+    }
+  })
   return (
     <div>
       <Stack spacing={4}>
@@ -31,7 +51,7 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                 <EditableTitle defaultValue={card.title} action={
                   
                   (value:string)=>{
-                    const newCard:Card = {title:value, listId:card.listId, description:card.description, coverImage:card.coverImage}
+                    const newCard = {title:value}
                     updateMutation.mutate ({id:card.id, card:newCard})
                   }
                 }/>
@@ -45,9 +65,9 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                 <MyEditableTextarea
                   defaultValue={card.description}
                   action={(value: string) => {
-                    console.log(value);
-                    const newCard = {description:value, listId:card.listId, title:card.title , coverImage:card.coverImage}
-                    updateMutation.mutate ({id:card.id ,newCard})
+                    console.log(`value: ${value}`);
+                    const newCard = {description:value}
+                    updateMutation.mutate ({id:card.id , card:newCard})
                   }}
                 />
                 <HStack spacing={2} px={4} py={2}>
@@ -69,9 +89,11 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
               <Stack w="25%" spacing={3} py={4}>
                 <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
                 <MembersPopOver />
-                <LabelPopOver card={card} />
+                <LabelPopOver card={card} addLabelAction={(label:LabelType)=>{
+                  labelsMutation.mutate (label)
+                }} />
                 <CoverPopOver card={card} action={(value:string)=>{
-                  const newCard = {coveImage:value, listId:card.listId}
+                  const newCard = {coverImage:value}
                   updateMutation.mutate ({id:card.id, card:newCard})
                 }}/>
                 <Button

@@ -11,7 +11,7 @@ import {
 import { CardInfo } from "../ui-elements/Media";
 import { Label } from "../ui-elements/Label";
 import { MdLabel } from "react-icons/md";
-import { Card } from "../../context/ContextScheme";
+import { Card , Label as LabelType} from "../../context/ContextScheme";
 // import {RemoveLabel} from "./RemoveLabel";
 
 interface LableObject {
@@ -21,6 +21,7 @@ interface LableObject {
 
 interface AddLableProps {
   card?: Card;
+  action?: (label: LabelType) => void;
 }
 
 // const createNewLabel = (
@@ -40,7 +41,7 @@ interface AddLableProps {
 
 export const AddLable: React.FC<AddLableProps> = ({
   // card,
-
+  action,
 }) => {
   const [labels, setLabels] = useState<LableObject[]>([]);
   const [value, setValue] = useState<string>("");
@@ -57,6 +58,7 @@ export const AddLable: React.FC<AddLableProps> = ({
     temp.push({ value, color });
     setLabels(temp);
     setValue("");
+    action && action ({value, color})
   };
   const removeLabel = (index: number) => {
     // let temp = labels.slice();

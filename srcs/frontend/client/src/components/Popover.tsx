@@ -6,7 +6,7 @@ import { AddLable } from "./Functionality/AddLable";
 import InviteToBoard from "./InviteToBoard";
 import { ChangeCover } from "./Functionality/ChangeCover";
 import { PopOverWrapper } from "./ui-elements/PopOver";
-import { Card } from "../context/ContextScheme";
+import { Card, Label } from "../context/ContextScheme";
 import { PhotosProvider } from "../providers/PhotosProvider";
 
 interface PopOverProps {
@@ -14,6 +14,9 @@ interface PopOverProps {
   action?: (photo: string) => void;
 }
 
+interface LabelsProps extends PopOverProps {
+addLabelAction?: (label:Label) => void;
+}
 export const MembersPopOver: React.FC = () => {
   return (
     <PopOverWrapper value="Members" icon={<FaUserGroup />} triggerVariant={"largeSecondary"} size="xs" placement="left">
@@ -22,10 +25,10 @@ export const MembersPopOver: React.FC = () => {
   );
 };
 
-export const LabelPopOver: React.FC<PopOverProps> = ({ card }) => {
+export const LabelPopOver: React.FC<LabelsProps> = ({ card , addLabelAction}) => {
   return (
     <PopOverWrapper value="Labels" icon={<MdLabel />} triggerVariant="largeSecondary" size="xs" placement="left">
-      <AddLable card={card} />
+      <AddLable card={card} action={addLabelAction}/>
     </PopOverWrapper>
   );
 };

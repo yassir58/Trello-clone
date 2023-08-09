@@ -22,8 +22,9 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
 }) => {
   
   const [keyword, setKeyWord] = useState<string>("");
-  const {isLoading, photos} = useContext (PhotosContext)
-
+  const {isLoading, photos, searchPhotos} = useContext (PhotosContext)
+  if (isLoading)
+   return <h3>Loading ...</h3>
   return (
     <div>
       <Stack spacing={2}>
@@ -31,7 +32,7 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
         <chakra.small color="#BDBDBD" fontSize="xs">
           Search Unsplash for photos
         </chakra.small>
-        <SearchInput state={keyword} stateSetter={setKeyWord} />
+        <SearchInput state={keyword} stateSetter={setKeyWord} action={searchPhotos}/>
         {
           isLoading ? <Loading /> : (
             <HStack w="98%" spacing={2} justify="center" flexWrap="wrap">

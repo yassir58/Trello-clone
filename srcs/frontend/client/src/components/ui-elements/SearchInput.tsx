@@ -6,8 +6,9 @@ import { FaSistrix } from "react-icons/fa6";
 interface SearchInputProps {
     state: string;
     stateSetter: React.Dispatch<React.SetStateAction<string>>;
+    action?: (keyword: string) => void;
   }
-  export const SearchInput: React.FC<SearchInputProps> = ({state, stateSetter }) => {
+  export const SearchInput: React.FC<SearchInputProps> = ({state, stateSetter, action }) => {
     return (<HStack
       justify="space-between"
       w="98%"
@@ -33,7 +34,7 @@ interface SearchInputProps {
           },
         }}
       />
-      <Button variant="primary">
+      <Button variant="primary" onClick={()=> action && action (state)}>
         <FaSistrix />
       </Button>
     </HStack>);
