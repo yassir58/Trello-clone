@@ -18,7 +18,7 @@ export const Nav: React.FC<NavProps> = ({
           bg="gray.200"
           mx="1.5rem"
         ></chakra.div>
-        <Link to="/AllBoards">
+        <Link to="/">
           <Button variant="secondary">
             <HStack spacing={2}>
               <BsFillGrid3X3GapFill />

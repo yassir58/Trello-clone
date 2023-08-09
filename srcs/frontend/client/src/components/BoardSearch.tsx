@@ -6,18 +6,19 @@ import VisibiltyButton from "./ui-elements/VisibiltyButton";
 import { useQuery } from "react-query";
 import apiClient from "../services/apiClient";
 import BoardList from "./Lists/BoardList";
+import { Board } from "../context/ContextScheme";
 
 export interface User {
   id: string;
 }
 
-export interface Board {
-  id: string;
-  title: string;
-  coverImage: string | null;
-  visibility: boolean;
-  users: User[];
-}
+// export interface Board {
+//   id: string;
+//   title: string;
+//   coverImage: string | null;
+//   visibility: boolean;
+//   users: User[];
+// }
 
 export interface BoardsReponse {
   status: string;
@@ -40,7 +41,7 @@ const BoardSearch = () => {
     if (data)
       return data.filter(
         (item) =>
-          item.title.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) && item.visibility == visibility
+          item.title?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) && item.visibility == visibility
       );
     return [];
   };

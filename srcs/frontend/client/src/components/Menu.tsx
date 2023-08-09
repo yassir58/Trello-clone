@@ -15,8 +15,18 @@ import {
   chakra,
   FormControl,
   Textarea,
+  Text,
+  Editable,
+  EditableInput,
+  EditablePreview,
+  IconButton,
+  ButtonGroup,
+  Flex,
+  useEditableControls,
+  Input
 } from "@chakra-ui/react";
-
+import { FaPen } from "react-icons/fa";
+import {CloseIcon, CheckIcon, EditIcon} from '@chakra-ui/icons'
 export const Menu: React.FC = () => {
   const profile = {
     name: "Nikola Tesla",
@@ -60,23 +70,12 @@ export const Menu: React.FC = () => {
 
       <Stack spacing={3} my="12px">
         <CardInfo value="Description" icon={<MdDescription />} />
-        <Box
-          border="1px solid black"
-          borderRadius="md"
-          width="95%"
-          p="15px"
-          my="10px"
-        >
+        <Box border="1px solid black" borderRadius="md" width="95%" p="15px" my="10px">
           <MyEditableTextarea defaultValue={"Enter description ..."} />
         </Box>
         <HStack spacing={3}>
-          <Button  variant='green'>
-            Save
-          </Button>
-          <Button
-            onClick={removeFocus}
-            variant="ghostSecondary"
-          >
+          <Button variant="green">Save</Button>
+          <Button onClick={removeFocus} variant="ghostSecondary">
             Cancel
           </Button>
         </HStack>
@@ -94,14 +93,12 @@ export const Menu: React.FC = () => {
 };
 
 interface MyEditableProps {
-  defaultValue?:string
-  action?:(value:string)=>void
+  defaultValue?: string;
+  action?: (value: string) => void;
 }
-export const MyEditableTextarea: React.FC<MyEditableProps> = ({
-  defaultValue = "",
-  action
-}) => {
+export const MyEditableTextarea: React.FC<MyEditableProps> = ({ defaultValue = "", action }) => {
   const [value, setValue] = useState(defaultValue);
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleChange = (event: any) => {
     setValue(event.target.value);
@@ -117,26 +114,45 @@ export const MyEditableTextarea: React.FC<MyEditableProps> = ({
 
   return (
     <FormControl>
+      <HStack spacing={6}>
+        <CardInfo value="Description" icon={<MdDescription />} />
+        <Button variant="outlineSecondary" onClick={()=>setIsEditing(true)}>
+          <HStack spacing={2}>
+            <FaPen /> <Text fontSize="sm">Edit</Text>
+          </HStack>
+        </Button>
+      </HStack>
       <Textarea
         ref={textareaRef}
         placeholder="Enter description ..."
         value={value}
         border="none"
-        sx={{
-          "&:focus": {
-            outline: "none",
-            boxShadow: "none",
-            border: "none",
-          },
-        }}
-        onChange={(e)=>{
-          handleChange (e)
-          action && action(e.target.value)
+        my={6}
+        onChange={(e) => {
+          handleChange(e);
         }}
         resize="none"
         overflow="hidden"
         height="auto"
       />
+      {isEditing ? (
+        <HStack spacing={4}>
+          <Button
+          variant="green"
+          onClick={() => {
+            action && action(value);
+            setIsEditing(false);
+          }}
+        >
+          save
+        </Button>
+        <Button variant={'ghost'} onClick={()=>setIsEditing (false)}>
+          cancel
+        </Button>
+        </HStack>
+      ) : (
+        ""
+      )}
     </FormControl>
   );
 };
@@ -156,23 +172,72 @@ export const TeamMemberCard: React.FC<teamMemberProps> = ({ profile }) => {
     <div>
       <HStack justify="space-between">
         <HStack spacing={3}>
-          <Avatar
-            size="sm"
-            rounded="md"
-            borderRadius="md"
-            src={profile.image}
-          />
+          <Avatar size="sm" rounded="md" borderRadius="md" src={profile.image} />
           <Heading size="xs">{profile.name}</Heading>
         </HStack>
-        {profile.admin ? (
-          <chakra.small> admin </chakra.small>
-        ) : (
-          <Button variant='outlineRed'>
-            {" "}
-            remove{" "}
-          </Button>
-        )}
+        {profile.admin ? <chakra.small> admin </chakra.small> : <Button variant="outlineRed"> remove </Button>}
       </HStack>
     </div>
   );
 };
+
+interface EditableHeadingProps {
+  fs?:string;
+  defaultValue:string;
+  action?:(value:string) => void
+}
+
+
+export const  EditableTitle:React.FC<EditableHeadingProps> = ({
+  defaultValue,
+  action
+}) => {
+  const [value, setValue] = useState<string> ("")
+  /* Here's a custom control */
+  function EditableControls() {
+    const {
+      isEditing,
+      getSubmitButtonProps,
+      getCancelButtonProps,
+      getEditButtonProps,
+    } = useEditableControls()
+
+
+    return isEditing ? (
+      <ButtonGroup justifyContent='center' size='sm'>
+        <Button onClick={()=>{
+          action && action(value)
+        }}>
+        <IconButton  icon={<CheckIcon/> } {...getSubmitButtonProps()} aria-label=""/>
+        </Button>
+        <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} aria-label="" />
+      </ButtonGroup>
+    ) : (
+      <Flex justifyContent='center'>
+        <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} aria-label="" />
+      </Flex>
+    )
+  }
+
+  return (
+    <Editable
+      textAlign='center'
+      defaultValue={defaultValue}
+      fontSize='2xl'
+      isPreviewFocusable={false}
+      display='flex'
+      justifyContent={'space-between'}
+    >
+      <EditablePreview />
+      {/* Here is the custom input */}
+      <Input as={EditableInput}  sx={{
+          "&:focus": {
+            outline: "none",
+            boxShadow: "none",
+            border: "none",
+          },
+        }} value={value} onChange={(e)=>setValue(e.target.value)}/>
+      <EditableControls />
+    </Editable>
+  )
+} 

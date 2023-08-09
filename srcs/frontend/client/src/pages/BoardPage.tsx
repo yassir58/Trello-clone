@@ -12,7 +12,6 @@ import { Navigate } from "react-router-dom";
 import Loading from "../pages/Loading";
 import ProfileSettings from "../components/ProfileSettings";
 import useModel from "../hooks/useModel";
-
 interface HomeProps {}
 
 export const BoardPage: React.FC<HomeProps> = ({}) => {

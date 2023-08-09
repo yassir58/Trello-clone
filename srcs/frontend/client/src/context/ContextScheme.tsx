@@ -1,6 +1,5 @@
 import React, { createContext, useState } from "react";
-import { useQuery } from "react-query";
-import { API_KEY, endpoint } from "../data/DataFetching";
+
 interface Props {
   children: React.ReactNode;
 }
@@ -10,15 +9,13 @@ export interface Boards {
   setState: React.Dispatch<React.SetStateAction<Board[]>>;
 }
 export interface User {
-  state: {
-    id: string;
-    userName: string;
-    Boards: Boards;
-    Comments: Comment[];
-    profilePicture?: string;
-    email: string;
-  } | null;
-  setState?: any;
+  id: string;
+  userName?: string;
+  Boards?: Boards;
+  Comments?: Comment[];
+  profilePicture?: string;
+  email?: string;
+ 
 }
 
 interface Comment {
@@ -52,29 +49,31 @@ export interface Label {
   color: string;
 }
 export interface Card {
-  id: string;
+  id?: string;
   title: string;
   description?: string;
-  cover?: string;
+  coverImage?: string;
   members?: User[];
   labels?: Label[];
   comments?: Comment[];
   attachments?: Attachment[]; // not the correct type but will do for now
   checklists?: Checklist[]; // not the correct type but will do for now
-  creationDate: string;
-  editDate: string;
+  creationDate?: string;
+  editDate?: string;
   listId: string;
-  BoardId: string;
+  BoardId?: string;
 }
 
 export interface Board {
   id?: string;
-  title: string;
-  coverImage?: string;
-  visibility: boolean;
+  title?: string;
+  coverImage?: string | null;
+  visibility?: boolean;
   authorId?: string;
   createdAt?: string;
   updatedAt?: string;
+  users?:User[];
+  description?: string;
 }
 export interface GlobalContext {
   LogedInUser?: User | null;
@@ -87,45 +86,16 @@ export interface GlobalContext {
 export interface GlobalState {
   publicBoards?: Board[];
   setPublicBoards?: React.Dispatch<React.SetStateAction<Board[]>>;
-  coverPhotos?: string[];
 }
 export const AppContext = createContext<GlobalState>({});
 
 export const GlobalContext: React.FC<Props> = ({ children }) => {
-  const [coverPhotos, setCoverPhotos] = useState<string[]>([]);
-  const count = 12;
   const [publicBoards, setPublicBoards] = useState<Board[]>([]);
-  const { isLoading } = useQuery(
-    "coverQuery",
-    async () => {
-      const res = await fetch(
-        `${endpoint}photos/random/?client_id=${API_KEY}&count=${count}`
-      );
-
-      const photos = await res.json();
-      return photos;
-    },
-    {
-      staleTime: 25 * 60 * 1000,
-      onSuccess: (data) => {
-        const tmp: string[] = [];
-        data.forEach((element: any) => {
-          tmp.push(element.urls.small);
-        });
-        setCoverPhotos(tmp);
-      },
-      onError: (error) => {
-        console.log("error from query :", error);
-      },
-    }
-  );
-
-  if (isLoading) console.log("cover loading ...");
-
+  
   return (
     <div>
       <AppContext.Provider
-        value={{ publicBoards, setPublicBoards, coverPhotos }}
+        value={{ publicBoards, setPublicBoards}}
       >
         {children}
       </AppContext.Provider>

@@ -84,6 +84,7 @@ export const CardCover: React.FC<CardCoverProps> = ({ image }) => {
         w="100%"
         h="100%"
         borderRadius="lg"
+        fallbackSrc='https://via.placeholder.com/150'
       />
     </Box>
   );
@@ -97,7 +98,7 @@ export const BoardCard: React.FC<BoardCardProps> = ({ Board }) => {
       <Container variant="Card">
         <Stack spacing={2}>
           {Board.coverImage && <CardCover image={Board.coverImage} />}
-          <Heading variant="cardTitle">{Board.title}</Heading>
+          <Heading variant="cardTitle" mx={2}>{Board.title}</Heading>
         </Stack>
       </Container>
     </Link>

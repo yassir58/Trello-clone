@@ -12,7 +12,7 @@ import { CardInfo } from "../ui-elements/Media";
 import { Label } from "../ui-elements/Label";
 import { MdLabel } from "react-icons/md";
 import { Card } from "../../context/ContextScheme";
-import {RemoveLabel} from "./RemoveLabel";
+// import {RemoveLabel} from "./RemoveLabel";
 
 interface LableObject {
   value: string;
@@ -21,29 +21,26 @@ interface LableObject {
 
 interface AddLableProps {
   card?: Card;
-  cards?: Card[];
-  setCards?: React.Dispatch<React.SetStateAction<Card[]>>;
 }
 
-const createNewLabel = (
-  cards: Card[],
-  setCards: React.Dispatch<React.SetStateAction<Card[]>>,
-  cardId: string,
-  value: string,
-  color: string
-) => {
-  let temp = cards.slice();
-  let index = cards.findIndex ((card) => card.id == cardId);
-  let labels = temp[index].labels;
-  labels?.push({ value, color });
-  temp[index].labels = labels;
-  setCards(temp);
-};
+// const createNewLabel = (
+//   cards: Card[],
+//   setCards: React.Dispatch<React.SetStateAction<Card[]>>,
+//   cardId: string,
+//   value: string,
+//   color: string
+// ) => {
+//   let temp = cards.slice();
+//   let index = cards.findIndex ((card) => card.id == cardId);
+//   let labels = temp[index].labels;
+//   labels?.push({ value, color });
+//   temp[index].labels = labels;
+//   setCards(temp);
+// };
 
 export const AddLable: React.FC<AddLableProps> = ({
-  card,
-  cards,
-  setCards
+  // card,
+
 }) => {
   const [labels, setLabels] = useState<LableObject[]>([]);
   const [value, setValue] = useState<string>("");
@@ -62,9 +59,10 @@ export const AddLable: React.FC<AddLableProps> = ({
     setValue("");
   };
   const removeLabel = (index: number) => {
-    let temp = labels.slice();
-    temp.splice(index, 1);
-    setLabels(temp);
+    // let temp = labels.slice();
+    // temp.splice(index, 1);
+    // setLabels(temp);
+    console.log (index)
   }
   const colors = [
     "gray",
@@ -120,14 +118,14 @@ export const AddLable: React.FC<AddLableProps> = ({
         <HStack spacing={2} px={2} py={2} flexWrap="wrap">
           {labels.map((label, index) => {
             return <Label  action={()=>{
-              RemoveLabel(cards, setCards, card!.id, index)
+              // RemoveLabel(cards, setCards, card!.id || '', index)
               removeLabel(index)
             }}  color={label.color}>{label.value}</Label>;
           })}
         </HStack>
         <Button size="md" variant="primary" mx="auto" onClick={()=>{
           addLabel ()
-          createNewLabel (cards!, setCards!, card!.id || '', value, color)
+          // createNewLabel (cards!, setCards!, card!.id || '', value, color)
         }}>
           Add
         </Button>

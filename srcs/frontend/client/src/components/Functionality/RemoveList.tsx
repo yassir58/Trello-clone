@@ -1,16 +1,8 @@
-import { BACKEND_ENDPOINT, JWT } from '../../data/DataFetching';
 import { List } from '../../context/ContextScheme';
-
+import apiClient from '../../services/apiClient';
 export const RemoveList = async (list:List) => {
-  const res = await fetch (`${BACKEND_ENDPOINT}/boards/${list.boardId}/lists/${list.id}`, {
-    method: 'DELETE',
-    headers: {
-        'Authorization': `Bearer ${JWT}`,
-    }
-  })
-  
-  if (!res.ok) {
-    throw new Error('Network response was not ok');
-  }
+  const deleteListClient = new apiClient (`lists/${list.id}`)
+
+  deleteListClient.deleteData().then (res=>res.data)
   return list.id
 }

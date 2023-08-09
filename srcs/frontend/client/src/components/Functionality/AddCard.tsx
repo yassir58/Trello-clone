@@ -1,13 +1,14 @@
 import React from "react";
 import { Box, Button, Input, Wrap, HStack, Stack } from "@chakra-ui/react";
-
+import {Card, List} from "../../context/ContextScheme"
 interface AddCardProps {
   cancelHandler: () => void;
-  action: (title:string) => void;
+  mutation:any,
   ref?: React.RefObject<HTMLInputElement>;
+  list:List
 }
 
-const AddCard:React.FC<AddCardProps> = ({cancelHandler, action, ref}) => {
+const AddCard:React.FC<AddCardProps> = ({cancelHandler, mutation, ref, list}) => {
   const [title, setTitle] = React.useState<string>('')
   const onChangeHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
@@ -24,7 +25,11 @@ const AddCard:React.FC<AddCardProps> = ({cancelHandler, action, ref}) => {
         />
         <HStack>
         <Button variant='green' onClick={()=>{
-          action(title);
+          const newCard:Card = {
+            title: title,
+            listId:list?.id || '',
+          }
+          mutation.mutate(newCard);
           cancelHandler();
         }}>
           Save
