@@ -6,7 +6,7 @@ const Router = express.Router({ mergeParams: true });
 
 Router.use(authorizeRoute);
 
-Router.use(preventUnauthorized);
+Router.use(preventUnauthorized("user"));
 
 Router.route("/").get(labelsController.getAllLabels).post(labelsController.createLabel);
 

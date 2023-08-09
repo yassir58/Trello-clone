@@ -9,12 +9,13 @@ const prisma = new PrismaClient();
 
 export const createInvite = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   //! Validate the duplication of invite
+  if (!req.boardId) return next(new AppError(`Board id is missing, please select a board first.`, 400));
   const { error, value } = inviteValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
   const checkDuplicate = await prisma.invite.findFirst({
     where: {
       userId: value.userId,
-      boardId: value.boardId,
+      boardId: req.boardId,
     },
   });
   if (checkDuplicate)
@@ -25,7 +26,7 @@ export const createInvite = catchAsync(async (req: Request, res: Response, next:
   //! Should find a way to refactor this function getting all users related to a board by id.
   const board = await prisma.board.findUnique({
     where: {
-      id: value.boardId,
+      id: req.boardId,
     },
     include: {
       users: {
@@ -43,7 +44,7 @@ export const createInvite = catchAsync(async (req: Request, res: Response, next:
   const boardUsers = board?.users.map((user) => user.id) || [];
   const result = [...boardUsers, board?.author.id];
   if (!result.includes(req.currentUser))
-    return next(new AppError(`You are not authorized to send invites from board: ${value.boardId}`, 400));
+    return next(new AppError(`You are not authorized to send invites from board: ${req.boardId}.`, 400));
   const invite = await prisma.invite.create({
     data: {
       ownerId: req.currentUser,
@@ -51,7 +52,7 @@ export const createInvite = catchAsync(async (req: Request, res: Response, next:
         connect: { id: value.userId },
       },
       board: {
-        connect: { id: value.boardId },
+        connect: { id: req.boardId },
       },
     },
   });
