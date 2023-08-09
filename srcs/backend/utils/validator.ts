@@ -6,7 +6,7 @@ import listSchema from "../models/listModel";
 import { boardUpdateSchema, boardSchema } from "../models/boardModel";
 import labelSchema from "../models/labelModel";
 import inviteSchema from "../models/inviteModel";
-import commentSchema from "../models/commentModel";
+import { commentUpdateSchema , commentSchema} from "../models/commentModel";
 import attachementSchema from "../models/attachementModel";
 import { checklistSchema, taskSchema } from "../models/checklistModel";
 
@@ -18,6 +18,7 @@ export const boardValidator = validator(boardSchema);
 export const boardUpdateValidator = validator(boardUpdateSchema);
 export const attachementValidator = validator(attachementSchema);
 export const commentValidator = validator(commentSchema);
+export const commentUpdateValidator = validator(commentUpdateSchema);
 export const labelValidator = validator(labelSchema);
 export const cardValidator = validator(cardSchema);
 export const inviteValidator = validator(inviteSchema);
