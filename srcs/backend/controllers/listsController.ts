@@ -1,7 +1,7 @@
 import { List, PrismaClient } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 
-import { listValidator } from "../utils/validator";
+import { listUpdateValidator, listValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 
@@ -57,7 +57,7 @@ export const getListById = catchAsync(async (req: Request, res: Response, next: 
 });
 
 export const updateListById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { error, value } = listValidator(req.body);
+  const { error, value } = listUpdateValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
   const list = (await UtilsCtrl.checkExistance(req, next, "list")) as List;
   const newList = await prisma.list.update({
