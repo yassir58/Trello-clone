@@ -1,6 +1,6 @@
 import { ObjectSchema } from "joi";
 
-import cardSchema from "../models/cardModel";
+import {cardSchema, cardUpdateSchema} from "../models/cardModel";
 import userSchema from "../models/userModel";
 import listSchema from "../models/listModel";
 import { boardUpdateSchema, boardSchema } from "../models/boardModel";
@@ -21,6 +21,7 @@ export const commentValidator = validator(commentSchema);
 export const commentUpdateValidator = validator(commentUpdateSchema);
 export const labelValidator = validator(labelSchema);
 export const cardValidator = validator(cardSchema);
+export const cardUpdateValidator = validator(cardUpdateSchema);
 export const inviteValidator = validator(inviteSchema);
 export const checklistValidor = validator(checklistSchema);
 export const taskValidator = validator(taskSchema);

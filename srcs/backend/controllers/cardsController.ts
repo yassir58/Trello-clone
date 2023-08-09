@@ -1,7 +1,7 @@
 import { Card, PrismaClient } from "@prisma/client";
 import { NextFunction, Request, Response } from "express";
 
-import { cardValidator } from "../utils/validator";
+import { cardUpdateValidator, cardValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 
@@ -69,7 +69,7 @@ export const getAllCards = catchAsync(async (req: Request, res: Response, next: 
 
 export const updateCardById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
-  const { error, value } = cardValidator(req.body);
+  const { error, value } = cardUpdateValidator(req.body);
   if (error) return next(new AppError(error.message, 400));
   const card = (await UtilsCtrl.checkExistance(req, next, "card")) as Card;
   await prisma.card.update({
