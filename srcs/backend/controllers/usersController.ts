@@ -56,8 +56,14 @@ export const getAllUsers = catchAsync(async (req: Request, res: Response, next: 
     },
   });
   //! Maybe i will remove the users in the invites too only display the users who did not receive the invite.
+  const boardInvites = await prisma.invite.findMany({
+    where: {
+      boardId: req.boardId
+    }
+  })
+  const boardInviteUsers = boardInvites.map((invite) => invite.userId);
   const boardUsers = board?.users.map((user) => user.id) || [];
-  const combinedUsers = [...boardUsers, board?.author.id];
+  const combinedUsers = [...boardUsers, ...boardInviteUsers ,board?.author.id];
   const users = await prisma.user.findMany({
     select: { id: true, fullname: true, email: true, profileImage: true },
     where: {
@@ -68,7 +74,9 @@ export const getAllUsers = catchAsync(async (req: Request, res: Response, next: 
     },
     take: 10
   });
-  const result = users.filter((item) => !combinedUsers.includes(item.id));
+  let result = users.filter((item) => !combinedUsers.includes(item.id));
+  if (!search)
+    result = result.slice(0, 10);
   res.status(200).json({
     status: "success",
     users: result,
