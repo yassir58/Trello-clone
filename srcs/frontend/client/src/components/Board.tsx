@@ -11,11 +11,12 @@ import { List, Board as BoardType, AppContext } from "../context/ContextScheme";
 import { CardList } from "./CardList";
 import { Container } from "./ui-elements/Wrappers";
 import { PopOverWrapper } from "./ui-elements/PopOver";
-import { useMutation } from "react-query";
-import { useQuery, useQueryClient } from "react-query";
+import { useMutation } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { RemoveList } from "./Functionality/RemoveList";
 import apiClient from "../services/apiClient";
 import { useNavigate } from "react-router-dom";
+import AssignMember from "./AssignMember";
 interface BoardProps {
   BoardId: string;
 }
@@ -45,11 +46,8 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({Board, updateMutation
           <PopOverWrapper triggerVariant="secondary" value={"Public"} icon={<BsGlobeEuropeAfrica />} size="2xs">
             <Visibility />
           </PopOverWrapper>
-
-          <PopOverWrapper triggerVariant="primary" value={"Add"} icon={<BiPlus />} size="2xs">
-            <EditBoard />
-          </PopOverWrapper>
           <EditBoard Board={Board} updateMutation={updateMutation} deleteMutation={deleteMutation}/>
+          <AssignMember />
         </HStack>
         <DrawerCp header="Menu" value="Menu" icon={<FaEllipsis />} variant="secondary" />
       </Container>
@@ -107,7 +105,7 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
   })
   useQuery ({
     queryKey:['board', BoardId],
-    queryFn:()=> boardInfoClient.getData (null).then (res=>res.data),
+    queryFn:()=> boardInfoClient.getData ().then (res=>res.data),
     staleTime: 30 * 60 * 1000, // 30 minutes in milliseconds
     refetchOnWindowFocus: false,
     onSuccess: (data:BoardResponse) => {
@@ -123,7 +121,7 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
   const { isLoading } = useQuery(
     {
       queryKey:["lists", BoardId],
-      queryFn:()=> getListsClient.getData(null).then (res=>res.data),
+      queryFn:()=> getListsClient.getData().then (res=>res.data),
       staleTime: 30 * 60 * 1000, // 30 minutes in milliseconds
       refetchOnWindowFocus: false,
       onSuccess: (data) => {

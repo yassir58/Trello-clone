@@ -7,7 +7,7 @@ import { Card, Label as LabelType } from './../context/ContextScheme'
 import { LabelsContext } from './../providers/LabelsProvider'
 // import {RemoveLabel} from './Functionality/RemoveLabel'
 import { useState } from 'react'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../services/apiClient'
 import {Skeleton} from './ui-elements/skeleton'
 
@@ -36,7 +36,7 @@ export const CardCp: React.FC<CardProps> = ({
 
     const {isLoading} = useQuery ({
       queryKey: ['card', card.id],
-      queryFn:()=> cardByIdClient (card?.id || '').getData (null).then (res=>res.data),
+      queryFn:()=> cardByIdClient (card?.id || '').getData ().then (res=>res.data),
       onSuccess:(data:CardResponse)=>{
         setCardObject (data.card)
       }

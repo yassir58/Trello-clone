@@ -4,7 +4,7 @@ import { CloseButton } from "./CloseButton";
 import { EditCardCover } from "../ui-elements/EditCardCover";
 import { FaUnlockKeyhole } from "react-icons/fa6";
 import { BiPlus } from "react-icons/bi";
-import { useMutation } from "react-query";
+import { useMutation } from "@tanstack/react-query";
 import { Board , AppContext} from "../../context/ContextScheme";
 import {CoverPopOver} from "../Popover" 
 import apiClient from "../../services/apiClient";

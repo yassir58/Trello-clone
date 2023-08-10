@@ -12,8 +12,8 @@ import { ModalCardWrapper } from "./ui-elements/Modal";
 import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 // import { EditListTitle } from "./Functionality/EditListTitle";
 import { handleFocus } from "./Functionality/utils";
-import { useQueryClient } from "react-query";
-import { useMutation, useQuery } from "react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import apiClient from "../services/apiClient";
 import { LabelsProvider } from "../providers/LabelsProvider";
 
@@ -90,7 +90,7 @@ export const CardList: React.FC<CardListProps> = ({ list, mutation }) => {
   });
   const { isLoading } = useQuery({
     queryKey: ["cards", list.id],
-    queryFn: () => allCardsClient.getData(null).then((res) => res.data),
+    queryFn: () => allCardsClient.getData().then((res) => res.data),
     onSuccess: (data) => {
       console.log(`card lists: ${data}`);
       setCards(data.cards);

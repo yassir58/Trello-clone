@@ -89,7 +89,6 @@ const EditableStyle: ComponentStyleConfig = {
   },
 };
 
-
 const ButtonStyle: ComponentStyleConfig = {
   // style object for base or default style
   // styles for different sizes ("sm", "md", "lg")
@@ -108,9 +107,8 @@ const ButtonStyle: ComponentStyleConfig = {
       },
 
       _active: {
-        backgroundColor: "#fff",
-        outline: "1px solid #5497f0",
-        color: "primary",
+        backgroundColor: "#1264CE",
+        color: "#fff",
       },
     },
     secondary: {
@@ -269,6 +267,23 @@ const ButtonStyle: ComponentStyleConfig = {
         color: "#828282",
       },
     },
+    generic: {
+      padding: "10px 14px",
+      backgroundColor: "primary",
+      borderRadius: "8px",
+      color: "#fff",
+      fontFamily: "Poppins",
+      fontWeight: "400",
+      marginTop: 2,
+      _hover: {
+        backgroundColor: "primaryLight",
+      },
+
+      _active: {
+        backgroundColor: "primary",
+        color: "#000",
+      },
+    }
   },
   // default values for 'size', 'variant' and 'colorScheme'
   defaultProps: {
@@ -378,7 +393,15 @@ const HStackStyle = defineStyleConfig({
       justifyContent: "space-between",
       "&:hover": {
         backgroundColor: "#F5F5F5",
-        cursor: "pointer"
+        cursor: "pointer",
+      },
+    },
+    ListItemButtonGhost: {
+      padding: "5px",
+      borderRadius: "8px",
+      "&:hover": {
+        backgroundColor: "#F5F5F5",
+        cursor: "pointer",
       },
     },
   },
@@ -390,14 +413,36 @@ const BoxStyle = defineStyleConfig({
   sizes: {},
   variants: {
     searchContainer: {
-      padding:"10px",
-      paddingBottom:"0px",
-      width:"400px",
-      borderRadius:"12px",
-      bgColor:"#fff",
-      border:"1px solid #E0E0E0",
-      position:"absolute",
-      boxShadow:"0px 2px 8px rgba(220,220,220, 0.8)"
+      padding: "10px",
+      paddingBottom: "0px",
+      width: "400px",
+      borderRadius: "12px",
+      bgColor: "#fff",
+      border: "1px solid #E0E0E0",
+      position: "absolute",
+      boxShadow: "0px 2px 8px rgba(220,220,220, 0.8)",
+    },
+    usersList: {
+      padding: "10px",
+      paddingBottom: "0px",
+      borderRadius: "12px",
+      bgColor: "#fff",
+      border: "1px solid #E0E0E0",
+      boxShadow: "0px 2px 8px rgba(220,220,220, 0.8)",
+      overflow: "auto",
+      "&::-webkit-scrollbar": {
+        width: "8px",
+      },
+      "&::-webkit-scrollbar-thumb": {
+        backgroundColor: "#E0E0E0",
+        borderRadius: "8px",
+      },
+      "&::-webkit-scrollbar-thumb:hover": {
+        backgroundColor: "#555",
+      },
+      "&::-webkit-scrollbar-track": {
+        backgroundColor: "#f1f1f1",
+      },
     },
     ListContainer: {
       padding: "5px",
@@ -445,7 +490,6 @@ const BoxStyle = defineStyleConfig({
       alignItems: "flex-start",
       padding: "18px 14px",
       overflowX: "scroll",
-      overflowY: "hidden",
       bg: "#F8F9FD",
       borderRadius: "8px",
       maxHeight: "75vh",
@@ -456,10 +500,9 @@ const BoxStyle = defineStyleConfig({
       flexDirection: "column",
       justifyContent: "center",
       alignItems: "flex-start",
-      width: "100%",
+      overflowY: "scroll",
       height: "100%",
-      overFlowY: "scroll",
-      maxHeight: "500px",
+      maxHeight: "100%",
       gap: "18px",
       padding: "10px",
     },
@@ -497,10 +540,16 @@ const theme = extendTheme({
     global: {
       body: {
         // bg: "#F8F9FD",
+        //#4F4F4F
       },
     },
   },
   colors: {
+    gray: {
+      100: "#F2F2F2",
+      700: "#828282",
+      600: "#4F4F4F",
+    },
     primary: "#2F80ED",
     primaryLight: "#5497f0",
   },

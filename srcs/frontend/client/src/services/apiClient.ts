@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios from "axios";
 
 const axiosInstance = axios.create({
   baseURL: "http://localhost:5002/api/v1/",
@@ -10,8 +10,8 @@ class apiClient<T> {
     this.endPoint = endPoint;
   }
 
-  postData = (data: T) => {
-    return axiosInstance.post(this.endPoint, data, { withCredentials: true });
+  postData = (data: T | any, suffix = "") => {
+    return axiosInstance.post(this.endPoint + suffix, data, { withCredentials: true });
   };
 
   updateData = (data: T, headers: any | undefined) => {
@@ -21,14 +21,14 @@ class apiClient<T> {
     });
   };
 
-  deleteData = () => {
-    return axiosInstance.delete(this.endPoint, {
+  deleteData = (suffix = "") => {
+    return axiosInstance.delete(this.endPoint + suffix, {
       withCredentials: true
     });
   }
 
-  getData = (params: AxiosRequestConfig | null) => {
-    return axiosInstance.get<T>(this.endPoint, { params, withCredentials: true });
+  getData = (suffix = "", params?: any) => {
+    return axiosInstance.get<T>(this.endPoint + suffix, { withCredentials: true, params });
   };
 }
 

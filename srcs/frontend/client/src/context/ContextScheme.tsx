@@ -10,13 +10,14 @@ export interface Boards {
 }
 export interface User {
   id: string;
-  userName?: string;
-  Boards?: Boards;
+  fullname: string;
+  profileImage: string;
+  email: string;
+  createdAt: Date;
+  updatedAt: Date;
   Comments?: Comment[];
-  profilePicture?: string;
-  email?: string;
- 
 }
+
 
 interface Comment {
   id: string;
@@ -67,15 +68,17 @@ export interface Card {
 
 export interface Board {
   id?: string;
-  title?: string;
+  title: string;
   coverImage?: string | null;
-  visibility?: boolean;
-  authorId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  users?:User[];
+  visibility: boolean;
   description?: string;
+  users?:User[];
+  author?: User;
+  authorId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
+
 export interface GlobalContext {
   LogedInUser?: User | null;
   PublicBoards?: {
