@@ -4,8 +4,27 @@ import { Text, Stack } from "@chakra-ui/react";
 import { MdPublic } from "react-icons/md";
 import { MdLock} from "react-icons/md";
 import DescriptiveBtnStack from "./DescriptiveBtnStack";
+import { Board } from "../context/ContextScheme";
+import { QueryClient } from "react-query";
+interface VisibilityProps {
+  Board:Board
+  mutation:any
+}
 
-const Visibility = () => {
+const Visibility:React.FC<VisibilityProps> = ({
+  Board,
+  mutation
+}) => {
+
+  const queryClient = new QueryClient () 
+  const setToPrivate = (visibility:boolean) => {
+    mutation.mutate({visibility:visibility})
+    queryClient.invalidateQueries(['board', Board.id])
+  }
+  const setToPublic = (visibility:boolean) => {
+    mutation.mutate({visibility:visibility})
+    queryClient.invalidateQueries(['board', Board.id])  
+  }
   return (
     <Stack
       spacing={"16px"}
@@ -31,6 +50,10 @@ const Visibility = () => {
         h="58px"
         icons={[<MdPublic color={"#4f4f4f"} />, <MdLock color={"#4f4f4f"} />]}
         spaceBetween="12px"
+        actions={[
+          () => setToPublic (true),
+          () => setToPrivate (false),
+        ]}
       ></DescriptiveBtnStack>
     </Stack>
   );

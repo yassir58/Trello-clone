@@ -10,6 +10,7 @@ interface Props {
   w: string;
   h: string;
   icons?: ReactNode[];
+  actions?:any[]
 }
 
 const DescriptiveBtnStack:React.FC<Props> = ({
@@ -20,12 +21,13 @@ const DescriptiveBtnStack:React.FC<Props> = ({
   w,
   h,
   icons,
+  actions
   
 }) => {
   return (
     <Stack spacing={spaceBetween}>
       {buttons.map((button, index) => (
-        <Button variant={style} w={w} h={h} px={"12px"}>
+        <Button variant={style} w={w} h={h} px={"12px"} onClick={actions && actions[index]()}>
           <Stack align={"start"}>
             <Wrap>
               {!(icons === undefined) && icons[index]}

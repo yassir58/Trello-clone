@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Stack, HStack, Button, Input, Text } from "@chakra-ui/react";
+import { Stack, HStack, Button, Input, Text, useToast } from "@chakra-ui/react";
 import { CloseButton } from "./CloseButton";
 import { EditCardCover } from "../ui-elements/EditCardCover";
 import { FaUnlockKeyhole } from "react-icons/fa6";
@@ -8,6 +8,7 @@ import { useMutation } from "react-query";
 import { Board , AppContext} from "../../context/ContextScheme";
 import {CoverPopOver} from "../Popover" 
 import apiClient from "../../services/apiClient";
+import {useSuccess,useFailure} from "../../hooks/useAlerts"
 interface newBoardProps {
   action?: any;
   onClose: () => void;
@@ -22,6 +23,7 @@ export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
   const { publicBoards, setPublicBoards } = useContext(AppContext);
   const [coverImage, setCoverImage] = useState<string>("");
   const createBoardClient = new apiClient<Board>("/boards");
+  const toast =  useToast ()
   // Mutation hook call
   const newBoardMutation = useMutation({
     mutationFn: (newBoard: Board) => createBoardClient.postData(newBoard).then (res=>res.data),
@@ -29,8 +31,9 @@ export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
       const tmpBoards = publicBoards?.slice();
       tmpBoards?.push(data.board);
       setPublicBoards && setPublicBoards(tmpBoards || []);
+      toast(useSuccess("Board created successfully!"));
     },
-    onError: (error) => console.log("error from mutation :", error),
+    onError: (error:any) => {toast (useFailure (error.message))},
   });
 
 
@@ -43,19 +46,18 @@ export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
       visibility: false,
       title: title,
       coverImage: coverImage,
-
     };
     newBoardMutation.mutate(newBoard);
   };
 
-  if (newBoardMutation.isIdle) console.log("Mutation is Idle");
-
   return (
     <Stack spacing={4} justify="center">
       <CloseButton onClose={onClose} />
-      <EditCardCover
+      {coverImage && (
+        <EditCardCover
         image={coverImage}
       />
+      )}
 
       <Input
         variant="outline"

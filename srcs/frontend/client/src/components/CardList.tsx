@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, chakra, Stack} from "@chakra-ui/react";
-
+import { Box, Button, chakra, Stack, useToast} from "@chakra-ui/react";
 import { BiPlus } from "react-icons/bi";
 import { FaEllipsis } from "react-icons/fa6";
 import { List, Card } from "../context/ContextScheme";
@@ -9,14 +8,15 @@ import { ListOptions } from "./ListOptions";
 import AddCard from "./Functionality/AddCard";
 import { PopOverWrapper } from "./ui-elements/PopOver";
 import { ModalCardWrapper } from "./ui-elements/Modal";
-import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
+// import { Editable, EditableInput, EditablePreview } from "@chakra-ui/editable";
 // import { EditListTitle } from "./Functionality/EditListTitle";
 import { handleFocus } from "./Functionality/utils";
 import { useQueryClient } from "react-query";
 import { useMutation, useQuery } from "react-query";
 import apiClient from "../services/apiClient";
 import { LabelsProvider } from "../providers/LabelsProvider";
-
+import { useSuccess } from "../hooks/useAlerts";
+// import {useSuccess, useFailure} from '../hooks/useAlerts'
 interface CardListProps {
   // Board:Board,
   list: List;
@@ -42,22 +42,20 @@ export const CardList: React.FC<CardListProps> = ({ list, mutation }) => {
   const allCardsClient = new apiClient<cardsRespose>(`/lists/${list.id}/cards`);
   const queryClient = useQueryClient();
   const ByIdCardClient = (id: string) => new apiClient(`/cards/${id}`);
+  const toast =  useToast ()
 
   const createCardToggler = () => {
     setCreateCard(!createCard);
   };
   const handleRemoveList = () => {
-    mutation.mutate(list);
+    mutation.mutate(list.id);
   };
 
   const newCardMutation = useMutation({
     mutationFn: (card: Card) => newCardClient.postData(card).then((res) => res.data),
-    onSuccess: (data) => {
-      console.log(`card list : ${data}`);
+    onSuccess: () => {;
       queryClient.invalidateQueries(["cards", list.id]);
-    },
-    onError: (error) => {
-      console.log(`error while creating card: ${error}`);
+      toast (useSuccess ('Card created successfully!'))
     },
   });
 
@@ -66,12 +64,9 @@ export const CardList: React.FC<CardListProps> = ({ list, mutation }) => {
       ByIdCardClient(card.id || "")
         .deleteData()
         .then((res) => res.data),
-    onSuccess: (data) => {
-      console.log(`card list : ${data}`);
+    onSuccess: () => {
       queryClient.invalidateQueries(["cards", list.id]);
-    },
-    onError: (error) => {
-      console.log(`error while deleting card: ${error}`);
+      toast (useSuccess ('Card deleted successfully!'))
     },
   });
 
@@ -81,11 +76,8 @@ export const CardList: React.FC<CardListProps> = ({ list, mutation }) => {
         .updateData(obj.card, {})
         .then((res) => res.data),
     onSuccess: (data) => {
-      console.log(`card list : ${data}`);
-      queryClient.invalidateQueries(["cards", list.id]);
-    },
-    onError: (error) => {
-      console.log(`error while updaing card : ${error}`);
+      queryClient.invalidateQueries(["card", data.card.id]);
+      toast (useSuccess ('Card updated successfully!'))
     },
   });
   const { isLoading } = useQuery({
@@ -94,9 +86,6 @@ export const CardList: React.FC<CardListProps> = ({ list, mutation }) => {
     onSuccess: (data) => {
       console.log(`card lists: ${data}`);
       setCards(data.cards);
-    },
-    onError: (error) => {
-      console.log(error);
     },
   });
 
@@ -107,14 +96,15 @@ export const CardList: React.FC<CardListProps> = ({ list, mutation }) => {
     <div>
       <Stack>
         <Container variant="mdSpaceBetween">
-          <Editable defaultValue={list.name ? list.name : "Add card title"}>
+          {/* <Editable defaultValue={list.name ? list.name : "Add card title"}>
             <EditablePreview fontSize="sm" />
             <EditableInput
               onChange={() => {
                 // EditListTitle (state, stateSetter, list!.id || '', e.target.value)
               }}
             />
-          </Editable>
+          </Editable> */}
+          <chakra.h3 fontSize="md" fontWeight="bold">{list.name}</chakra.h3>
           <PopOverWrapper triggerVariant={"ghost"} icon={<FaEllipsis />} size="3xs">
             <ListOptions removeList={() => handleRemoveList()} />
           </PopOverWrapper>

@@ -3,7 +3,7 @@ useEffect,
 useState,
 useContext
    } from "react";
-import { HStack, Heading, Stack, Text, Box, useDisclosure } from "@chakra-ui/react";
+import { HStack, Heading, Stack, Text, Box, useDisclosure, useToast } from "@chakra-ui/react";
 import { SmallLogo } from "../components/header/SmallLogo";
 // import { NewBoard } from "./Popover";
 import { BiPlus } from "react-icons/bi";
@@ -21,6 +21,7 @@ import useModal from "../hooks/useModel";
 import { useQuery } from "react-query";
 import apiClient from "../services/apiClient"
 import { BoardsReponse } from "../components/BoardSearch";
+import { useFailure } from "../hooks/useAlerts";
 interface AllBoardsProps {}
 export interface BoardProps {
   id: number;
@@ -34,6 +35,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
   const {profileModal} = useModal();
   const boardsClient = new apiClient<BoardsReponse>("/boards");
   const [loading, setLoading] = useState(true);
+  const toast = useToast();
   const { auth } = useAuth();
   useEffect(() => {
     setTimeout(() => {
@@ -45,16 +47,11 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
     {
       queryKey:["boards"],
       queryFn:()=> boardsClient.getData(null).then((res) => res.data),
-      staleTime: 30 * 60 * 1000, // 30 minutes in milliseconds
-      refetchOnMount: false,
       refetchOnWindowFocus: false,
       onSuccess: (data) => {
-        console.log(`data from query : ${JSON.stringify(data.boards)}`);
         setPublicBoards && setPublicBoards(data.boards);
       },
-      onError: (error) => {
-        console.log("error from query :", error);
-      },
+      onError: (error:any) => {toast (useFailure (error.message))},
     }
   );
 
