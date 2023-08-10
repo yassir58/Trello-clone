@@ -144,7 +144,7 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
       queryClient.invalidateQueries(["lists", BoardId]);
   },[])
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) console.log ('list are loading ...')
   return (
     <Stack mt="90px">
       <BoardMenuBar Board={BoardInfo} updateMutation={updateBoardMutation} deleteMutation={deleteBoardMutation}/>

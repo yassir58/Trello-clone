@@ -14,10 +14,6 @@ import { MdLabel } from "react-icons/md";
 import { Card , Label as LabelType} from "../../context/ContextScheme";
 // import {RemoveLabel} from "./RemoveLabel";
 
-interface LableObject {
-  value: string;
-  color: string;
-}
 
 interface AddLableProps {
   card?: Card;
@@ -43,8 +39,8 @@ export const AddLable: React.FC<AddLableProps> = ({
   // card,
   action,
 }) => {
-  const [labels, setLabels] = useState<LableObject[]>([]);
-  const [value, setValue] = useState<string>("");
+  const [labels, setLabels] = useState<LabelType[]>([]);
+  const [tag, setValue] = useState<string>("");
   const [color, setColor] = useState<string>("gray");
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,10 +51,10 @@ export const AddLable: React.FC<AddLableProps> = ({
 
   const addLabel = () => {
     let temp = labels.slice();
-    temp.push({ value, color });
+    temp.push({tag, color});
     setLabels(temp);
     setValue("");
-    action && action ({value, color})
+    action && action ({tag, color})
   };
   const removeLabel = (index: number) => {
     // let temp = labels.slice();
@@ -91,7 +87,7 @@ export const AddLable: React.FC<AddLableProps> = ({
           placeholder="Label..."
           w="98%"
           variant="outline"
-          value={value}
+          value={tag}
           onChange={onChange}
         />
         <HStack flexWrap="wrap" justify="center" w="100%">
@@ -122,7 +118,7 @@ export const AddLable: React.FC<AddLableProps> = ({
             return <Label  action={()=>{
               // RemoveLabel(cards, setCards, card!.id || '', index)
               removeLabel(index)
-            }}  color={label.color}>{label.value}</Label>;
+            }}  color={label.color}>{label.tag}</Label>;
           })}
         </HStack>
         <Button size="md" variant="primary" mx="auto" onClick={()=>{

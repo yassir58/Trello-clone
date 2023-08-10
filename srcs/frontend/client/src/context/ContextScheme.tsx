@@ -45,7 +45,8 @@ export interface List {
 }
 
 export interface Label {
-  value: string;
+  id?:string;
+  tag: string;
   color: string;
 }
 export interface Card {

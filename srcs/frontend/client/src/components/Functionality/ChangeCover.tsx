@@ -9,7 +9,7 @@ import React, { useState, useContext} from "react";
 import { AvatarWrapper } from "../ui-elements/Wrappers";
 import { PhotosContext } from "../../providers/PhotosProvider";
 import { SearchInput } from "../ui-elements/SearchInput";
-import Loading from "../../pages/Loading";
+import { Spinner } from "@chakra-ui/spinner";
 export interface ChangeCoverProps {
   action: (photo: string) => void;
 }
@@ -23,8 +23,7 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
   
   const [keyword, setKeyWord] = useState<string>("");
   const {isLoading, photos, searchPhotos} = useContext (PhotosContext)
-  if (isLoading)
-   return <h3>Loading ...</h3>
+  
   return (
     <div>
       <Stack spacing={2}>
@@ -34,7 +33,7 @@ export const ChangeCover: React.FC<ChangeCoverProps> = ({
         </chakra.small>
         <SearchInput state={keyword} stateSetter={setKeyWord} action={searchPhotos}/>
         {
-          isLoading ? <Loading /> : (
+          isLoading ? <Spinner size="md"  thickness="4px" speed="0.65s" emptyColor="gray.200" color="blue.500" /> : (
             <HStack w="98%" spacing={2} justify="center" flexWrap="wrap">
           {photos?.map((photo, index) => (
             <AvatarWrapper

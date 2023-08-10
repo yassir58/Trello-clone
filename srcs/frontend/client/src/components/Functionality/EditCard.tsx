@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Stack, Text, HStack, Button, chakra } from "@chakra-ui/react";
 import { CloseButton } from "./CloseButton";
 import { CardInfo } from "../ui-elements/Media";
@@ -7,12 +7,10 @@ import {  FaTrash } from "react-icons/fa6";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { MyEditableTextarea, EditableTitle } from "../Menu";
 import { MembersPopOver, LabelPopOver, CoverPopOver } from "../Popover";
-import { Card, Label as LabelType } from "../../context/ContextScheme";
+import { Card} from "../../context/ContextScheme";
 import { ModalCardProps } from "../ui-elements/Modal";
-import { useMutation } from "react-query";
-import apiClient from "../../services/apiClient";
 import { Label } from "../ui-elements/Label";
-import { QueryClient } from "react-query";
+import { LabelsContext } from "../../providers/LabelsProvider";
 interface EditCardProps extends ModalCardProps {
   card: Card;
   onClose: () => void;
@@ -22,23 +20,9 @@ interface EditCardProps extends ModalCardProps {
 
 export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutation, updateMutation }) => {
  
-  const queryClient = new QueryClient ()
-  const labelsClient = (id:string)=> new apiClient (`/cards/${id}/labels`)
-
-  // const  labelsQuery = useQuery ({
-  //   queryKey:['labels', card.id],
-  //   queryFn:()=> labelsClient(card.id).getData().then (res=>res.data),
-  //   onSuccess:(data)=>{
-  //     console.log (`labels : ${data}`)
-  //   }
-  // })
-  const labelsMutation = useMutation ({
-    mutationFn:(label:LabelType)=> labelsClient(card?.id || '').postData(label).then (res=>res.data),
-    onSuccess:(data)=>{
-      console.log (`label added : ${data}`)
-      queryClient.invalidateQueries (['labels', card.id])
-    }
-  })
+  const {isLoading, labels, createLabel, deleteLabel} = useContext (LabelsContext)
+  
+ 
   return (
     <div>
       <Stack spacing={4}>
@@ -71,16 +55,18 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                   }}
                 />
                 <HStack spacing={2} px={4} py={2}>
-                  {card.labels &&
-                    card.labels.map((tag) => {
+                  {isLoading ? <h3>Loading ...</h3> :
+                    labels?.map((item) => {
                       return (
                         <Label
-                          color={tag.color}
+                          color={item.color}
                           action={
-                            () => {}
+                            () => {
+                              deleteLabel && deleteLabel (item?.id || '')
+                            }
                           }
                         >
-                          {tag.value}
+                          {item.tag}
                         </Label>
                       );
                     })}
@@ -89,9 +75,7 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
               <Stack w="25%" spacing={3} py={4}>
                 <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
                 <MembersPopOver />
-                <LabelPopOver card={card} addLabelAction={(label:LabelType)=>{
-                  labelsMutation.mutate (label)
-                }} />
+                <LabelPopOver card={card} addLabelAction={createLabel} />
                 <CoverPopOver card={card} action={(value:string)=>{
                   const newCard = {coverImage:value}
                   updateMutation.mutate ({id:card.id, card:newCard})
