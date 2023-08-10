@@ -13,17 +13,20 @@ import {
 import { useNavigate } from "react-router-dom";
 import useAuth from "../../hooks/useAuth";
 import useModel from "../../hooks/useModel";
+import apiClient from "../../services/apiClient";
 
 const ProfileMenu = () => {
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
   const { profileModal, inviteModal } = useModel();
+  const usersClient = new apiClient("/users/logout");
 
   const handleLogout = () => {
-    setAuth({ loggedIn: false, token: null, user: null });
-    localStorage.removeItem("jwtToken");
-    //! Still should make request to backend to logout
-    navigate("/login");
+    usersClient.postData({}).then(() => {
+      setAuth({ loggedIn: false, token: null, user: null });
+      localStorage.removeItem("jwtToken");
+      navigate("/login");
+    });
   };
 
   return (
