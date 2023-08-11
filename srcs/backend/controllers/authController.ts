@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { PrismaClient } from "@prisma/client";
@@ -171,11 +171,11 @@ export const preventUnauthorized = (level: string | undefined) => {
     if (!board) return next(new AppError("The board that you've request does not exists", 400));
     if (level === "admin") {
       if (board.authorId != req.currentUser)
-        return next(new AppError("Sorry this action can only be performed by the board admin", 401));
+        return next(new AppError("This action can only be performed by the board admin", 401));
     } else {
       const users = board.users.map((item) => item.id);
       if (!users.includes(req.currentUser) && board.authorId != req.currentUser)
-        return next(new AppError("User is authorized to perform this action on this baord", 401));
+        return next(new AppError("This user lacks authorization to carry out this action on the board.", 401));
     }
     next();
   });
