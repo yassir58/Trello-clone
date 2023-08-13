@@ -1,10 +1,13 @@
-import React from "react";
+import React, {useState} from "react";
 import { Modal, ModalBody, ModalContent, ModalOverlay, useDisclosure, Button, HStack, Text } from "@chakra-ui/react";
 import { CardCp, CardProps } from "../Card";
 import { EditCard } from "../Functionality/EditCard";
 import { EditBoardComponent } from "../Functionality/EditBoard";
 import { Board } from "../../context/ContextScheme";
 import { NewBoard } from "../Functionality/NewBoard";
+import { Card } from "../../context/ContextScheme";
+import { useQuery } from '@tanstack/react-query'
+import apiClient from '../../services/apiClient'
 interface ModalComponentProps {
   children: React.ReactNode;
   isOpen?: boolean;
@@ -12,7 +15,10 @@ interface ModalComponentProps {
   onClose?: () => void;
   size?: string;
 }
-
+interface CardResponse {
+  status:string
+  card:Card
+}
 export interface ModalCardProps extends CardProps {
   id?: number | undefined;
   deleteMutation: any;
@@ -43,12 +49,22 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({ children, isOpen
 
 export const ModalCardWrapper: React.FC<ModalCardProps> = ({ card, width, height, deleteMutation, updateMutation }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [cardObject, setCardObject] = useState<Card>(card)
+  const cardByIdClient  = (cardId:string) => new apiClient (`/cards/${cardId}`)
+
+  const {isLoading} = useQuery ({
+    queryKey: ['card', card.id],
+    queryFn:()=> cardByIdClient (card?.id || '').getData ().then (res=>res.data),
+    onSuccess:(data:CardResponse)=>{
+      setCardObject (data.card)
+    }
+  })
   return (
     <>
       <ModalComponent isOpen={isOpen} onClose={onClose} size="3xl">
-        <EditCard card={card} onClose={onClose} deleteMutation={deleteMutation} updateMutation={updateMutation} />
+        <EditCard isLoading={isLoading} card={cardObject} onClose={onClose} deleteMutation={deleteMutation} updateMutation={updateMutation} />
       </ModalComponent>
-      <CardCp onClick={onOpen} card={card} width={width} height={height} />
+      <CardCp isLoading={isLoading} onClick={onOpen} card={cardObject} width={width} height={height} />
     </>
   );
 };

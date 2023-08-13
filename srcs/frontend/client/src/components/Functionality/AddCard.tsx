@@ -1,36 +1,29 @@
 import React from "react";
-import { Box, Button, Input, Wrap, HStack, Stack } from "@chakra-ui/react";
-import {Card, List} from "../../context/ContextScheme"
+import { Box, Button,  Wrap, HStack } from "@chakra-ui/react";
+import { ControlledForm } from "../Forms/controlledForm";
 interface AddCardProps {
   cancelHandler: () => void;
-  mutation:any,
-  ref?: React.RefObject<HTMLInputElement>;
-  list:List
+  actionHandler:(title:string)=>void,
+  placeholder?: string;
 }
 
-const AddCard:React.FC<AddCardProps> = ({cancelHandler, mutation, ref, list}) => {
+
+const AddCard:React.FC<AddCardProps> = ({cancelHandler, actionHandler, placeholder}) => {
   const [title, setTitle] = React.useState<string>('')
   const onChangeHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value)
   }
+  const handleOnsubmit = ()=>{
+    actionHandler(title);
+  }
   return (
-    <Box w='260px' bg="white" borderWidth="1px" borderRadius="xl" p={5} shadow="md">
+    <Box w='260px' bg="white" borderWidth="1px" borderRadius="xl" p={5} shadow="md" py={4}>
       <Wrap spacing={8}>
-        <Input
-          variant="unstyled"
-          placeholder="Enter a title for this card..."
-          value={title}
-          onChange={onChangeHandler}
-          ref={ref}
-        />
+        <ControlledForm placeholder={placeholder} action={handleOnsubmit} onClose={cancelHandler} handleOnchange={onChangeHandler} value={title} />
         <HStack>
         <Button variant='green' onClick={()=>{
-          const newCard:Card = {
-            title: title,
-            listId:list?.id || '',
-          }
-          mutation.mutate(newCard);
-          cancelHandler();
+          handleOnsubmit ()
+          cancelHandler ()
         }}>
           Save
         </Button>
@@ -45,28 +38,5 @@ const AddCard:React.FC<AddCardProps> = ({cancelHandler, mutation, ref, list}) =>
   );
 };
 
-interface addListProps {
-  actionHandler: (title:string) => void;
-  cancelHandler: () => void;
-}
-
-export const AddList:React.FC<addListProps> = ({cancelHandler, actionHandler}) => { 
-  const [title, setTitle] = React.useState<string>('')
-  const onChangeHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value)
-  }
-  return (
-    <Stack>
-      <Input variant={'outline'} onChange={onChangeHandler} placeholder={'Enter list title...'} bg='white' />
-      <HStack>
-        <Button variant='green' onClick={()=>{
-          actionHandler(title);
-          cancelHandler(); 
-        }} >add</Button>
-        <Button variant='ghost' onClick={cancelHandler} >cancel</Button>
-      </HStack>
-    </Stack>
-  )
-}
 
 export default AddCard;

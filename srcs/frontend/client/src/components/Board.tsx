@@ -1,21 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { chakra, HStack, Stack, Button, useToast } from "@chakra-ui/react";
-import { DrawerCp } from "./ui-elements/Drawer";
-// import Visibility from "./Visibility";
+import Visibility from "./Visibility";
 import { BsGlobeEuropeAfrica } from "react-icons/bs";
 import { BiPlus } from "react-icons/bi";
-import { FaEllipsis } from "react-icons/fa6";
 import { EditBoard } from "./Functionality/EditBoard";
-import { AddList } from "./Functionality/AddCard";
+import AddCard from "./Functionality/AddCard";
 import { List, Board as BoardType, AppContext } from "../context/ContextScheme";
 import { CardList } from "./CardList";
 import { Container } from "./ui-elements/Wrappers";
 import { PopOverWrapper } from "./ui-elements/PopOver";
-import { useMutation } from "react-query";
-import { useQuery, useQueryClient } from "react-query";
 import apiClient from "../services/apiClient";
 import { useNavigate } from "react-router-dom";
+import AssignMember from "./AssignMember";
 import { useSuccess, useFailure } from "../hooks/useAlerts";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { MembersList } from "./Lists/MembersList";
 interface BoardProps {
   BoardId: string;
 }
@@ -43,15 +42,13 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ Board, updateMutatio
       <Container variant="mdSpaceBetween">
         <HStack spacing={3}>
           <PopOverWrapper triggerVariant="secondary" value={Board?.visibility ? 'private' : 'public'} icon={<BsGlobeEuropeAfrica />} size="2xs">
-            {/* <Visibility mutation={updateMutation} Board={Board!} /> */}
+            <Visibility mutation={updateMutation} Board={Board!} />
           </PopOverWrapper>
-
-          <PopOverWrapper triggerVariant="primary" value={"Add"} icon={<BiPlus />} size="2xs">
-            <EditBoard />
-          </PopOverWrapper>
-          <EditBoard Board={Board} updateMutation={updateMutation} deleteMutation={deleteMutation} />
+         {!Board?.visibility && <AssignMember />}
+         {!Board?.visibility && <MembersList max={3} members={Board?.users || []}/>}
         </HStack>
-        <DrawerCp header="Menu" value="Menu" icon={<FaEllipsis />} variant="secondary" />
+          <EditBoard Board={Board} updateMutation={updateMutation} deleteMutation={deleteMutation} />
+        {/* <DrawerCp header="Menu" value="Menu" icon={<FaEllipsis />} variant="secondary" /> */}
       </Container>
     </Stack>
   );
@@ -79,15 +76,15 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
 
   useQuery({
     queryKey: ["board", BoardId],
-    queryFn: () => boardInfoClient.getData(null).then((res) => res.data),
+    queryFn: () => boardInfoClient.getData().then((res) => res.data),
     refetchOnWindowFocus: false,
     onSuccess: (data: BoardResponse) => setBoardInfo(data.board),
     onError: (error:any) => toast (useFailure(error.message))
   });
 
-  const { isLoading, refetch } = useQuery({
+  const { isLoading} = useQuery({
     queryKey: ["lists", BoardId],
-    queryFn: () => getListsClient.getData(null).then((res) => res.data),
+    queryFn: () => getListsClient.getData().then((res) => res.data),
     refetchOnWindowFocus: false,
     onSuccess: (data:ListResponse) => setLists(data.lists),
     onError: (error:any) => toast (useFailure(error.message))
@@ -98,7 +95,6 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
     mutationFn: (list: List) => getListsClient.postData(list).then((res) => res.data),
     onSuccess: () => {
       queryClient.invalidateQueries(["lists", BoardId]);
-      handleToggle();
       toast (useSuccess("List successfully created!"))
     },
     onError: (error:any) => {toast (useFailure(error.message))}
@@ -107,8 +103,7 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
   const removeListMutation = useMutation({
     mutationFn: (listId:string)=> deleteListClient(listId).deleteData().then((res) => res.data),
     onSuccess: () => {
-      // queryClient.invalidateQueries(["lists", BoardId]);
-      refetch();
+      queryClient.invalidateQueries(["lists", BoardId]);
       toast (useSuccess("List successfully deleted!"))
     },
     onError: (error:any) => {toast (useFailure(error.message))}
@@ -139,7 +134,7 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
   };
 
   useEffect(() => {
-    queryClient.invalidateQueries(["lists", BoardId]);
+    // queryClient.invalidateQueries(["lists", BoardId]);
   }, []);
 
   if (isLoading) console.log("list are loading ...");
@@ -152,7 +147,7 @@ export const Board: React.FC<BoardProps> = ({ BoardId }) => {
         })}
         <Stack>
           {addList ? (
-            <AddList cancelHandler={handleToggle} actionHandler={handleAddList} />
+            <AddCard cancelHandler={handleToggle} actionHandler={handleAddList} placeholder="Add list title " />
           ) : (
             <Button variant="largePrimary" onClick={handleToggle}>
               <chakra.small>Add another list</chakra.small>

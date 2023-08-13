@@ -17,7 +17,7 @@ import useModel from "../../hooks/useModel";
 const ProfileMenu = () => {
   const navigate = useNavigate();
   const { auth, setAuth } = useAuth();
-  const { profileModal } = useModel();
+  const { profileModal, inviteModal } = useModel();
 
   const handleLogout = () => {
     setAuth({ loggedIn: false, token: null, user: null });
@@ -49,7 +49,7 @@ const ProfileMenu = () => {
       </MenuButton>
       <MenuList fontFamily="Poppins">
         <MenuItem onClick={() => profileModal.onOpen()}>Profile</MenuItem>
-        <MenuItem>Invites</MenuItem>
+        <MenuItem onClick={() => inviteModal.onOpen()}>Invites</MenuItem>
         <MenuItem onClick={() => navigate("/")}>Boards</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </MenuList>

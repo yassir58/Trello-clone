@@ -20,7 +20,7 @@ const AuthProvider = ({ children }: AuthProps) => {
   useEffect(() => {
     const token = localStorage.getItem("jwtToken");
     if (!auth.loggedIn)
-    new apiClient<UserResponse>("/users/me").getData(null).then((res) => {
+    new apiClient<UserResponse>("/users/me").getData().then((res) => {
       if (token) setAuth({ loggedIn: true, token, user: res.data.user });
     });
   }, []);

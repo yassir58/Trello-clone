@@ -9,14 +9,15 @@ export interface Boards {
   setState: React.Dispatch<React.SetStateAction<Board[]>>;
 }
 export interface User {
-  id: string;
-  userName?: string;
-  Boards?: Boards;
-  Comments?: Comment[];
-  profilePicture?: string;
+  id?: string;
+  fullname?: string;
+  profileImage?: string;
   email?: string;
- 
+  createdAt?: Date;
+  updatedAt?: Date;
+  Comments?: Comment[];
 }
+
 
 interface Comment {
   id: string;
@@ -38,10 +39,10 @@ interface Checklist {}
 
 export interface List {
   id?: string;
-  name: string;
+  name?: string;
   creationDate?: string;
   updateDate?: string;
-  boardId: string;
+  boardId?: string;
 }
 
 export interface Label {
@@ -67,15 +68,17 @@ export interface Card {
 
 export interface Board {
   id?: string;
-  title?: string;
+  title: string;
   coverImage?: string | null;
-  visibility?: boolean;
-  authorId?: string;
-  createdAt?: string;
-  updatedAt?: string;
-  users?:User[];
+  visibility: boolean;
   description?: string;
+  users?:User[];
+  author?: User;
+  authorId?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
+
 export interface GlobalContext {
   LogedInUser?: User | null;
   PublicBoards?: {

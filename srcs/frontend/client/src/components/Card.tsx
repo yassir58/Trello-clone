@@ -6,9 +6,7 @@ import { CardFooter, CardCover } from './ui-elements/Media'
 import { Card, Label as LabelType } from './../context/ContextScheme'
 import { LabelsContext } from './../providers/LabelsProvider'
 // import {RemoveLabel} from './Functionality/RemoveLabel'
-import { useState } from 'react'
-import { useQuery } from 'react-query'
-import apiClient from '../services/apiClient'
+
 import {Skeleton} from './ui-elements/skeleton'
 
 export interface CardProps {
@@ -16,39 +14,28 @@ export interface CardProps {
     width?: string;
     height?: string;
     onClick?: () => void;
-
+    isLoading?:boolean
   }
 
-  interface CardResponse {
-    status:string
-    card:Card
-  }
+  
 
 export const CardCp: React.FC<CardProps> = ({
     card,
     onClick,
+    isLoading
   }) => {
 
     
     const {labels} = useContext (LabelsContext)
-    const [cardObject, setCardObject] = useState<Card>(card)
-    const cardByIdClient  = (cardId:string) => new apiClient (`/cards/${cardId}`)
-
-    const {isLoading} = useQuery ({
-      queryKey: ['card', card.id],
-      queryFn:()=> cardByIdClient (card?.id || '').getData (null).then (res=>res.data),
-      onSuccess:(data:CardResponse)=>{
-        setCardObject (data.card)
-      }
-    })
+   
     if (isLoading)
       return (<Skeleton/>)
     return (
       <div>
         <Container variant="Card" onClick={onClick}>
           
-            {cardObject.coverImage && <CardCover image={cardObject.coverImage} />}
-            <Heading variant={'cardTitle'}>{cardObject.title}</Heading>
+            {card.coverImage && <CardCover image={card.coverImage} />}
+            <Heading variant={'cardTitle'}>{card.title}</Heading>
             {
               <HStack spacing={2} flexWrap={'wrap'} px={4} py={2}>
                 {

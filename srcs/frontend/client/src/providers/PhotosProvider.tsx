@@ -1,5 +1,5 @@
 import React, {createContext, useState} from 'react'
-import { useQuery, QueryClient } from 'react-query'
+import { useQuery, QueryClient } from '@tanstack/react-query'
 interface PhotosContextProps {
     photos?:string[]
     searchPhotos?:(query:string)=>void

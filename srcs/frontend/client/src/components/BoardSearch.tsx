@@ -3,22 +3,10 @@ import React, { useRef, useState } from "react";
 import { Box, Divider, HStack, Heading, useStyleConfig } from "@chakra-ui/react";
 import FormSearchInput from "./Forms/FormSearchInput";
 import VisibiltyButton from "./ui-elements/VisibiltyButton";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/apiClient";
 import BoardList from "./Lists/BoardList";
 import { Board } from "../context/ContextScheme";
-
-export interface User {
-  id: string;
-}
-
-// export interface Board {
-//   id: string;
-//   title: string;
-//   coverImage: string | null;
-//   visibility: boolean;
-//   users: User[];
-// }
 
 export interface BoardsReponse {
   status: string;
@@ -34,14 +22,14 @@ const BoardSearch = () => {
   const [searchText, setsearchText] = useState("");
   const { data, refetch } = useQuery<BoardsReponse>({
     queryKey: ["boards"],
-    queryFn: () => boardsClient.getData(null).then((res) => res.data),
+    queryFn: () => boardsClient.getData().then((res) => res.data),
   });
 
   const searchData = (data: Board[] | undefined) => {
     if (data)
       return data.filter(
         (item) =>
-          item.title?.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) && item.visibility == visibility
+          item.title.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()) && item.visibility == visibility
       );
     return [];
   };
@@ -58,6 +46,9 @@ const BoardSearch = () => {
   return (
     <Box position="relative" onBlur={handleBlur} ref={boxRef}>
       <FormSearchInput
+        placeholder="keyword..."
+        width="400px"
+        type="text"
         ChangeCb={(e) => setsearchText(e.target.value)}
         ClickCb={() => refetch()}
         FocusCb={() => setSearchArea(true)}

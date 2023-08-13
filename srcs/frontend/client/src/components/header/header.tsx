@@ -7,6 +7,8 @@ import { Nav } from "./Nav";
 import { Board } from "../../context/ContextScheme";
 import BoardSearch from "../BoardSearch";
 import ProfileMenu from "../Menu/ProfileMenu";
+// import { DrawerCp } from "../ui-elements/Drawer";
+// import FiMenu from "react-icons/fi";
 export interface HeaderProps {
   Board:Board
 }
@@ -23,10 +25,13 @@ const Header: React.FC<HeaderProps> = ({
           <SmallLogo />
           <Nav Board={Board} />
         </HStack>
-        <HStack spacing={5}>
+        <HStack spacing={5} className="first">
           <BoardSearch />
           <ProfileMenu />
         </HStack>
+        {/* <DrawerCp Board={Board} icon={<FiMenu/>}> */}
+
+        {/* </DrawerCp> */}
       </Container>
     </Box>
   );

@@ -42,7 +42,7 @@ const checkPassword = async (candidatePassword: string, userPassword: string) =>
 };
 
 export const formatSecureUserResponse = (user: any) => {
-  return { fullname: user.fullname, profileImage: user.profileImage, email: user.email };
+  return { id: user.id, fullname: user.fullname, profileImage: user.profileImage, email: user.email };
 };
 
 const sendAuthToken = async (res: Response, next: NextFunction, userId: string) => {
@@ -258,6 +258,7 @@ export const logout = catchAsync(async (req: Request, res: Response, next: NextF
     expires: new Date(Date.now() + 4 * 1000),
   };
 
+  res.cookie("boardId", "", cookieOptions);
   res.cookie("jwt", "disconnected", cookieOptions);
   res.status(200).json({
     status: "success",

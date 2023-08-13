@@ -1,5 +1,5 @@
 import React, { createContext, useState } from "react";
-import { useQuery, useMutation } from "react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import apiClient from "../services/apiClient";
 import { Card, Label as LabelType } from "../context/ContextScheme";
 interface LabelsResponse {
@@ -28,7 +28,7 @@ export const LabelsProvider: React.FC<Props> = ({ children, card }) => {
     queryKey: ["labels", card?.id],
     queryFn: () =>
       labelsClient(card?.id || "")
-        .getData(null)
+        .getData()
         .then((res) => res.data),
     onSuccess: (data: LabelsResponse) => {
       console.log(`labels : ${data}`);

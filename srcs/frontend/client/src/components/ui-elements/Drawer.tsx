@@ -12,12 +12,12 @@ import {
   DrawerOverlay,
   Divider,
 } from "@chakra-ui/react";
-import { Menu } from "../Menu";
 interface DrawerCpProps {
   header: string;
   value: string;
   icon: React.ReactNode;
   variant?: string;
+  children?: React.ReactNode;
 }
 
 export const DrawerCp: React.FC<DrawerCpProps> = ({
@@ -25,6 +25,7 @@ export const DrawerCp: React.FC<DrawerCpProps> = ({
   value,
   icon,
   variant,
+  children
 }) => {
   // const btnRef = React.useRef()
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -50,7 +51,7 @@ export const DrawerCp: React.FC<DrawerCpProps> = ({
           <DrawerHeader>{header}</DrawerHeader>
           <Divider />
           <DrawerBody>
-            <Menu />
+            {children}
           </DrawerBody>
         </DrawerContent>
       </Drawer>

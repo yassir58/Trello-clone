@@ -1,0 +1,16 @@
+services:
+  backend:
+    image: thullo
+    ports:
+      - 5002:5002
+    build:
+      context: ./backend
+      args:
+        DB_USER: david
+        DB_PASS: test
+  # frontend:
+  #   image: thullo-frontend
+  #   ports:
+  #     - 3000:3000
+  #   build:
+  #     context: ./frontend/client

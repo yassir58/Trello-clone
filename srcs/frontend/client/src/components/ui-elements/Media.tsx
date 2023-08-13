@@ -1,18 +1,10 @@
 import React from "react";
-import {
-  chakra,
-  Image,
-  Stack,
-  Heading,
-  HStack,
-  Avatar,
-  Box,
-  Button,
-} from "@chakra-ui/react";
-import { Board } from "../../context/ContextScheme";
+import { chakra, Image, Stack, Heading, HStack, Avatar, Box, Button } from "@chakra-ui/react";
+import { Board, User } from "../../context/ContextScheme";
 import { Container } from "./Wrappers";
 import { FaPlus, FaPaperclip, FaComment } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { MembersList } from "../Lists/MembersList";
 interface CardInfoProps {
   value: string;
   icon: any;
@@ -21,11 +13,7 @@ interface CardInfoProps {
 interface CardFooterProps {}
 
 interface ProfileCardProps {
-  profile: {
-    name: string;
-    image: string;
-    joined: string;
-  };
+  profile: User;
 }
 
 export const CardInfo: React.FC<CardInfoProps> = ({ value, icon }) => {
@@ -61,10 +49,15 @@ export const ProfileCard: React.FC<ProfileCardProps> = ({ profile }) => {
   return (
     <div>
       <HStack spacing={2} align="center">
-        <Avatar size="sm" rounded="md" borderRadius="md" src={profile.image} />
+        <Avatar
+          size="sm"
+          rounded="md"
+          borderRadius="md"
+          src={`http://localhost:5002/img/users/"${profile.profileImage}`}
+          name={profile.fullname}
+        />
         <Stack spacing={0}>
-          <Heading size="xs">{profile.name}</Heading>
-          <chakra.small color="gray.500">{profile.joined}</chakra.small>
+          <Heading size="xs">{profile.fullname}</Heading>
         </Stack>
       </HStack>
     </div>
@@ -84,7 +77,7 @@ export const CardCover: React.FC<CardCoverProps> = ({ image }) => {
         w="100%"
         h="100%"
         borderRadius="lg"
-        fallbackSrc='https://via.placeholder.com/150'
+        fallbackSrc="https://via.placeholder.com/150"
       />
     </Box>
   );
@@ -98,7 +91,12 @@ export const BoardCard: React.FC<BoardCardProps> = ({ Board }) => {
       <Container variant="Card">
         <Stack spacing={2}>
           {Board.coverImage && <CardCover image={Board.coverImage} />}
-          <Heading variant="cardTitle" mx={2}>{Board.title}</Heading>
+          <Heading variant="cardTitle" mx={2}>
+            {Board.title}
+          </Heading>
+          <Box px={2} py={4}>
+            {!Board.visibility && <MembersList max={3} members={Board?.users || []} />}
+          </Box>
         </Stack>
       </Container>
     </Link>

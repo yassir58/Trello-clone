@@ -3,16 +3,17 @@ import { Button, chakra, Stack, Divider } from "@chakra-ui/react";
 
 interface ListOptionProps {
   removeList:()=>void
+  editMode:(state:boolean)=>void
 }
 
-export const ListOptions:React.FC<ListOptionProps> =({removeList})=> {
+export const ListOptions:React.FC<ListOptionProps> =({removeList, editMode})=> {
   return (
     <Stack
     >
       <Button
         py={3}
         variant="ghost"
-
+        onClick={()=>editMode (true)}
       >
         <chakra.small>Rename</chakra.small>
       </Button>

@@ -18,10 +18,11 @@ import Loading from "../pages/Loading";
 import BoardSearch from "../components/BoardSearch";
 import ProfileSettings from "../components/ProfileSettings";
 import useModal from "../hooks/useModel";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import apiClient from "../services/apiClient"
 import { BoardsReponse } from "../components/BoardSearch";
 import { useFailure } from "../hooks/useAlerts";
+import Invites from "../components/Invites";
 interface AllBoardsProps {}
 export interface BoardProps {
   id: number;
@@ -32,7 +33,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { publicBoards, setPublicBoards } = useContext(AppContext);
-  const {profileModal} = useModal();
+  const { profileModal, inviteModal } = useModal();
   const boardsClient = new apiClient<BoardsReponse>("/boards");
   const [loading, setLoading] = useState(true);
   const toast = useToast();
@@ -46,7 +47,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
   const { isLoading } = useQuery(
     {
       queryKey:["boards"],
-      queryFn:()=> boardsClient.getData(null).then((res) => res.data),
+      queryFn:()=> boardsClient.getData().then((res) => res.data),
       refetchOnWindowFocus: false,
       onSuccess: (data) => {
         setPublicBoards && setPublicBoards(data.boards);
@@ -78,6 +79,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
         />
         <UserBoards Boards={publicBoards || []} />
         <ProfileSettings open={profileModal.isOpen} onClose={profileModal.onClose} />
+        <Invites open={inviteModal.isOpen} onClose={inviteModal.onClose} />
       </Stack>
     </Stack>
   );

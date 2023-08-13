@@ -5,13 +5,13 @@ import {
   Heading,
   Stack,
   chakra,
-  Input,
   HStack,
 } from "@chakra-ui/react";
 import { CardInfo } from "../ui-elements/Media";
 import { Label } from "../ui-elements/Label";
 import { MdLabel } from "react-icons/md";
 import { Card , Label as LabelType} from "../../context/ContextScheme";
+import { ControlledForm } from "../Forms/controlledForm";
 // import {RemoveLabel} from "./RemoveLabel";
 
 
@@ -20,20 +20,6 @@ interface AddLableProps {
   action?: (label: LabelType) => void;
 }
 
-// const createNewLabel = (
-//   cards: Card[],
-//   setCards: React.Dispatch<React.SetStateAction<Card[]>>,
-//   cardId: string,
-//   value: string,
-//   color: string
-// ) => {
-//   let temp = cards.slice();
-//   let index = cards.findIndex ((card) => card.id == cardId);
-//   let labels = temp[index].labels;
-//   labels?.push({ value, color });
-//   temp[index].labels = labels;
-//   setCards(temp);
-// };
 
 export const AddLable: React.FC<AddLableProps> = ({
   // card,
@@ -83,13 +69,7 @@ export const AddLable: React.FC<AddLableProps> = ({
         <chakra.small color="#BDBDBD" fontSize="xs">
           Select a name and a color
         </chakra.small>
-        <Input
-          placeholder="Label..."
-          w="98%"
-          variant="outline"
-          value={tag}
-          onChange={onChange}
-        />
+        <ControlledForm  placeholder="Label..." value={tag} action={addLabel} handleOnchange={onChange}/>
         <HStack flexWrap="wrap" justify="center" w="100%">
           {colors.map((color) => {
             return (

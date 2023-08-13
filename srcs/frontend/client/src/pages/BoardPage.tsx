@@ -12,11 +12,12 @@ import { Navigate } from "react-router-dom";
 import Loading from "../pages/Loading";
 import ProfileSettings from "../components/ProfileSettings";
 import useModel from "../hooks/useModel";
+import Invites from "../components/Invites";
 interface HomeProps {}
 
 export const BoardPage: React.FC<HomeProps> = ({}) => {
   const [loading, setLoading] = useState(true);
-  const { profileModal } = useModel();
+  const { profileModal, inviteModal } = useModel();
   const { auth } = useAuth();
   useEffect(() => {
     setTimeout(() => {
@@ -36,6 +37,7 @@ export const BoardPage: React.FC<HomeProps> = ({}) => {
       <Header Board={board! || {}} />
       <Board BoardId={id || ""} />
       <ProfileSettings open={profileModal.isOpen} onClose={profileModal.onClose} />
+      <Invites open={inviteModal.isOpen} onClose={inviteModal.onClose} />
     </Stack>
   );
 };
