@@ -23,6 +23,14 @@ export const createComment = catchAsync(async (req: Request, res: Response, next
         connect: { id: req.currentUser },
       },
     },
+    include: {
+      user: {
+        select: {
+          fullname: true,
+          profileImage: true
+        }
+      }
+    }
   });
   if (!comment) next(new AppError("Could not create Comment", 400));
   res.status(201).json({
