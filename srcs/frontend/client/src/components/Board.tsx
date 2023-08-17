@@ -44,8 +44,8 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ Board, updateMutatio
           <PopOverWrapper triggerVariant="secondary" value={Board?.visibility ? 'private' : 'public'} icon={<BsGlobeEuropeAfrica />} size="2xs">
             <Visibility mutation={updateMutation} Board={Board!} />
           </PopOverWrapper>
-         {!Board?.visibility && <AssignMember />}
          {!Board?.visibility && <MembersList max={3} members={Board?.users || []}/>}
+         {!Board?.visibility && <AssignMember />}
         </HStack>
           <EditBoard Board={Board} updateMutation={updateMutation} deleteMutation={deleteMutation} />
         {/* <DrawerCp header="Menu" value="Menu" icon={<FaEllipsis />} variant="secondary" /> */}

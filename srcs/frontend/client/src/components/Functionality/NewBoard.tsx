@@ -10,7 +10,7 @@ import { CoverPopOver } from "../Popover";
 import apiClient from "../../services/apiClient";
 import { useSuccess, useFailure } from "../../hooks/useAlerts";
 import {ControlledForm} from "../Forms/controlledForm"
-
+import {BsGlobeEuropeAfrica} from "react-icons/bs";
 interface newBoardProps {
   action?: any;
   onClose: () => void;
@@ -22,6 +22,7 @@ interface BoardResponse {
 
 export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
   const [title, setTitle] = useState<string>("");
+  const [visibility, setVisibility] = useState<boolean>(false);
   const { publicBoards, setPublicBoards } = useContext(AppContext);
   const [coverImage, setCoverImage] = useState<string>("");
   const createBoardClient = new apiClient<Board>("/boards");
@@ -40,13 +41,14 @@ export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
     },
   });
 
+  const toggleVisibility = ()=>setVisibility (!visibility)
   const handleOnchange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
   };
 
   const handleOnSubmit = () => {
     const newBoard: Board = {
-      visibility: false,
+      visibility: visibility,
       title: title,
       coverImage: coverImage,
     };
@@ -63,12 +65,11 @@ export const NewBoard: React.FC<newBoardProps> = ({ onClose }) => {
       </Stack>
       <HStack spacing={4} justifyContent="center">
         <CoverPopOver action={(photo: string) => setCoverImage(photo)} />
-        <Button variant="secondary">
+        <Button variant="secondary" onClick={toggleVisibility}>
           <HStack spacing={3}>
-            <FaUnlockKeyhole />
-
+            {visibility ? <FaUnlockKeyhole /> : <BsGlobeEuropeAfrica />}
             <Text fontSize="md" fontWeight="normal">
-              Private
+              {visibility ? "Private" : "Public"}
             </Text>
           </HStack>
         </Button>

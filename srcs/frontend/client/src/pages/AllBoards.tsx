@@ -3,19 +3,16 @@ useEffect,
 useState,
 useContext
    } from "react";
-import { HStack, Heading, Stack, Text, Box, useDisclosure, useToast } from "@chakra-ui/react";
-import { SmallLogo } from "../components/header/SmallLogo";
+import { HStack, Heading, Stack, Text, useDisclosure, useToast } from "@chakra-ui/react";
 // import { NewBoard } from "./Popover";
 import { BiPlus } from "react-icons/bi";
 import { Board, Boards, AppContext } from "../context/ContextScheme";
 import { BoardCard } from "../components/ui-elements/Media";
 import { Container } from "../components/ui-elements/Wrappers";
 import { NewBoardWrapper } from "../components/ui-elements/Modal";
-import ProfileMenu from "../components/Menu/ProfileMenu";
 import useAuth from "../hooks/useAuth";
 import { Navigate } from "react-router-dom";
 import Loading from "../pages/Loading";
-import BoardSearch from "../components/BoardSearch";
 import ProfileSettings from "../components/ProfileSettings";
 import useModal from "../hooks/useModel";
 import { useQuery } from "@tanstack/react-query";
@@ -23,6 +20,9 @@ import apiClient from "../services/apiClient"
 import { BoardsReponse } from "../components/BoardSearch";
 import { useFailure } from "../hooks/useAlerts";
 import Invites from "../components/Invites";
+import Header from "../components/header/header";
+
+
 interface AllBoardsProps {}
 export interface BoardProps {
   id: number;
@@ -61,7 +61,7 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
   if (!auth.loggedIn) return <Navigate to="/login" />;
   return (
     <Stack mt="120px">
-      <Box className="header">
+      {/* <Box className="header">
         <Container variant="mdSpaceBetween">
           <SmallLogo />
           <HStack spacing={3}>
@@ -69,7 +69,8 @@ export const AllBoards: React.FC<AllBoardsProps> = () => {
             <ProfileMenu />
           </HStack>
         </Container>
-      </Box>
+      </Box> */}
+    <Header BoardHeader={false} />
       <Stack>
         <AllBoardsHeader
           isOpen={isOpen}

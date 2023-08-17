@@ -6,11 +6,11 @@ import { EditCardCover } from "../ui-elements/EditCardCover";
 import {  FaTrash } from "react-icons/fa6";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { MyEditableTextarea, EditableTitle } from "../Menu";
-import { MembersPopOver, LabelPopOver, CoverPopOver } from "../Popover";
+import {LabelPopOver, CoverPopOver } from "../Popover";
 import { Card} from "../../context/ContextScheme";
 import { ModalCardProps } from "../ui-elements/Modal";
-import { Label } from "../ui-elements/Label";
 import { LabelsContext } from "../../providers/LabelsProvider";
+import { LabelList } from "../Lists/LabelList";
 interface EditCardProps extends ModalCardProps {
   card: Card;
   onClose: () => void;
@@ -20,7 +20,7 @@ interface EditCardProps extends ModalCardProps {
 
 export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutation, updateMutation }) => {
  
-  const {isLoading, labels, createLabel, deleteLabel} = useContext (LabelsContext)
+  const {labels, createLabel, deleteLabel} = useContext (LabelsContext)
   
  
   return (
@@ -30,8 +30,8 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
           <>
             <CloseButton onClose={onClose} />
             {card.coverImage && <EditCardCover image={card.coverImage} />}
-            <HStack justify="space-between" mx="auto" px={3} py={2} width="100%" alignItems="flex-start">
-              <Stack w="70%">
+            <HStack justify="space-between" flexWrap={'wrap'} mx="auto" w={'100%'} px={3} py={2} alignItems="flex-start">
+              <Stack w={'400px'}>
                 <EditableTitle defaultValue={card.title} action={
                   
                   (value:string)=>{
@@ -54,27 +54,10 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                     updateMutation.mutate ({id:card.id , card:newCard})
                   }}
                 />
-                <HStack spacing={2} px={4} py={2}>
-                  {isLoading ? <h3>Loading ...</h3> :
-                    labels?.map((item) => {
-                      return (
-                        <Label
-                          color={item.color}
-                          action={
-                            () => {
-                              deleteLabel && deleteLabel (item?.id || '')
-                            }
-                          }
-                        >
-                          {item.tag}
-                        </Label>
-                      );
-                    })}
-                </HStack>
+                <LabelList labels={labels} deleteLabel={deleteLabel} />
               </Stack>
-              <Stack w="25%" spacing={3} py={4}>
+              <Stack spacing={3} py={4}>
                 <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
-                <MembersPopOver />
                 <LabelPopOver card={card} addLabelAction={createLabel} />
                 <CoverPopOver card={card} action={(value:string)=>{
                   const newCard = {coverImage:value}

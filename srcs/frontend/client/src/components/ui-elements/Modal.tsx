@@ -36,10 +36,10 @@ export const ModalComponent: React.FC<ModalComponentProps> = ({ children, isOpen
   return (
     <>
       {isOpen && onClose && (
-        <Modal size={size} isOpen={isOpen} onClose={onClose}>
+        <Modal size={size} isOpen={isOpen} onClose={onClose} >
           <ModalOverlay />
           <ModalContent>
-            <ModalBody>{children}</ModalBody>
+            <ModalBody maxHeight="80vh" overflowY="auto">{children}</ModalBody>
           </ModalContent>
         </Modal>
       )}
@@ -80,7 +80,7 @@ export const EditBoardWrapper: React.FC<ModalBoardProps> = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <ModalComponent isOpen={isOpen} onClose={onClose} size="3xl">
+      <ModalComponent isOpen={isOpen} onClose={onClose} size="3xl" >
         <EditBoardComponent
           onClose={onClose}
           Board={Board}

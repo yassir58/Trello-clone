@@ -13,9 +13,9 @@ import {
   Divider,
 } from "@chakra-ui/react";
 interface DrawerCpProps {
-  header: string;
-  value: string;
-  icon: React.ReactNode;
+  header?: string;
+  value?: string;
+  icon?: React.ReactNode;
   variant?: string;
   children?: React.ReactNode;
 }

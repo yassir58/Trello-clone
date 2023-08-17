@@ -36,9 +36,9 @@ export const EditBoardComponent: React.FC<EditBoardCpProps> = ({ onClose, Board,
   return (
     <Stack>
       <EditCardCover image={Board?.coverImage || ""} />
-      <HStack justifyContent={"space-between"} width="100%" alignItems={"flex-start"}>
+      <HStack justifyContent={"space-between"} flexWrap={'wrap'}   alignItems={"flex-start"}>
         <CloseButton onClose={onClose} />
-        <Stack width="70%">
+        <Stack w={'400px'} >
           <Heading fontSize={"md"} py={3}></Heading>
           <EditableTitle
             fs="lg"
@@ -61,7 +61,7 @@ export const EditBoardComponent: React.FC<EditBoardCpProps> = ({ onClose, Board,
             }}
           />
         </Stack>
-        <Stack width="25%" py={5}>
+        <Stack py={5}>
           <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
           {(Board?.visibility == false) && <MembersToggler Board={Board} />}
           <CoverPopOver

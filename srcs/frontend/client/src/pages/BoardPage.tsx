@@ -34,7 +34,7 @@ export const BoardPage: React.FC<HomeProps> = ({}) => {
   console.log(`Board id : ${id}`);
   return (
     <Stack spacing={3}>
-      <Header Board={board! || {}} />
+      <Header Board={board! || {}} BoardHeader={true} />
       <Board BoardId={id || ""} />
       <ProfileSettings open={profileModal.isOpen} onClose={profileModal.onClose} />
       <Invites open={inviteModal.isOpen} onClose={inviteModal.onClose} />

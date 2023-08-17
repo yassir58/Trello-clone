@@ -1,11 +1,9 @@
 import React, { useRef, useState, useEffect } from "react";
 import { CardInfo } from "./ui-elements/Media";
-import { BiSolidUserCircle } from "react-icons/bi";
 import { MdDescription } from "react-icons/md";
 import {
   // Editable,
   EditableTextarea,
-  Box,
   // EditablePreview,
   HStack,
   Stack,
@@ -22,26 +20,26 @@ import {
   ButtonGroup,
   Flex,
   useEditableControls,
-  Input
+  Input,
 } from "@chakra-ui/react";
 import { FaPen } from "react-icons/fa";
-import {CloseIcon, CheckIcon, EditIcon} from '@chakra-ui/icons'
-import { User , Board} from "../context/ContextScheme"
+import { CloseIcon, CheckIcon, EditIcon } from "@chakra-ui/icons";
+import { User, Board } from "../context/ContextScheme";
 
-import ProfileMenu  from "./Menu/ProfileMenu";
 import BoardSearch from "./BoardSearch";
+import { MenuNavBar } from "./Menu/MenuNavBar";
 interface MenuProps {
-  Board:Board
+  Board?: Board;
 }
 export const Menu: React.FC<MenuProps> = ({}) => {
- 
   return (
-    <Stack>
-      <ProfileMenu />
-      <BoardSearch />
+    <Stack spacing={3}>
+      <Stack spacing={12}>
+        <MenuNavBar />
+        <BoardSearch />
+      </Stack>
     </Stack>
-  )
-
+  );
 };
 
 interface MyEditableProps {
@@ -68,7 +66,7 @@ export const MyEditableTextarea: React.FC<MyEditableProps> = ({ defaultValue = "
     <FormControl>
       <HStack spacing={6}>
         <CardInfo value="Description" icon={<MdDescription />} />
-        <Button variant="outlineSecondary" onClick={()=>setIsEditing(true)}>
+        <Button variant="outlineSecondary" onClick={() => setIsEditing(true)}>
           <HStack spacing={2}>
             <FaPen /> <Text fontSize="sm">Edit</Text>
           </HStack>
@@ -90,17 +88,17 @@ export const MyEditableTextarea: React.FC<MyEditableProps> = ({ defaultValue = "
       {isEditing ? (
         <HStack spacing={4}>
           <Button
-          variant="green"
-          onClick={() => {
-            action && action(value);
-            setIsEditing(false);
-          }}
-        >
-          save
-        </Button>
-        <Button variant={'ghost'} onClick={()=>setIsEditing (false)}>
-          cancel
-        </Button>
+            variant="green"
+            onClick={() => {
+              action && action(value);
+              setIsEditing(false);
+            }}
+          >
+            save
+          </Button>
+          <Button variant={"ghost"} onClick={() => setIsEditing(false)}>
+            cancel
+          </Button>
         </HStack>
       ) : (
         ""
@@ -112,7 +110,7 @@ export const MyEditableTextarea: React.FC<MyEditableProps> = ({ defaultValue = "
 export default EditableTextarea;
 
 interface teamMemberProps {
-  profile: User
+  profile: User;
 }
 
 export const TeamMemberCard: React.FC<teamMemberProps> = ({ profile }) => {
@@ -120,7 +118,13 @@ export const TeamMemberCard: React.FC<teamMemberProps> = ({ profile }) => {
     <div>
       <HStack justify="space-between">
         <HStack spacing={3}>
-          <Avatar size="sm" rounded="md" borderRadius="md" name={profile.fullname} src={`http://localhost:5002/img/users/${profile.profileImage}`} />
+          <Avatar
+            size="sm"
+            rounded="md"
+            borderRadius="md"
+            name={profile.fullname}
+            src={`http://localhost:5002/img/users/${profile.profileImage}`}
+          />
           <Heading size="xs">{profile.fullname}</Heading>
         </HStack>
         {/* {? <chakra.small> admin </chakra.small> : <Button variant="outlineRed"> remove </Button>} */}
@@ -130,62 +134,59 @@ export const TeamMemberCard: React.FC<teamMemberProps> = ({ profile }) => {
 };
 
 interface EditableHeadingProps {
-  fs?:string;
-  defaultValue:string;
-  action?:(value:string) => void
+  fs?: string;
+  defaultValue: string;
+  action?: (value: string) => void;
 }
 
-
-export const  EditableTitle:React.FC<EditableHeadingProps> = ({
-  defaultValue,
-  action
-}) => {
-  const [value, setValue] = useState<string> ("")
+export const EditableTitle: React.FC<EditableHeadingProps> = ({ defaultValue, action }) => {
+  const [value, setValue] = useState<string>("");
   /* Here's a custom control */
   function EditableControls() {
-    const {
-      isEditing,
-      getSubmitButtonProps,
-      getCancelButtonProps,
-      getEditButtonProps,
-    } = useEditableControls()
-
+    const { isEditing, getSubmitButtonProps, getCancelButtonProps, getEditButtonProps } = useEditableControls();
 
     return isEditing ? (
-      <ButtonGroup justifyContent='center' size='sm'>
-        <Button onClick={()=>{
-          action && action(value)
-        }}>
-        <IconButton  icon={<CheckIcon/> } {...getSubmitButtonProps()} aria-label=""/>
+      <ButtonGroup justifyContent="center" size="sm">
+        <Button
+          onClick={() => {
+            action && action(value);
+          }}
+        >
+          <IconButton icon={<CheckIcon />} {...getSubmitButtonProps()} aria-label="" />
         </Button>
         <IconButton icon={<CloseIcon />} {...getCancelButtonProps()} aria-label="" />
       </ButtonGroup>
     ) : (
-      <Flex justifyContent='center'>
-        <IconButton size='sm' icon={<EditIcon />} {...getEditButtonProps()} aria-label="" />
+      <Flex justifyContent="center">
+        <IconButton size="sm" icon={<EditIcon />} {...getEditButtonProps()} aria-label="" />
       </Flex>
-    )
+    );
   }
 
   return (
     <Editable
-      textAlign='center'
+      textAlign="center"
       defaultValue={defaultValue}
-      fontSize='2xl'
+      fontSize="2xl"
       isPreviewFocusable={false}
-      display='flex'
-      justifyContent={'space-between'}
+      display="flex"
+      justifyContent={"space-between"}
     >
       <EditablePreview />
       {/* Here is the custom input */}
-      <Input as={EditableInput}  sx={{
+      <Input
+        as={EditableInput}
+        sx={{
           "&:focus": {
             outline: "none",
             boxShadow: "none",
             border: "none",
           },
-        }} value={value} onChange={(e)=>setValue(e.target.value)}/>
+        }}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
       <EditableControls />
     </Editable>
-  )
-} 
+  );
+};

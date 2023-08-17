@@ -1,9 +1,9 @@
-FROM node:16-buster
-
-RUN  apt-get update && apt-get -y install curl build-essential 
-RUN  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash 
-ADD ./tools/entrypoint.sh /tmp/
-ADD ./client /var/run
-RUN chmod +x /tmp/entrypoint.sh 
-WORKDIR /var/run/client 
+FROM debian:buster
+RUN apt-get update && apt-get install curl build-essential libssl-dev -y
+COPY ./tools/entrypoint.sh /tmp/entrypoint.sh
+RUN mkdir /tmp/project
+ADD ./client/ /tmp/project/client
+WORKDIR /tmp/project/client
+RUN chmod +x /tmp/entrypoint.sh
 ENTRYPOINT ["/tmp/entrypoint.sh"]
+CMD ["npm", "run", "start"]

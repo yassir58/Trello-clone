@@ -21,7 +21,7 @@ const ProfileMenu = () => {
   const { profileModal, inviteModal } = useModel();
   const usersClient = new apiClient("/users/logout");
 
-  const handleLogout = () => {
+const handleLogout = () => {
     usersClient.postData({}).then(() => {
       setAuth({ loggedIn: false, token: null, user: null });
       localStorage.removeItem("jwtToken");
@@ -29,6 +29,7 @@ const ProfileMenu = () => {
     });
   };
 
+  
   return (
     <Menu variant="primary">
       <MenuButton
