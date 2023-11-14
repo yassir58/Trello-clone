@@ -1,21 +1,24 @@
 import React from "react";
 import { Button, Input, Wrap } from "@chakra-ui/react";
 import { useState } from "react";
+import { useTasks } from "../hooks/useTasks";
 
 interface Props {
-  checklists: string[];
   cancelClick: () => void;
-  addClick: React.Dispatch<React.SetStateAction<string[]>>;
+  checklist:checklist
 }
 
-const PromptWrap = ({ checklists, cancelClick, addClick }: Props) => {
+const PromptWrap = ({ cancelClick, checklist}: Props) => {
   const [input, setInput] = useState("");
+  const {newTaskMutation} = useTasks (checklist)
+
   const handleAddchecklist = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInput(event.target.value);
   };
-  console.log(checklists);
-  const handleAddClick = () => {
-    addClick((checklists) => [...checklists, input]);
+  const addTask = () => {
+    newTaskMutation.mutate (input);
+    setInput ("");
+    cancelClick ();
   };
 
   return (
@@ -32,7 +35,7 @@ const PromptWrap = ({ checklists, cancelClick, addClick }: Props) => {
         w={"60px"}
         h={"30px"}
         fontSize={"12px"}
-        onClick={handleAddClick}
+        onClick={addTask}
       >
         Add
       </Button>

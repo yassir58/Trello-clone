@@ -1,14 +1,14 @@
 import React from "react";
 import { FaImage } from "react-icons/fa6";
 import { FaUserGroup } from "react-icons/fa6";
-import { MdLabel } from "react-icons/md";
+import { MdCheckBox, MdLabel } from "react-icons/md";
 import { AddLable } from "./Functionality/AddLable";
 import InviteToBoard from "./InviteToBoard";
 import { ChangeCover } from "./Functionality/ChangeCover";
 import { PopOverWrapper } from "./ui-elements/PopOver";
 import { Card, Label } from "../context/ContextScheme";
 import { PhotosProvider } from "../providers/PhotosProvider";
-
+import AddChecklist from "./AddChecklist";
 interface PopOverProps {
   card?: Card;
   action?: (photo: string) => void;
@@ -32,6 +32,14 @@ export const LabelPopOver: React.FC<LabelsProps> = ({ card , addLabelAction}) =>
     </PopOverWrapper>
   );
 };
+
+export const CheckListPopOver: React.FC<PopOverProps> = ({card}) => {
+  return (
+    <PopOverWrapper value="Checklists" icon={<MdCheckBox/>} triggerVariant="largeSecondary" size="2xs" placement="left">
+      <AddChecklist card={card}/>
+    </PopOverWrapper>
+  )
+}
 
 export const CoverPopOver: React.FC<PopOverProps> = ({ action }) => {
   return (

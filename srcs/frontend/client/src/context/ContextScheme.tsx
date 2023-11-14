@@ -91,7 +91,16 @@ export interface GlobalState {
   publicBoards?: Board[];
   setPublicBoards?: React.Dispatch<React.SetStateAction<Board[]>>;
 }
+
+export interface PopOverContext {
+  isOpen?:boolean
+  onOpen?:() => void
+  onClose?:()=> void
+}
+
 export const AppContext = createContext<GlobalState>({});
+export  const popOverContext = createContext<PopOverContext> ({});
+
 
 export const GlobalContext: React.FC<Props> = ({ children }) => {
   const [publicBoards, setPublicBoards] = useState<Board[]>([]);

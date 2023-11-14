@@ -9,8 +9,10 @@ import {
   HStack,
   PlacementWithLogical,
   Text,
+  useDisclosure,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext }  from "react";
+import { popOverContext } from "../../context/ContextScheme";
 
 interface PopOverProps {
   children: React.ReactNode;
@@ -34,6 +36,8 @@ export const PopOver: React.FC<PopOverProps> = ({
   header,
   placement = "bottom",
 }) => {
+
+  const {isOpen, onOpen} = useContext (popOverContext)
   const PopOverHeader = () => {
     return (
       <div>
@@ -44,9 +48,9 @@ export const PopOver: React.FC<PopOverProps> = ({
   };
   return (
     <div>
-      <Popover placement={placement}>
+      <Popover placement={placement} isOpen={isOpen}>
         <PopoverTrigger>
-          <Button variant={triggerVariant}>{triggerValue}</Button>
+          <Button onClick={onOpen} variant={triggerVariant}>{triggerValue}</Button>
         </PopoverTrigger>
         <PopoverContent width={size} mx="10px">
           {header && <PopOverHeader />}
@@ -66,6 +70,7 @@ export const PopOverWrapper: React.FC<PopOverWrapperProps> = ({
   icon,
   value,
 }) => {
+  const {isOpen, onClose, onOpen} = useDisclosure ();
   const trigger = () => {
     return (
       <HStack spacing={1}>
@@ -74,7 +79,8 @@ export const PopOverWrapper: React.FC<PopOverWrapperProps> = ({
     );
   };
   return (
-    <PopOver
+    <popOverContext.Provider value={{isOpen, onClose, onOpen}}>
+<PopOver
       size={size}
       placement={placement}
       header={header}
@@ -83,5 +89,6 @@ export const PopOverWrapper: React.FC<PopOverWrapperProps> = ({
     >
       {children}
     </PopOver>
+    </popOverContext.Provider>
   );
 };

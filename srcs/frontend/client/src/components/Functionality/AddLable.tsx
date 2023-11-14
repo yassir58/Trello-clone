@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import {
   Button,
@@ -7,10 +7,7 @@ import {
   chakra,
   HStack,
 } from "@chakra-ui/react";
-import { CardInfo } from "../ui-elements/Media";
-import { Label } from "../ui-elements/Label";
-import { MdLabel } from "react-icons/md";
-import { Card , Label as LabelType} from "../../context/ContextScheme";
+import { Card , Label as LabelType, popOverContext} from "../../context/ContextScheme";
 import { ControlledForm } from "../Forms/controlledForm";
 // import {RemoveLabel} from "./RemoveLabel";
 
@@ -42,12 +39,7 @@ export const AddLable: React.FC<AddLableProps> = ({
     setValue("");
     action && action ({tag, color})
   };
-  const removeLabel = (index: number) => {
-    // let temp = labels.slice();
-    // temp.splice(index, 1);
-    // setLabels(temp);
-    console.log (index)
-  }
+  
   const colors = [
     "gray",
     "red",
@@ -62,9 +54,10 @@ export const AddLable: React.FC<AddLableProps> = ({
     "white",
     "black",
   ];
+
+  const {onClose} = useContext (popOverContext)
   return (
-    <div>
-      <Stack spacing={2} px={4} py={2} justify="flex-start">
+      <Stack spacing={2} px={4} py={2} justifyContent="flex-start" alignItems='flex-start'  w='100%'>
         <Heading size="sm">Lable</Heading>
         <chakra.small color="#BDBDBD" fontSize="xs">
           Select a name and a color
@@ -76,8 +69,8 @@ export const AddLable: React.FC<AddLableProps> = ({
               <Button
                 bg={`${color}.400`}
                 borderRadius="lg"
-                w="50px"
-                h="30px"
+                w="55px"
+                h="35px"
                 sx={{
                   _hover: {
                     opacity: 0.8,
@@ -92,22 +85,17 @@ export const AddLable: React.FC<AddLableProps> = ({
             );
           })}
         </HStack>
-        <CardInfo value="Available" icon={<MdLabel />} />
-        <HStack spacing={2} px={2} py={2} flexWrap="wrap">
-          {labels.map((label, index) => {
-            return <Label  action={()=>{
-              // RemoveLabel(cards, setCards, card!.id || '', index)
-              removeLabel(index)
-            }}  color={label.color}>{label.tag}</Label>;
-          })}
-        </HStack>
-        <Button size="md" variant="primary" mx="auto" onClick={()=>{
+        
+       <HStack  w='100%' border='1px' borderColor='red' justifyContent={'flext-start'}>
+       <Button size="md" colorScheme={'blue'} mx="auto" onClick={()=>{
           addLabel ()
-          // createNewLabel (cards!, setCards!, card!.id || '', value, color)
+          onClose! ()
         }}>
           Add
         </Button>
+
+        <Button variant='ghost' onClick={onClose}>cancel</Button>
+       </HStack>
       </Stack>
-    </div>
   );
 };

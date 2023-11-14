@@ -4,11 +4,10 @@ import { useState } from "react";
 import PromptWrap from "./PromptWrap";
 
 interface Props {
-  checklists: string[];
-  addClick: React.Dispatch<React.SetStateAction<string[]>>;
+  checklist:checklist
 }
 
-const PromptField = ({ checklists, addClick }: Props) => {
+const PromptField = ({checklist}:Props) => {
   const [state, setState] = useState(1);
 
   function handleClick() {
@@ -30,9 +29,8 @@ const PromptField = ({ checklists, addClick }: Props) => {
   }
   return (
     <PromptWrap
-      checklists={checklists}
+      checklist={checklist}
       cancelClick={handleClick}
-      addClick={addClick}
     />
   );
 };

@@ -6,11 +6,12 @@ import { EditCardCover } from "../ui-elements/EditCardCover";
 import {  FaTrash } from "react-icons/fa6";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { MyEditableTextarea, EditableTitle } from "../Menu";
-import {LabelPopOver, CoverPopOver } from "../Popover";
+import {LabelPopOver, CoverPopOver, CheckListPopOver } from "../Popover";
 import { Card} from "../../context/ContextScheme";
 import { ModalCardProps } from "../ui-elements/Modal";
 import { LabelsContext } from "../../providers/LabelsProvider";
 import { LabelList } from "../Lists/LabelList";
+import { CheckLists } from "../CheckLists";
 interface EditCardProps extends ModalCardProps {
   card: Card;
   onClose: () => void;
@@ -49,16 +50,17 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                 <MyEditableTextarea
                   defaultValue={card.description}
                   action={(value: string) => {
-                    console.log(`value: ${value}`);
                     const newCard = {description:value}
                     updateMutation.mutate ({id:card.id , card:newCard})
                   }}
                 />
+                <CheckLists card={card} />
                 <LabelList labels={labels} deleteLabel={deleteLabel} />
               </Stack>
               <Stack spacing={3} py={4}>
                 <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
                 <LabelPopOver card={card} addLabelAction={createLabel} />
+                <CheckListPopOver card={card}/>
                 <CoverPopOver card={card} action={(value:string)=>{
                   const newCard = {coverImage:value}
                   updateMutation.mutate ({id:card.id, card:newCard})
