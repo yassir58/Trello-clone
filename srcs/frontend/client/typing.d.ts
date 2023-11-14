@@ -10,3 +10,10 @@ type Task = {
     id:string
     resolved:boolean
 }
+
+type comment = {
+    content:string
+    id:string
+    cardId?:string
+    createdAt?:string
+}

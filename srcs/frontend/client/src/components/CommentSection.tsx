@@ -1,8 +1,14 @@
 import React from "react";
 import { Wrap, Textarea, Button } from "@chakra-ui/react";
 import { useState } from "react";
-function CommentSection() {
+import { useComments } from "../hooks/useComments";
+import { Card } from "../context/ContextScheme";
+interface props {
+  card:Card
+}
+const  CommentSection:React.FC<props> = ({card})=> {
   const [comment, setComment] = useState("");
+  const {newCommentMutation} = useComments (card.id!)
 
   const handleCommentChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -10,7 +16,10 @@ function CommentSection() {
     setComment(event.target.value);
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = () => {
+    setComment ('')
+    newCommentMutation.mutate (comment)
+  };
 
   return (
     <Wrap position={"relative"}>

@@ -1,4 +1,4 @@
-import { useQuery , useMutation} from "@tanstack/react-query";
+import { useQuery , useMutation, useQueryClient} from "@tanstack/react-query";
 import apiClient from "../services/apiClient"
 import { useToast } from "@chakra-ui/react";
 import { useSuccess, useFailure } from "./useAlerts";
@@ -14,9 +14,10 @@ export const useComments = (cardId:string)=>{
     const allCommentsClient = new apiClient (`http://localhost:5002/api/v1/cards/${cardId}/comments`)
     const deleteCommentClient = (comment:string) => new apiClient (`http://localhost:5002/api/v1/cards/${cardId}/comments/${comment}`)
     const toast  = useToast ()
+    const queryClient = useQueryClient ()
 
-    const {isError, isLoading} = useQuery ({
-        queryKey:['comments'],
+    const {isError, isLoading, data} = useQuery ({
+        queryKey:['comments', cardId],
         queryFn: async () => allCommentsClient.getData ().then (res=> res.data),
         onSuccess: (data:any) => console.log (data),
         onError: (err:any) => console.log (err)
@@ -27,13 +28,18 @@ export const useComments = (cardId:string)=>{
             "content": content,
             "cardId": cardId
         }),
-        onSuccess: () => toast (useSuccess ("Comment created succesfully")),
+        onSuccess: () =>{
+            queryClient.invalidateQueries (['comment', cardId])
+            toast (useSuccess ("Comment created succesfully"))
+        },
         onError: () => toast (useFailure ("Failed to create comment"))
     })
 
     const deleteCommentMutation = useMutation ({
         mutationFn: async (comment:string)=> deleteCommentClient(comment).deleteData(),
-        onSuccess: () => toast (useSuccess ('Comment deleted successfully')),
+        onSuccess: () => {
+            queryClient.invalidateQueries (['comment', cardId])
+            toast (useSuccess ('Comment deleted successfully'))},
         onError: () => toast (useFailure ('Failed to delete comment'))
 
     })
@@ -42,8 +48,10 @@ export const useComments = (cardId:string)=>{
         mutationFn: async (args:updateComment) => deleteCommentClient (args.comment).updateData ({
             "content": args.content,
         }, null),
-        onSuccess: () => toast (useSuccess ('Comment updated successfully')),
+        onSuccess: () => {
+            queryClient.invalidateQueries (['comment', cardId])
+            toast (useSuccess ('Comment updated successfully'))},
         onError: () => toast (useFailure ('Failed to update comment'))
     })
-    return {isError, isLoading, newCommentMutation, deleteCommentMutation, updateCommentMutation}
+    return {isError, isLoading, newCommentMutation, deleteCommentMutation, updateCommentMutation, data}
 }

@@ -12,6 +12,8 @@ import { ModalCardProps } from "../ui-elements/Modal";
 import { LabelsContext } from "../../providers/LabelsProvider";
 import { LabelList } from "../Lists/LabelList";
 import { CheckLists } from "../CheckLists";
+import CommentSection from "../CommentSection";
+import { CommentList } from "../CommentList";
 interface EditCardProps extends ModalCardProps {
   card: Card;
   onClose: () => void;
@@ -55,6 +57,8 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                   }}
                 />
                 <CheckLists card={card} />
+                <CommentSection card={card}/>
+                <CommentList card={card}/>
                 <LabelList labels={labels} deleteLabel={deleteLabel} />
               </Stack>
               <Stack spacing={3} py={4}>
