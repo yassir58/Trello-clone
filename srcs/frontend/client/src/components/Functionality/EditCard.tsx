@@ -6,7 +6,7 @@ import { EditCardCover } from "../ui-elements/EditCardCover";
 import {  FaTrash } from "react-icons/fa6";
 import { BiSolidUserCircle } from "react-icons/bi";
 import { MyEditableTextarea, EditableTitle } from "../Menu";
-import {LabelPopOver, CoverPopOver, CheckListPopOver } from "../Popover";
+import {LabelPopOver, CoverPopOver} from "../Popover";
 import { Card} from "../../context/ContextScheme";
 import { ModalCardProps } from "../ui-elements/Modal";
 import { LabelsContext } from "../../providers/LabelsProvider";
@@ -14,6 +14,8 @@ import { LabelList } from "../Lists/LabelList";
 import { CheckLists } from "../CheckLists";
 import CommentSection from "../CommentSection";
 import { CommentList } from "../CommentList";
+import { AttachementsPopOver } from "../Popover";
+import { AttachementsList } from "../AttachementList";
 interface EditCardProps extends ModalCardProps {
   card: Card;
   onClose: () => void;
@@ -57,6 +59,7 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
                   }}
                 />
                 <CheckLists card={card} />
+                <AttachementsList card={card}/>
                 <CommentSection card={card}/>
                 <CommentList card={card}/>
                 <LabelList labels={labels} deleteLabel={deleteLabel} />
@@ -64,7 +67,7 @@ export const EditCard: React.FC<EditCardProps> = ({ card, onClose, deleteMutatio
               <Stack spacing={3} py={4}>
                 <CardInfo icon={<BiSolidUserCircle />} value="Actions" />
                 <LabelPopOver card={card} addLabelAction={createLabel} />
-                <CheckListPopOver card={card}/>
+                <AttachementsPopOver card={card}/>
                 <CoverPopOver card={card} action={(value:string)=>{
                   const newCard = {coverImage:value}
                   updateMutation.mutate ({id:card.id, card:newCard})

@@ -1,20 +1,39 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { Card } from "../context/ContextScheme"
-import { useChecklists } from "../hooks/useChecklists"
-import { Stack } from "@chakra-ui/react"
-import Checklist from "./Checklist"
+import { Button, Input, InputGroup, Stack , InputRightElement, Heading} from "@chakra-ui/react"
+import { useTasks } from '../hooks/useTasks'
+import { Checklist } from './Checklist'
 
 interface props {
     card?:Card
 }
 export const CheckLists:React.FC<props> = ({card})=>{
 
-    const {data} = useChecklists (card?.id!)
+    const {newTaskMutation} = useTasks (card?.id!)
+    const ref = useRef <HTMLInputElement>(null)
+    const [task, setTask] = useState ('')
+
+    const newTask = ()=>{
+        newTaskMutation.mutate (task);
+        setTask ('')
+    }
+
+    const handleEnter = (event: React.KeyboardEvent<HTMLInputElement>)=>{
+        if (event.key === 'Enter')
+            newTask ()
+    }
     return (
         <Stack spacing={4}>
-            {data && data.count > 0 && data!.checklists.map((item:any)=> {
-                return <Checklist checklist={item} />
-            })}
+            <Heading>Checklist</Heading>
+            <InputGroup size='md'>
+                <Input onKeyDown={handleEnter} value={task} placeholder='task title' ref={ref!} onChange={(e)=> setTask (e.target.value)} type='text' px={4}/>
+                <InputRightElement>
+                <Button colorScheme='green' onClick={newTask}>
+                    add
+                </Button>
+                </InputRightElement>
+            </InputGroup>
+            <Checklist card={card!}/>
         </Stack>
     )
 }

@@ -3,7 +3,6 @@ import path from "path";
 import morgan from "morgan";
 import cors, { CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
-import { rateLimit } from "express-rate-limit";
 import express, { Express, Request, Response, NextFunction } from "express";
 
 // Routers
@@ -15,7 +14,6 @@ import boardsRouter from "./routes/boardsRouter";
 import labelsRouter from "./routes/labelsRouter";
 import invitesRouter from "./routes/invitesRouter";
 import commentsRouter from "./routes/commentsRouter";
-import checklistRouter from "./routes/checkListRouter";
 import attachementsRouter from "./routes/attachementsRouter";
 
 // Error handling
@@ -27,7 +25,7 @@ const app: Express = express();
 if (process.env.DEV_MODE == "dev") app.use(morgan("dev"));
 
 const corsOptions: CorsOptions = {
-  origin: ["http://localhost:5173", "http://localhost:3030"],
+  origin: ["http://localhost:3030"],
   optionsSuccessStatus: 200,
   credentials: true,
 };
@@ -41,12 +39,6 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(cookieParser());
 
 // The rate limiter is configured to serve 5000Req/Hour
-app.use(
-  rateLimit({
-    windowMs: 60 * 60 * 1000,
-    max: 5000,
-  })
-);
 
 // app.use(cookieParser());
 app.use(express.json({ limit: "10kb" }));
@@ -61,7 +53,6 @@ app.use("/api/v1/boards", boardsRouter);
 app.use("/api/v1/labels", labelsRouter);
 app.use("/api/v1/invites", invitesRouter);
 app.use("/api/v1/comments", commentsRouter);
-app.use("/api/v1/checklists", checklistRouter);
 app.use("/api/v1/attachements", attachementsRouter);
 
 app.all("*", (req: Request, res: Response, next: NextFunction) => {

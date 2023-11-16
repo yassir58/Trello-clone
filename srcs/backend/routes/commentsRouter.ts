@@ -11,7 +11,6 @@ Router.use(preventUnauthorized("user"));
 Router.route("/").get(commentsController.getAllComments).post(commentsController.createComment);
 
 Router.route("/:id")
-  .get(commentsController.getCommentById)
   .put(commentsController.updateCommentById)
   .delete(commentsController.deleteCommentById);
 

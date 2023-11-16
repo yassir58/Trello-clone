@@ -1,14 +1,14 @@
 import { ObjectSchema } from "joi";
 
-import { cardSchema, cardUpdateSchema } from "../models/cardModel";
 import userSchema from "../models/userModel";
-import { listSchema, listUpdateSchema } from "../models/listModel";
-import { boardUpdateSchema, boardSchema } from "../models/boardModel";
 import labelSchema from "../models/labelModel";
 import inviteSchema from "../models/inviteModel";
-import { commentUpdateSchema, commentSchema } from "../models/commentModel";
 import attachementSchema from "../models/attachementModel";
-import { checklistSchema, taskSchema } from "../models/checklistModel";
+import { listSchema, listUpdateSchema } from "../models/listModel";
+import { cardSchema, cardUpdateSchema } from "../models/cardModel";
+import { taskSchema, taskUpdateSchema } from "../models/checklistModel";
+import { boardUpdateSchema, boardSchema } from "../models/boardModel";
+import { commentUpdateSchema, commentSchema } from "../models/commentModel";
 
 const validator = (schema: ObjectSchema) => (payload: object) =>
   schema.validate(payload, { abortEarly: true });
@@ -25,5 +25,5 @@ export const labelValidator = validator(labelSchema);
 export const cardValidator = validator(cardSchema);
 export const cardUpdateValidator = validator(cardUpdateSchema);
 export const inviteValidator = validator(inviteSchema);
-export const checklistValidor = validator(checklistSchema);
 export const taskValidator = validator(taskSchema);
+export const taskUpdateValidator = validator(taskUpdateSchema);

@@ -137,7 +137,7 @@ export const CardList: React.FC<CardListProps> = ({ list, mutation }) => {
         {!editList ? (
           <Container variant="mdSpaceBetween">
             <Heading variant="listTitle">{listTitle}</Heading>
-            <PopOverWrapper triggerVariant={"ghost"} icon={<FaEllipsis />} size="3xs">
+            <PopOverWrapper triggerVariant={"ghost"} icon={<FaEllipsis />} closable={true} size="3xs">
               <ListOptions removeList={() => handleRemoveList()} editMode={(state: boolean) => setEditList(state)} />
             </PopOverWrapper>
           </Container>

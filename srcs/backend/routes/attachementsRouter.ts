@@ -6,7 +6,9 @@ const Router = express.Router({ mergeParams: true });
 
 Router.use(authCtrl.authorizeRoute);
 
-Router.route("/").get(attachementsCtrl.getAllAttachements).post(attachementsCtrl.createAttachement);
+Router.use(authCtrl.preventUnauthorized("user"));
+
+Router.route("/").get(attachementsCtrl.getAllAttachements).post(attachementsCtrl.uploadCardAttachement, attachementsCtrl.processAttachement,attachementsCtrl.createAttachement);
 
 Router.route("/:id").get(attachementsCtrl.getAttachementById).delete(attachementsCtrl.deleteAttachementById);
 

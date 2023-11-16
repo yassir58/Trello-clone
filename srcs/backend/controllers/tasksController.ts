@@ -1,7 +1,7 @@
 import { PrismaClient, Task } from "@prisma/client";
 import { Request, Response, NextFunction } from "express";
 
-import { taskValidator } from "../utils/validator";
+import { taskValidator, taskUpdateValidator } from "../utils/validator";
 import catchAsync from "../utils/catchAsync";
 import AppError from "../utils/AppError";
 
@@ -15,9 +15,9 @@ export const createTask = catchAsync(async (req: Request, res: Response, next: N
   const task = await prisma.task.create({
     data: {
       content: value.content,
-      checkList: {
+      card: {
         connect: {
-          id: value.checkListId,
+          id: value.cardId,
         },
       },
     },
@@ -30,9 +30,13 @@ export const createTask = catchAsync(async (req: Request, res: Response, next: N
 });
 
 export const getAllTasks = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  //! Maybe i should add some authorization before getting the tasks list
   const tasks = await prisma.task.findMany({
     where: {
-      checkListId: req.params.checkListId ?? undefined,
+      cardId: req.params.cardId ?? undefined,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
   res.status(200).json({
@@ -45,15 +49,16 @@ export const getAllTasks = catchAsync(async (req: Request, res: Response, next: 
 export const getTaskById = UtilsCtrl.getOneById("task", null);
 
 export const updateTaskById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const { content, resolved } = req.body;
+  const { error, value } = taskUpdateValidator(req.body);
+  if (error) return next(new AppError(error.message, 400));
   const task = (await UtilsCtrl.checkExistance(req, next, "task")) as Task;
   const newTask = await prisma.task.update({
     where: {
       id: task.id,
     },
     data: {
-      content,
-      resolved,
+      content: value.content,
+      resolved: value.resolved,
     },
   });
   if (!newTask) return next(new AppError(`Could not update task ${task.id}`, 400));
@@ -70,7 +75,6 @@ export const deleteTaskById = catchAsync(async (req: Request, res: Response, nex
       id: task.id,
     },
   });
-
   res.status(204).json({
     status: "success",
   });

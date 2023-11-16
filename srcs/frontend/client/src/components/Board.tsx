@@ -41,7 +41,7 @@ export const BoardMenuBar: React.FC<BoardMenuBarProps> = ({ Board, updateMutatio
     <Stack>
       <Container variant="mdSpaceBetween">
         <HStack spacing={3}>
-          <PopOverWrapper triggerVariant="secondary" value={Board?.visibility ? 'private' : 'public'} icon={<BsGlobeEuropeAfrica />} size="2xs">
+          <PopOverWrapper triggerVariant="secondary" closable={true} value={Board?.visibility ? 'private' : 'public'} icon={<BsGlobeEuropeAfrica />} size="2xs">
             <Visibility mutation={updateMutation} Board={Board!} />
           </PopOverWrapper>
          {!Board?.visibility && <MembersList max={3} members={Board?.users || []}/>}

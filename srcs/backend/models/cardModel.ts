@@ -4,8 +4,6 @@ const uuidExpr: RegExp = new RegExp(/^[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a
 
 export const cardSchema = Joi.object({
   title: Joi.string().min(5).max(100).required(),
-  description: Joi.string().optional(),
-  coverImage: Joi.string().optional(),
   listId: Joi.string().regex(uuidExpr).required(),
 });
 

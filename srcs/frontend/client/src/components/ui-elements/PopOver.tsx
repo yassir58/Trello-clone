@@ -21,11 +21,13 @@ interface PopOverProps {
   placement?: PlacementWithLogical | undefined;
   size?: string;
   header?: string;
+  closable?:boolean
 }
 
 interface PopOverWrapperProps extends PopOverProps {
   icon?: React.ReactNode | undefined;
   value?: string;
+  closable?:boolean
 }
 
 export const PopOver: React.FC<PopOverProps> = ({
@@ -34,6 +36,7 @@ export const PopOver: React.FC<PopOverProps> = ({
   triggerValue,
   triggerVariant,
   header,
+  closable,
   placement = "bottom",
 }) => {
 
@@ -46,18 +49,34 @@ export const PopOver: React.FC<PopOverProps> = ({
       </div>
     );
   };
+
+  const CloseAblePopover = ()=>{
+    return (<Popover placement={placement} isOpen={isOpen}>
+      <PopoverTrigger>
+        <Button onClick={onOpen} variant={triggerVariant}>{triggerValue}</Button>
+      </PopoverTrigger>
+      <PopoverContent width={size} mx="10px">
+        {header && <PopOverHeader />}
+        <PopoverBody>{children}</PopoverBody>
+      </PopoverContent>
+    </Popover>)
+  }
+
+  const UncloseAblePopover = ()=>{
+    return (<Popover placement={placement}>
+      <PopoverTrigger>
+        <Button onClick={onOpen} variant={triggerVariant}>{triggerValue}</Button>
+      </PopoverTrigger>
+      <PopoverContent width={size} mx="10px">
+        {header && <PopOverHeader />}
+        <PopoverBody>{children}</PopoverBody>
+      </PopoverContent>
+    </Popover>)
+  }
   return (
-    <div>
-      <Popover placement={placement} isOpen={isOpen}>
-        <PopoverTrigger>
-          <Button onClick={onOpen} variant={triggerVariant}>{triggerValue}</Button>
-        </PopoverTrigger>
-        <PopoverContent width={size} mx="10px">
-          {header && <PopOverHeader />}
-          <PopoverBody>{children}</PopoverBody>
-        </PopoverContent>
-      </Popover>
-    </div>
+    <>
+      {closable ? <UncloseAblePopover/> : <CloseAblePopover/>}
+    </>
   );
 };
 
@@ -69,6 +88,7 @@ export const PopOverWrapper: React.FC<PopOverWrapperProps> = ({
   placement = "bottom",
   icon,
   value,
+  closable
 }) => {
   const {isOpen, onClose, onOpen} = useDisclosure ();
   const trigger = () => {
@@ -86,6 +106,7 @@ export const PopOverWrapper: React.FC<PopOverWrapperProps> = ({
       header={header}
       triggerValue={trigger()}
       triggerVariant={triggerVariant}
+      closable={closable}
     >
       {children}
     </PopOver>

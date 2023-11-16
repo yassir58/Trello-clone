@@ -37,6 +37,7 @@ model User {
   passwordResetExpires DateTime?
   contriBoards         Board[]   @relation("Members")
   invites              Invite[]
+  cards                Card[]
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -46,7 +47,7 @@ model User {
 
 model List {
   id   String @id @default(uuid())
-  name String @unique
+  name String
   card Card[] @relation("cards")
 
   createdAt DateTime @default(now())
@@ -56,8 +57,10 @@ model List {
 }
 
 model Card {
-  id    String @id @default(uuid())
-  title String
+  id     String @id @default(uuid())
+  title  String
+  author User   @relation(fields: [userId], references: [id])
+  userId String
 
   list        List?        @relation("cards", fields: [listId], references: [id], onDelete: SetNull)
   listId      String?
@@ -66,15 +69,16 @@ model Card {
   comments    Comment[]    @relation("comments")
   attachments Attachment[] @relation("attachements")
   labels      Label[]
-  checklists  CheckList[]
+  checklists  Task[]
 
+  order Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Attachment {
   id    String @id @default(uuid())
-  title String @unique
+  title String
   path  String @unique
 
   createdAt DateTime @default(now())
@@ -110,7 +114,7 @@ model Invite {
 
 model Label {
   id    String @id @default(uuid())
-  tag   String @unique
+  tag   String
   color String
 
   card   Card?   @relation(fields: [cardId], references: [id], onDelete: SetNull)
@@ -120,22 +124,12 @@ model Label {
   updatedAt DateTime @updatedAt
 }
 
-model CheckList {
+model Task {
   id        String   @id @default(uuid())
-  name      String
-  tasks     Task[]
+  content   String
+  resolved  Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  card      Card?    @relation(fields: [cardId], references: [id])
-  cardId    String?
-}
-
-model Task {
-  id          String     @id @default(uuid())
-  content     String
-  resolved    Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  checkList   CheckList? @relation(fields: [checkListId], references: [id], onDelete: SetNull)
-  checkListId String?
+  card      Card     @relation(fields: [cardId], references: [id])
+  cardId    String
 }

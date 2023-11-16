@@ -23,6 +23,24 @@ export const createBoard = catchAsync(async (req: Request, res: Response, next: 
         connect: { id: req.currentUser },
       },
     },
+    include: {
+      author: {
+        select: {
+          id: true,
+          fullname: true,
+          email: true,
+          profileImage: true,
+        },
+      },
+      users: {
+        select: {
+          id: true,
+          fullname: true,
+          email: true,
+          profileImage: true,
+        },
+      },
+    },
   });
   if (!board) next(new AppError("Could not create board", 400));
   res.status(201).json({
@@ -31,7 +49,7 @@ export const createBoard = catchAsync(async (req: Request, res: Response, next: 
   });
 });
 
-export const getAllBoards = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+export const getMyboards = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const boards = await prisma.board.findMany({
     where: {
       OR: [
@@ -80,11 +98,74 @@ export const getBoardById = catchAsync(async (req: Request, res: Response, next:
   if (!board) return next(new AppError(`Could not find board: ${id}`, 404));
   const boardUsers = board.users.map((user) => user.id);
   if (board.author.id !== req.currentUser && !boardUsers.includes(req.currentUser))
-    return next(new AppError(`You don't have permissions to access board: ${id}`, 401));
+  {
+    if (!board.visibility)
+      return next(new AppError(`You don't have permissions to access board: ${id}`, 401));
+    await prisma.board.update({
+      where: {
+        id: board.id
+      },
+      data: {
+        users: {
+          connect: {
+            id: req.currentUser
+          }
+        }
+      }
+    })
+  }
   sendBoardId(board.id, res);
   res.status(200).json({
     status: "success",
     board,
+  });
+});
+
+export const getAllBoards = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  const privateBoards = await prisma.board.findMany({
+    where: {
+      OR: [
+        {
+          authorId: req.currentUser,
+        },
+        {
+          users: { some: { id: req.currentUser } },
+        },
+      ],
+      AND: {
+        visibility: false
+      }
+    },
+    include: {
+      author: {
+        select: { id: true, fullname: true, email: true, profileImage: true },
+      },
+      users: {
+        select: { id: true, fullname: true, email: true, profileImage: true },
+      },
+    },
+  });
+
+  const publicBoards = await prisma.board.findMany({
+    where: {
+      visibility: true
+    },
+    include: {
+      author: {
+        select: { id: true, fullname: true, email: true, profileImage: true },
+      },
+      users: {
+        select: { id: true, fullname: true },
+      },
+    },
+  })
+  
+  const boards = [...privateBoards, ...publicBoards];
+
+  res.status(200).json({
+    status: "success",
+    boards,
+    count: boards.length,
   });
 });
 

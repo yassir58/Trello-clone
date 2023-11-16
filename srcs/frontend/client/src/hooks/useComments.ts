@@ -29,7 +29,7 @@ export const useComments = (cardId:string)=>{
             "cardId": cardId
         }),
         onSuccess: () =>{
-            queryClient.invalidateQueries (['comment', cardId])
+            queryClient.invalidateQueries (['comments', cardId])
             toast (useSuccess ("Comment created succesfully"))
         },
         onError: () => toast (useFailure ("Failed to create comment"))
@@ -38,7 +38,7 @@ export const useComments = (cardId:string)=>{
     const deleteCommentMutation = useMutation ({
         mutationFn: async (comment:string)=> deleteCommentClient(comment).deleteData(),
         onSuccess: () => {
-            queryClient.invalidateQueries (['comment', cardId])
+            queryClient.invalidateQueries (['comments', cardId])
             toast (useSuccess ('Comment deleted successfully'))},
         onError: () => toast (useFailure ('Failed to delete comment'))
 
@@ -49,7 +49,7 @@ export const useComments = (cardId:string)=>{
             "content": args.content,
         }, null),
         onSuccess: () => {
-            queryClient.invalidateQueries (['comment', cardId])
+            queryClient.invalidateQueries (['comments', cardId])
             toast (useSuccess ('Comment updated successfully'))},
         onError: () => toast (useFailure ('Failed to update comment'))
     })

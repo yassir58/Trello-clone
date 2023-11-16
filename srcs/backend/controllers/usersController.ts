@@ -36,7 +36,6 @@ export const processUserPhoto = (req: Request, res: Response, next: NextFunction
 
 export const getAllUsers = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const search = req.query.search as string;
-  console.log(search);
   if (!req.boardId) return next(new AppError(`Board id is needed to filter out users`, 400));
   const board = await prisma.board.findUnique({
     where: {
@@ -58,7 +57,8 @@ export const getAllUsers = catchAsync(async (req: Request, res: Response, next: 
   //! Maybe i will remove the users in the invites too only display the users who did not receive the invite.
   const boardInvites = await prisma.invite.findMany({
     where: {
-      ownerId: req.currentUser
+      ownerId: req.currentUser,
+      boardId: req.boardId
     }
   })
   const boardInviteUsers = boardInvites.map((invite) => invite.userId);
@@ -111,7 +111,7 @@ export const updateCurrentUser = catchAsync(async (req: Request, res: Response, 
     data: {
       fullname,
       email,
-      profileImage: req.file?.filename ?? null,
+      profileImage: req.file?.filename ?? undefined,
     },
   });
   res.status(200).json({

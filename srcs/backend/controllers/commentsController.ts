@@ -39,20 +39,6 @@ export const createComment = catchAsync(async (req: Request, res: Response, next
   });
 });
 
-export const getCommentById = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  const comment = await prisma.comment.findUnique({
-    where: {
-      id,
-    },
-  });
-  if (!comment) return next(new AppError(`Could not find comment: ${id}`, 404));
-  res.status(200).json({
-    status: "success",
-    comment,
-  });
-});
-
 export const getAllComments = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const comments = await prisma.comment.findMany({
     where: {

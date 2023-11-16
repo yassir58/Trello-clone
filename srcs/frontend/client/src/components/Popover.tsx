@@ -9,6 +9,7 @@ import { PopOverWrapper } from "./ui-elements/PopOver";
 import { Card, Label } from "../context/ContextScheme";
 import { PhotosProvider } from "../providers/PhotosProvider";
 import AddChecklist from "./AddChecklist";
+import { AddAttachement } from "./AddAttachement";
 interface PopOverProps {
   card?: Card;
   action?: (photo: string) => void;
@@ -27,7 +28,7 @@ export const MembersPopOver: React.FC = () => {
 
 export const LabelPopOver: React.FC<LabelsProps> = ({ card , addLabelAction}) => {
   return (
-    <PopOverWrapper value="Labels" icon={<MdLabel />} triggerVariant="largeSecondary" size="xs" placement="left">
+    <PopOverWrapper closable={true} value="Labels" icon={<MdLabel />} triggerVariant="largeSecondary" size="xs" placement="left">
       <AddLable card={card} action={addLabelAction}/>
     </PopOverWrapper>
   );
@@ -41,9 +42,18 @@ export const CheckListPopOver: React.FC<PopOverProps> = ({card}) => {
   )
 }
 
+export const AttachementsPopOver: React.FC<PopOverProps> = ({card}) => {
+  return (
+    <PopOverWrapper value="Checklists" closable={true} icon={<MdCheckBox/>} triggerVariant="largeSecondary" size="xs" placement="left">
+      <AddAttachement card={card!} />
+    </PopOverWrapper>
+  )
+}
+
+
 export const CoverPopOver: React.FC<PopOverProps> = ({ action }) => {
   return (
-    <PopOverWrapper value="Cover" icon={<FaImage />} triggerVariant="largeSecondary" size="2xs" placement="left">
+    <PopOverWrapper value="Cover" closable={true} icon={<FaImage />} triggerVariant="largeSecondary" size="2xs" placement="left">
       <PhotosProvider>
         <ChangeCover action={action!} />
       </PhotosProvider>
